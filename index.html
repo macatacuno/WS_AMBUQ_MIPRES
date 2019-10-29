@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>WS AMBUQ MIPRES</title>
+  <link rel="shortcut icon"
+    href="http://www.ambuq.org.co/wp-content/themes/wordpress-bootstrap-master/images/logito.png">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="javascript:void(0);"
+        onclick="location.reload();">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-link"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">AMBUQ MIPRES</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!--////////// Nav Item - Panel ///////////////-->
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0);" onclick="cargarPanel();">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Panel</span></a>
+      </li>
+
+      <!--*******************************************************************************************************-->
+      <!--/////////////WSSUMINISTROAPI WSSUMINISTROAPI WSSUMINISTROAPI WSSUMINISTROAPI WSSUMINISTROAPI///////////-->
+      <!--*******************************************************************************************************-->
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        WSSUMINISTROAPI
+      </div>
+
+
+      <!--////////// Nav Item - Direccionamiento ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDireccionamiento"
+          aria-expanded="true" aria-controls="collapseDireccionamiento">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Direccionamiento</span>
+        </a>
+        <div id="collapseDireccionamiento" class="collapse" aria-labelledby="headingPages"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_direcporfecha" href="javascript:void(0);" onclick="cargarDirecPorFecha();"
+              style="color:rgb(202, 202, 202);">Por
+              fecha</a>
+            <a class="collapse-item" id="a_direcporpresc" href="javascript:void(0);" onclick="cargarDirecPorPresc();"
+              style="color:rgb(202, 202, 202);">Por
+              prescripcion</a>
+            <a class="collapse-item" id="a_direcporpaciefecha" href="javascript:void(0);"
+              onclick="cargarDirecPorpacieFecha();" style="color:rgb(202, 202, 202);">Por
+              paciente por fecha</a>
+            <a class="collapse-item" id="a_direcpormany" href="javascript:void(0);" onclick="cargarDirecPorMany();"
+              style="color:rgb(202, 202, 202);">Por
+              paciente por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!--////////// Nav Item - Entrega ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEntrega"
+          aria-expanded="true" aria-controls="collapseEntrega">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Entrega</span>
+        </a>
+        <div id="collapseEntrega" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_entregaporfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              fecha</a>
+            <a class="collapse-item" id="a_entregaporpresc" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              prescripcion</a>
+            <a class="collapse-item" id="a_entregaporpaciefecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              paciente por fecha</a>
+            <a class="collapse-item" id="a_entregaporpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              paciente por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!--////////// Nav Item - No Direccionamiento ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoDireccionamiento"
+          aria-expanded="true" aria-controls="collapseNoDireccionamiento">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">No Direccionamiento</span>
+        </a>
+        <div id="collapseNoDireccionamiento" class="collapse" aria-labelledby="headingPages"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_nodirecporfecha" href="javascript:void(0);"
+              onclick="cargarNoDirecPorFecha();" style="color:rgb(202, 202, 202);">Por
+              fecha</a>
+            <a class="collapse-item" id="a_nodirecporpresc" href="javascript:void(0);"
+              onclick="cargarNoDirecPorPresc();" style="color:rgb(202, 202, 202);">Por
+              prescripcion</a>
+            <a class="collapse-item" id="a_nodirecporpaciefecha" href="javascript:void(0);"
+              onclick="cargarNoDirecPorpacieFecha();" style="color:rgb(202, 202, 202);">Por
+              paciente por fecha</a>
+            <a class="collapse-item" id="a_nodirecpormany" href="javascript:void(0);" onclick="cargarNoDirecPorMany();"
+              style="color:rgb(202, 202, 202);">Por
+              paciente por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+
+      <!--////////// Nav Item - Programación ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProgramacion"
+          aria-expanded="true" aria-controls="collapseProgramacion">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Programación</span>
+        </a>
+        <div id="collapseProgramacion" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_programacionporfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              fecha</a>
+            <a class="collapse-item" id="a_programacionporpresc" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              prescripcion</a>
+            <a class="collapse-item" id="a_programacionporpaciefecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              paciente por fecha</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+      <!--////////// Nav Item - Reporte Entrega ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReporteEntrega"
+          aria-expanded="true" aria-controls="collapseReporteEntrega">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Reporte Entrega</span>
+        </a>
+        <div id="collapseReporteEntrega" class="collapse" aria-labelledby="headingPages"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_entregaxfecha" href="javascript:void(0);"
+              onclick="cargarEntregaXFecha();">Por Fecha</a>
+            <a class="collapse-item" id="a_entregaxfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por # de Prescripción</a>
+            <a class="collapse-item" id="a_entregaxfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por paciente fecha</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!--////////// Nav Item - Suministro ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSuministro"
+          aria-expanded="true" aria-controls="collapseSuministro">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Suministro</span>
+        </a>
+        <div id="collapseSuministro" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_suministroporfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              fecha</a>
+            <a class="collapse-item" id="a_suministroporpresc" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              prescripcion</a>
+            <a class="collapse-item" id="a_suministroporpaciefecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              paciente por fecha</a>
+            <a class="collapse-item" id="a_suministroporpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por
+              paciente por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!--////////// Nav Item - Validar Token ///////////////////-->
+      <!--<li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseValidarToken"
+          aria-expanded="true" aria-controls="collapseValidarToken">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Validar Token</span>
+        </a>
+        <div id="collapseValidarToken" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_validartokenporfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Obtener token</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+    -->
+
+      <!--*******************************************************************************************************-->
+      <!--//////////////////WSPRESCRIPCIÓN WSPRESCRIPCIÓN WSPRESCRIPCIÓN WSPRESCRIPCIÓN WSPRESCRIPCIÓN///////////-->
+      <!--*******************************************************************************************************-->
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        WSPRESCRIPCION
+      </div>
+
+      <!-- Nav Item - Anulaciones -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnulaciones"
+          aria-expanded="true" aria-controls="collapseAnulaciones">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Anulaciones </span>
+        </a>
+        <div id="collapseAnulaciones" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_anulacionporprescripcion" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por prescripción </a>
+            <a class="collapse-item" id="a_anulacionpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!-- Nav Item - Junta profesional -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseJuntaProfesional"
+          aria-expanded="true" aria-controls="collapseJuntaProfesional">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Junta Profesional </span>
+        </a>
+        <div id="collapseJuntaProfesional" class="collapse" aria-labelledby="headingPages"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_juntaprofesionalporprescripcion" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Junta profesional </a>
+            <a class="collapse-item" id="a_juntaprofesionalporpaciente" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por paciente</a>
+            <a class="collapse-item" id="a_juntaprofesionalpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por fecha</a>
+            <a class="collapse-item" id="a_juntaprofesionalpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Prescripcion -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrescripcion"
+          aria-expanded="true" aria-controls="collapsePrescripcion">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Prescripción </span>
+        </a>
+        <div id="collapsePrescripcion" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_prescripcionporfecha" href="javascript:void(0);"
+              onclick="cargarPrescripcionPorFecha();">Por
+              fecha</a>
+            <a class="collapse-item" id="a_prescripcionporpaciente" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por paciente</a>
+            <a class="collapse-item" id="a_prescripcionpornumero" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por numero</a>
+            <a class="collapse-item" id="a_novedadesprescripcion" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Novedades prescripción</a>
+            <a class="collapse-item" id="a_prescripcionpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por many</a>
+            <a class="collapse-item" id="a_novedadesprescripcionpormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Novedades prescripción <br> por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+      <!-- Nav Item - Suministro -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSuministroWSPrescripcion"
+          aria-expanded="true" aria-controls="collapseSuministroWSPrescripcion">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Suministro </span>
+        </a>
+        <div id="collapseSuministroWSPrescripcion" class="collapse" aria-labelledby="headingPages"
+          data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_suministroporfecha" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por fecha</a>
+            <a class="collapse-item" id="a_suministropormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+
+      <!-- Nav Item - Tutela -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTutela" aria-expanded="true"
+          aria-controls="collapseTutela">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Tutela </span>
+        </a>
+        <div id="collapseTutela" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">GET:</h6>
+            <a class="collapse-item" id="a_tutelaportutela" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por tutela</a>
+            <a class="collapse-item" id="a_tutelaporpaciente" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por paciente</a>
+            <a class="collapse-item" id="a_tutelapornumero" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por numero</a>
+            <a class="collapse-item" id="a_novedadestutela" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Novedades tutela</a>
+            <a class="collapse-item" id="a_tutelapormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Por many</a>
+            <a class="collapse-item" id="a_novedadestutelapormany" href="javascript:void(0);" onclick=""
+              style="color:rgb(202, 202, 202);">Novedades tutela por many</a>
+            <h6 class="collapse-header">POST:</h6>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Pages Collapse Menu 
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Pages</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Login Screens:</h6>
+            <a class="collapse-item" href="login.html">Login</a>
+            <a class="collapse-item" href="register.html">Register</a>
+            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Other Pages:</h6>
+            <a class="collapse-item" href="404.html">404 Page</a>
+            <a class="collapse-item" href="blank.html">Blank Page</a>
+          </div>
+        </div>
+      </li>-->
+
+      <!-- Nav Item - Charts 
+      <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Charts</span></a>
+      </li>-->
+
+      <!-- Nav Item - Tables
+      <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Tables</span></a>
+      </li> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!--*******************************************************************************************************-->
+      <!--/////////////Solución de errores---- Solución de errores------ Solución de errores ///////////////////-->
+      <!--*******************************************************************************************************-->
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Solución de errores
+      </div>
+
+      <!--////////// Nav Item - Actualizar ///////////////////-->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseActualizar"
+          aria-expanded="true" aria-controls="collapseActualizar">
+          <i class="fas fa-fw fa-folder"></i>
+          <span style="color:rgb(128, 128, 128);">Actualizar servicios</span>
+        </a>
+        <div id="collapseActualizar" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" id="a_direcpormany" href="javascript:void(0);" onclick="cargarActualizacionManual();"
+            style="color:rgb(202, 202, 202);">Actualizar todo</a>
+          </div>
+        </div>
+      </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..."
+                aria-label="Buscar" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="button">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                      aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <!-- Counter - Alerts -->
+                <span class="" id="id_cant_alert"><!--La clase de el span se cargar desde notificaciones.js-->
+                  <font style="vertical-align: inherit;">
+                    <font style="vertical-align: inherit;" id="cantidad_alertas"></font>
+                  </font>
+                </span>
+              </a>
+              <!-- Dropdown - Alerts -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                  Alertas
+                </h6>
+                <div id="div_alertas">
+                  
+              <!--  <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">Error</div>
+                    <span class="font-weight-bold">No se cargó Prescripción Subsidiado 2019-01-06</span>
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                      <i class="fas fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">Error</div>
+                    <span class="font-weight-bold">No se cargó Reporte Entrega Subsidiado 2019-01-06</span>
+                  </div>
+                </a>  -->              
+              </div>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+              </div>
+            </li>
+
+            <!-- Nav Item - Messages -->
+
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- Nav Item - User Information -->
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid" id="contenido_principal">
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer 
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2019</span>
+          </div>
+        </div>
+      </footer>-->
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins 
+  <script src="vendor/chart.js/Chart.min.js"></script>-->
+
+  <!-- Page level custom scripts 
+  <script src="js/demo/chart-area-demo.js"></script>
+  <script src="js/demo/chart-pie-demo.js"></script>-->
+
+  <script src="js/menu.js"></script>
+  <script src="js/notificaciones.js"></script>
+<script>
+//Cargar procedieintos iniciales
+cargarPanel();
+cargarNotificaciones();
+</script>
+</body>
+
+</html>
+
