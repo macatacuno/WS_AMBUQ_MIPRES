@@ -25,7 +25,6 @@ $periodos_cargados_conteo=0;
 //$tipo_get = $_GET['tipo'];
 $tipo_get = "contributivo";
 $tipo_id=1;
-$tipo_id = 0;
 $servicio_id = 3; // Se asigna el codigo del servicio Prescripcion
 //Parametros de la api
 $nit = "";

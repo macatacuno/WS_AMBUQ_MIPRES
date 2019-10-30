@@ -25,6 +25,7 @@ $periodos_cargados_conteo=0;
 //$tipo_get = $_GET['tipo'];
 $tipo_get ='contributivo';
 $tipo_id=1;
+$tipo_id = 0;
 $servicio_id = 1; // Se asigna el codigo del servicio GetReporteEntregaXFecha
 //Parametros de la api
 $nit = "";
@@ -58,6 +59,7 @@ if ($resultado = $conn->query($consulta)) {
 }
 //obtener el nit y el token(fin)
 
+
 //Generar token para contibutivo(inicio)
   //Si el tipo es contributivo entonces genera el token temporal y se usa este en lugar del token contributivo
 
@@ -73,6 +75,7 @@ if ($resultado = $conn->query($consulta)) {
   $token = str_replace("\"", '', $token);
 
 //Generar token para contributivo(fin)
+
 
 
 /*

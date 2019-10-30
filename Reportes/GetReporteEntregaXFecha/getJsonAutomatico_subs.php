@@ -24,7 +24,6 @@ $periodos_cargados_conteo=0;
 //$tipo_get = $_GET['tipo'];
 $tipo_get ='subsidiado';
 $tipo_id=2;
-$tipo_id = 0;
 $servicio_id = 1; // Se asigna el codigo del servicio GetReporteEntregaXFecha
 //Parametros de la api
 $nit = "";
