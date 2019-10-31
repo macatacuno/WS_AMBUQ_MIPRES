@@ -4,9 +4,6 @@ include("../../conexion.php");
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
-$Json_final="";
-$peri_error="";
-$error_encontrado="";
 //pamemetros de entrada
 $servicio_id = 4;
 $tipo_id = $_POST['tipo'];
@@ -16,6 +13,7 @@ $nit = "";
 $url_bd="";
 $token="";
 $url_api_generar_token="";
+$i=0;
 
 
 
@@ -52,52 +50,10 @@ if ($resultado = $conn->query($consulta)) {
 
 //Generar token para contributivo(fin)
 
-
-
-/*
-$url_token ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/GenerarToken/818000140/3858A1E4-E9BB-40D1-90E7-C127480363F2';
-$token = file_get_contents($url_token);
-$token = str_replace("\"", '', $token);
-
-$nit = '818000140';
-
-*/
-$periodo_inicial='20'.date('y-m-d');
-
-$periodo_final = $periodo_inicial;
-
-
-
-$date1 = new DateTime($periodo_inicial);
-$date2 = new DateTime($periodo_final);
-$diff = $date1->diff($date2);
-$cant_dias=$diff->days+1;
-
-if($periodo_final<$periodo_inicial){
-  echo "<script>alert('La fecha final no puede ser menor que la fecha inicial.');</script>";
-  }else{
-
-  
-    for ($i = 0; $i <= $cant_dias-1; $i++) {
-      $periodo_conteo = date("y-m-d",strtotime($periodo_inicial."+ ".$i." day")); 
-    
-      //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
       $url =$url_bd."/".$nit.'/'.$token.'/'.$numero_prescripcion;
-     
-      //echo $url;
       $json = file_get_contents($url);
-      if ($json == "") {
-        $peri_error= $peri_error."20".$periodo_conteo."<br>";
-      }else{
-    
-      }
-      $Json_final=$Json_final.$json;
-    
-    }
-
 
 if($json==""){
-
   echo "<script>alert('Error al conectar con la API, favor volver a intentar.');</script>";
 }else{
   
@@ -118,9 +74,9 @@ PHP.")
 
      
     //$json_array = json_decode($json); 
-    $json_array = json_decode($Json_final, true);
+    $json_array = json_decode($json, true);
+    $i=2;//se comenzaran a escribir los datos desde la fila 2 del excel
     foreach($json_array as $clave) {
-      $i=$i+1;
       $objPHPExcel->setActiveSheetIndex(0)
       ->setCellValue('A'.$i, $clave["ID"])
       ->setCellValue('B'.$i, $clave["IDReporteEntrega"])
@@ -128,17 +84,19 @@ PHP.")
       ->setCellValue('D'.$i, $clave["TipoTec"])
       ->setCellValue('E'.$i, $clave["ConTec"])
       ->setCellValue('F'.$i, $clave["TipoIDPaciente"])
-      ->setCellValue('G'.$i, $clave["NoEntrega"])
-      ->setCellValue('H'.$i, $clave["EstadoEntrega"])
-      ->setCellValue('I'.$i, $clave["CausaNoEntrega"])
-      ->setCellValue('J'.$i, $clave["CodTecEntregado"])
-      ->setCellValue('K'.$i, $clave["CantTotEntregada"])
-      ->setCellValue('L'.$i, $clave["NoLote"])
-      ->setCellValue('M'.$i, $clave["FecEntrega"])
-      ->setCellValue('N'.$i, $clave["FecRepEntrega"])
-      ->setCellValue('O'.$i, $clave["EstRepEntrega"])
-      ->setCellValue('P'.$i, $clave["FecAnulacion"]);
-  
+      ->setCellValue('G'.$i, $clave["NoIDPaciente"])
+      ->setCellValue('H'.$i, $clave["NoEntrega"])
+      ->setCellValue('I'.$i, $clave["EstadoEntrega"])
+      ->setCellValue('J'.$i, $clave["CausaNoEntrega"])
+      ->setCellValue('K'.$i, $clave["ValorEntregado"])
+      ->setCellValue('L'.$i, $clave["CodTecEntregado"])
+      ->setCellValue('M'.$i, $clave["CantTotEntregada"])
+      ->setCellValue('N'.$i, $clave["NoLote"])
+      ->setCellValue('O'.$i, $clave["FecEntrega"])
+      ->setCellValue('P'.$i, $clave["FecRepEntrega"])
+      ->setCellValue('Q'.$i, $clave["EstRepEntrega"])
+      ->setCellValue('R'.$i, $clave["FecAnulacion"]);
+      $i=$i+1;
   }
 
 
@@ -150,16 +108,18 @@ $objPHPExcel->setActiveSheetIndex(0)
 ->setCellValue('D1', 'TipoTec')
 ->setCellValue('E1', 'ConTec')
 ->setCellValue('F1', 'TipoIDPaciente')
-->setCellValue('G1', 'NoEntrega')
-->setCellValue('H1', 'EstadoEntrega')
-->setCellValue('I1', 'CausaNoEntrega')
-->setCellValue('J1', 'CodTecEntregado')
-->setCellValue('K1', 'CantTotEntregada')
-->setCellValue('L1', 'NoLote')
-->setCellValue('M1', 'FecEntrega')
-->setCellValue('N1', 'FecRepEntrega')
-->setCellValue('O1', 'EstRepEntrega')
-->setCellValue('P1', 'FecAnulacion');
+->setCellValue('G1', 'NoIDPaciente')
+->setCellValue('H1', 'NoEntrega')
+->setCellValue('I1', 'EstadoEntrega')
+->setCellValue('J1', 'CausaNoEntrega')
+->setCellValue('K1', 'ValorEntregado')
+->setCellValue('L1', 'CodTecEntregado')
+->setCellValue('M1', 'CantTotEntregada')
+->setCellValue('N1', 'NoLote')
+->setCellValue('O1', 'FecEntrega')
+->setCellValue('P1', 'FecRepEntrega')
+->setCellValue('Q1', 'EstRepEntrega')
+->setCellValue('R1', 'FecAnulacion');
 
   
 
@@ -177,9 +137,8 @@ $objWriter->save('php://output');
 exit;
 
 }
-  }
-//echo $json; --Escribir el Json en la vista
-mysqli_close($conn);
+  
+echo $json; //Escribir el Json en la vista
 mysqli_close($conn);
 
 ?>
