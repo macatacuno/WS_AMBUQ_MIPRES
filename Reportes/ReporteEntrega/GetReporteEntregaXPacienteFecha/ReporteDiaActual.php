@@ -1,15 +1,19 @@
 <?php
-include("../../conexion.php");
+include("../../../conexion.php");
 
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
 //pamemetros de entrada
-$servicio_id = 4;
+$servicio_id = 5;
 $tipo_id = $_POST['tipo'];
-$numero_prescripcion=$_POST['numero_prescripcion'];
+
+$fecha = $_POST['fecha'];
+$tipo_documento = $_POST['tipo_documento'];
+$Numero_documento = $_POST['Numero_documento'];
 //Parametros de la api
 $nit = "";
+
 $url_bd="";
 $token="";
 $url_api_generar_token="";
@@ -47,7 +51,7 @@ if ($resultado = $conn->query($consulta)) {
 
 //Generar token para contributivo(fin)
 
-      $url =$url_bd."/".$nit.'/'.$token.'/'.$numero_prescripcion;
+      $url =$url_bd."/".$nit.'/'.$fecha.'/'.$token.'/'.$tipo_documento.'/'.$Numero_documento;
       $json = file_get_contents($url);
 
 if($json==""){
@@ -55,7 +59,7 @@ if($json==""){
 }else{
   
 /** Incluir la libreria PHPExcel */
-require_once '../../Plugins/PHPExcel/Classes/PHPExcel.php';
+require_once '../../../plugins/PHPExcel/Classes/PHPExcel.php';
 // Crea un nuevo objeto PHPExcel
 $objPHPExcel = new PHPExcel();
 // Establecer propiedades
@@ -69,7 +73,29 @@ PHP.")
 ->setKeywords("Excel Office 2007 openxml php")
 ->setCategory("Pruebas de Excel");
 
-     
+// Agregar Informacion
+$objPHPExcel->setActiveSheetIndex(0)
+->setCellValue('A1', 'ID')
+->setCellValue('B1', 'IDReporteEntrega')
+->setCellValue('C1', 'NoPrescripcion')
+->setCellValue('D1', 'TipoTec')
+->setCellValue('E1', 'ConTec')
+->setCellValue('F1', 'TipoIDPaciente')
+->setCellValue('G1', 'NoIDPaciente')
+->setCellValue('H1', 'NoEntrega')
+->setCellValue('I1', 'EstadoEntrega')
+->setCellValue('J1', 'CausaNoEntrega')
+->setCellValue('K1', 'ValorEntregado')
+->setCellValue('L1', 'CodTecEntregado')
+->setCellValue('M1', 'CantTotEntregada')
+->setCellValue('N1', 'NoLote')
+->setCellValue('O1', 'FecEntrega')
+->setCellValue('P1', 'FecRepEntrega')
+->setCellValue('Q1', 'EstRepEntrega')
+->setCellValue('R1', 'FecAnulacion');
+
+  
+  
     //$json_array = json_decode($json); 
     $json_array = json_decode($json, true);
     $i=2;//se comenzaran a escribir los datos desde la fila 2 del excel
@@ -97,28 +123,6 @@ PHP.")
   }
 
 
-// Agregar Informacion
-$objPHPExcel->setActiveSheetIndex(0)
-->setCellValue('A1', 'ID')
-->setCellValue('B1', 'IDReporteEntrega')
-->setCellValue('C1', 'NoPrescripcion')
-->setCellValue('D1', 'TipoTec')
-->setCellValue('E1', 'ConTec')
-->setCellValue('F1', 'TipoIDPaciente')
-->setCellValue('G1', 'NoIDPaciente')
-->setCellValue('H1', 'NoEntrega')
-->setCellValue('I1', 'EstadoEntrega')
-->setCellValue('J1', 'CausaNoEntrega')
-->setCellValue('K1', 'ValorEntregado')
-->setCellValue('L1', 'CodTecEntregado')
-->setCellValue('M1', 'CantTotEntregada')
-->setCellValue('N1', 'NoLote')
-->setCellValue('O1', 'FecEntrega')
-->setCellValue('P1', 'FecRepEntrega')
-->setCellValue('Q1', 'EstRepEntrega')
-->setCellValue('R1', 'FecAnulacion');
-
-  
 
 // Renombrar Hoja
 $objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
@@ -126,7 +130,7 @@ $objPHPExcel->getActiveSheet()->setTitle('Tecnologia Simple');
 $objPHPExcel->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
 header('Content-Type: application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename=Reporte prescripcion numero: ".$numero_prescripcion.".xlsx");
+header("Content-Disposition: attachment;filename=Reporte Cliente Con CC: ".$Numero_documento.".xlsx");
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,
 'Excel2007');
@@ -135,7 +139,7 @@ exit;
 
 }
   
-echo $json; //Escribir el Json en la vista
+//echo $json; //Escribir el Json en la vista
 mysqli_close($conn);
 
 ?>

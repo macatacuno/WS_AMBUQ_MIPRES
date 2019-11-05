@@ -1,5 +1,5 @@
 <?php
-include("../../conexion.php");
+include("../../../conexion.php");
 
 //Variable Generales
 $json="";
@@ -32,7 +32,7 @@ if ($resultado = $conn->query($consulta)) {
 
 
 /** Incluir la libreria PHPExcel */
-require_once '../../Plugins/PHPExcel/Classes/PHPExcel.php';
+require_once '../../../plugins/PHPExcel/Classes/PHPExcel.php';
 // Crea un nuevo objeto PHPExcel
 $objPHPExcel = new PHPExcel();
 // Establecer propiedades

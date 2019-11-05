@@ -1,5 +1,6 @@
 <?php
-//include("../../conexion.php");//Se comenta este codigo porque presenta errores al momento de ser llamado desde el .bat
+//include("../../../conexion.php");//Se comenta este codigo porque presenta errores al momento de ser llamado desde el .bat
+
 
 set_time_limit(9999999);
 $servername = "localhost";
@@ -22,8 +23,8 @@ $periodos_cargados="";
 $periodos_cargados_conteo=0;
 //pamemetros de entrada
 //$tipo_get = $_GET['tipo'];
-$tipo_get ='subsidiado';
-$tipo_id=2;
+$tipo_get ='contributivo';
+$tipo_id=1;
 $servicio_id = 1; // Se asigna el codigo del servicio GetReporteEntregaXFecha
 //Parametros de la api
 $nit = "";
@@ -57,7 +58,6 @@ if ($resultado = $conn->query($consulta)) {
 }
 //obtener el nit y el token(fin)
 
-
 //Generar token para contibutivo(inicio)
   //Si el tipo es contributivo entonces genera el token temporal y se usa este en lugar del token contributivo
 
@@ -75,7 +75,6 @@ if ($resultado = $conn->query($consulta)) {
 //Generar token para contributivo(fin)
 
 
-
 /*
  
 $periodo_final ="19-10-23";
@@ -90,6 +89,7 @@ $date1 = new DateTime($periodo_inicial);
 $date2 = new DateTime($periodo_final);
 $diff = $date1->diff($date2);
 $cant_dias=$diff->days+1;
+
 echo "////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
 echo "<br> Servicio cargado: WSSUMINISTROAPI-> ".$serv_nombre."-> ".$tipo_get."<br>";
 echo ' dia(s) consultado(s): '.$cant_dias;
@@ -98,6 +98,8 @@ echo "<br>";
 $periodo_conteo=$periodo_inicial;
 echo "Periodo consultado: 20".$periodo_inicial." - 20".$periodo_final; 
 echo "<br>";
+
+
 
 
 for ($i = 0; $i <= $cant_dias-1; $i++) {

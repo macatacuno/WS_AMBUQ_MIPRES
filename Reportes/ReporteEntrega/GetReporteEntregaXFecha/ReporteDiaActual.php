@@ -1,5 +1,5 @@
 <?php
-include("../../conexion.php");
+include("../../../conexion.php");
 
 
 ///////Declaracion de Variables Generales(Inicio)/////////
@@ -8,12 +8,11 @@ $Json_final="";
 $peri_error="";
 $error_encontrado="";
 //pamemetros de entrada
-//$servicio_get='ReporteEntregaXFecha';
+$servicio_get='ReporteEntregaXFecha';
 //$tipo_get='contributivo';
 
-
+$servicio_id = 0;
 //$tipo_id = 0;
-$servicio_id = 3; // Se asigna el codigo del servicio Prescripcion
 $tipo_id = $_POST['tipo'];
 //Parametros de la api
 $nit = "";
@@ -25,11 +24,11 @@ $url_api_generar_token="";
 
 
 //obtener los parametros la url(inicio)
-/*if($servicio_get=='ReporteEntregaXFecha'){
+if($servicio_get=='ReporteEntregaXFecha'){
   $servicio_id = 1;
 }else if($servicio_get=='Prescripcion'){
   $servicio_id = 2;
-}*/
+}
 $consulta = "SELECT serv_url FROM servicios where serv_id=".$servicio_id;
 if ($resultado = $conn->query($consulta)) {
   while ($fila = $resultado->fetch_assoc()) { 
@@ -56,7 +55,6 @@ if ($resultado = $conn->query($consulta)) {
 }
 //obtener el nit y el token(fin)
 
-/*
 //Generar token para contibutivo(inicio)
   //Si el tipo es contributivo entonces genera el token temporal y se usa este en lugar del token contributivo
 //if($tipo_id==1){
@@ -70,11 +68,10 @@ if ($resultado = $conn->query($consulta)) {
   $url_token =$url_api_generar_token."/".$nit."/".$token;
   $token = file_get_contents($url_token);
   $token = str_replace("\"", '', $token);
-
 //}
 //Generar token para contributivo(fin)
 
-*/
+
 
 /*
 $url_token ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/GenerarToken/818000140/3858A1E4-E9BB-40D1-90E7-C127480363F2';
@@ -103,7 +100,7 @@ if($periodo_final<$periodo_inicial){
       $periodo_conteo = date("y-m-d",strtotime($periodo_inicial."+ ".$i." day")); 
     
       //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
-      $url =$url_bd."/".$nit.'/'."20".$periodo_conteo.'/'.$token;
+      $url =$url_bd."/".$nit.'/'.$token.'/'."20".$periodo_conteo;
       //echo $url;
       $json = file_get_contents($url);
       if ($json == "") {
@@ -122,7 +119,7 @@ if($Json_final==""){
 }else{
   
 /** Incluir la libreria PHPExcel */
-require_once '../../Plugins/PHPExcel/Classes/PHPExcel.php';
+require_once '../../../plugins/PHPExcel/Classes/PHPExcel.php';
 // Crea un nuevo objeto PHPExcel
 $objPHPExcel = new PHPExcel();
 // Establecer propiedades
@@ -136,7 +133,7 @@ PHP.")
 ->setKeywords("Excel Office 2007 openxml php")
 ->setCategory("Pruebas de Excel");
 
-  /*   
+     
     //$json_array = json_decode($json); 
     $json_array = json_decode($Json_final, true);
     foreach($json_array as $clave) {
@@ -148,16 +145,18 @@ PHP.")
       ->setCellValue('D'.$i, $clave["TipoTec"])
       ->setCellValue('E'.$i, $clave["ConTec"])
       ->setCellValue('F'.$i, $clave["TipoIDPaciente"])
-      ->setCellValue('G'.$i, $clave["NoEntrega"])
-      ->setCellValue('H'.$i, $clave["EstadoEntrega"])
-      ->setCellValue('I'.$i, $clave["CausaNoEntrega"])
-      ->setCellValue('J'.$i, $clave["CodTecEntregado"])
-      ->setCellValue('K'.$i, $clave["CantTotEntregada"])
-      ->setCellValue('L'.$i, $clave["NoLote"])
-      ->setCellValue('M'.$i, $clave["FecEntrega"])
-      ->setCellValue('N'.$i, $clave["FecRepEntrega"])
-      ->setCellValue('O'.$i, $clave["EstRepEntrega"])
-      ->setCellValue('P'.$i, $clave["FecAnulacion"]);
+      ->setCellValue('G'.$i, $clave["NoIDPaciente"])
+      ->setCellValue('H'.$i, $clave["NoEntrega"])
+      ->setCellValue('I'.$i, $clave["EstadoEntrega"])
+      ->setCellValue('J'.$i, $clave["CausaNoEntrega"])
+      ->setCellValue('K'.$i, $clave["ValorEntregado"])
+      ->setCellValue('L'.$i, $clave["CodTecEntregado"])
+      ->setCellValue('M'.$i, $clave["CantTotEntregada"])
+      ->setCellValue('N'.$i, $clave["NoLote"])
+      ->setCellValue('O'.$i, $clave["FecEntrega"])
+      ->setCellValue('P'.$i, $clave["FecRepEntrega"])
+      ->setCellValue('Q'.$i, $clave["EstRepEntrega"])
+      ->setCellValue('R'.$i, $clave["FecAnulacion"]);
   
   }
     
@@ -172,16 +171,18 @@ $objPHPExcel->setActiveSheetIndex(0)
 ->setCellValue('D1', 'TipoTec')
 ->setCellValue('E1', 'ConTec')
 ->setCellValue('F1', 'TipoIDPaciente')
-->setCellValue('G1', 'NoEntrega')
-->setCellValue('H1', 'EstadoEntrega')
-->setCellValue('I1', 'CausaNoEntrega')
-->setCellValue('J1', 'CodTecEntregado')
-->setCellValue('K1', 'CantTotEntregada')
-->setCellValue('L1', 'NoLote')
-->setCellValue('M1', 'FecEntrega')
-->setCellValue('N1', 'FecRepEntrega')
-->setCellValue('O1', 'EstRepEntrega')
-->setCellValue('P1', 'FecAnulacion');
+->setCellValue('G1', 'NoIDPaciente')
+->setCellValue('H1', 'NoEntrega')
+->setCellValue('I1', 'EstadoEntrega')
+->setCellValue('J1', 'CausaNoEntrega')
+->setCellValue('K1', 'ValorEntregado')
+->setCellValue('L1', 'CodTecEntregado')
+->setCellValue('M1', 'CantTotEntregada')
+->setCellValue('N1', 'NoLote')
+->setCellValue('O1', 'FecEntrega')
+->setCellValue('P1', 'FecRepEntrega')
+->setCellValue('Q1', 'EstRepEntrega')
+->setCellValue('R1', 'FecAnulacion');
 
   
 
@@ -197,7 +198,7 @@ $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,
 'Excel2007');
 $objWriter->save('php://output');
 exit;
-*/
+
 }
 
 
@@ -205,7 +206,7 @@ exit;
 
 
 
-echo $json; //Escribir el Json en la vista
+//echo $json; --Escribir el Json en la vista
 mysqli_close($conn);
 
 ?>

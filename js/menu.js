@@ -15,19 +15,26 @@ function cargarActualizacionManual(){
 
 //////////////////////////////////WSSUMINISTROAPI///////////////////////////////////////////////////////////
 function cargarEntregaXFecha (){
-      $('#contenido_principal').load('./Reportes/GetReporteEntregaXFecha/vistaEntregaXFecha.html'); 
+      $('#contenido_principal').load('./Reportes/ReporteEntrega/GetReporteEntregaXFecha/vistaEntregaXFecha.html'); 
       $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
       $("#a_entregaxfecha").addClass("active");//agrega la clase active al item seleccionado
 }
 
 function cargarEntregaXNoPrescripcion (){
-      $('#contenido_principal').load('./Reportes/GetReporteEntregaXNoPrescripcion/ReporteEntregaXNoPrescripcion.html'); 
+      $('#contenido_principal').load('./Reportes/ReporteEntrega/GetReporteEntregaXNoPrescripcion/ReporteEntregaXNoPrescripcion.html'); 
       $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
-      $("#a_entregaxfecha").addClass("active");//agrega la clase active al item seleccionado
+      $("#a_entregaxnumeroprescripcion").addClass("active");//agrega la clase active al item seleccionado
 }
+
+function cargarEntregaXPacienteFecha (){
+      $('#contenido_principal').load('./Reportes/ReporteEntrega/GetReporteEntregaXPacienteFecha/ReporteEntregaXPacienteFecha.html'); 
+      $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
+      $("#a_entregaxpacientefecha").addClass("active");//agrega la clase active al item seleccionado
+}
+
 //////////////////////////////////WSPRESCRIPCIÓN///////////////////////////////////////////////////////////
 function cargarPrescripcionPorFecha (){
-      $('#contenido_principal').load('./Reportes/GetPrescripcion/vistaPrescripcion.html'); 
+      $('#contenido_principal').load('./Reportes/Prescripcion/GetPrescripcion/vistaPrescripcion.html'); 
       $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
       $("#a_prescripcionporfecha").addClass("active");//agrega la clase active al item seleccionado
 }
