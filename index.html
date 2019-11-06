@@ -185,10 +185,10 @@
             <h6 class="collapse-header">GET:</h6>
             <a class="collapse-item" id="a_entregaxfecha" href="javascript:void(0);"
               onclick="cargarEntregaXFecha();">Por Fecha</a>
-            <a class="collapse-item" id="a_entregaxnumeroprescripcion" href="javascript:void(0);" onclick="cargarEntregaXNoPrescripcion();"
-             >Por # de Prescripción</a>
-            <a class="collapse-item" id="a_entregaxpacientefecha" href="javascript:void(0);" onclick="cargarEntregaXPacienteFecha();"
-             >Por paciente fecha</a>
+            <a class="collapse-item" id="a_entregaxnumeroprescripcion" href="javascript:void(0);"
+              onclick="cargarEntregaXNoPrescripcion();">Por # de Prescripción</a>
+            <a class="collapse-item" id="a_entregaxpacientefecha" href="javascript:void(0);"
+              onclick="cargarEntregaXPacienteFecha();">Por paciente fecha</a>
             <h6 class="collapse-header">POST:</h6>
           </div>
         </div>
@@ -312,14 +312,14 @@
             <a class="collapse-item" id="a_prescripcionporpaciente" href="javascript:void(0);" onclick=""
               style="color:rgb(202, 202, 202);">Por paciente</a>
             <a class="collapse-item" id="a_prescripcionpornumero" href="javascript:void(0);" onclick=""
-              style="color:rgb(202, 202, 202);">Por numero</a>
+              style="color:rgb(202, 202, 202);">Por numero de prescripción</a>
             <a class="collapse-item" id="a_novedadesprescripcion" href="javascript:void(0);" onclick=""
               style="color:rgb(202, 202, 202);">Novedades prescripción</a>
+            <h6 class="collapse-header">POST:</h6>
             <a class="collapse-item" id="a_prescripcionpormany" href="javascript:void(0);" onclick=""
               style="color:rgb(202, 202, 202);">Por many</a>
             <a class="collapse-item" id="a_novedadesprescripcionpormany" href="javascript:void(0);" onclick=""
               style="color:rgb(202, 202, 202);">Novedades prescripción <br> por many</a>
-            <h6 class="collapse-header">POST:</h6>
           </div>
         </div>
       </li>
@@ -420,7 +420,7 @@
 
 
 
- <!--*******************************************************************************************************-->
+      <!--*******************************************************************************************************-->
       <!--/////////////Solución de errores---- Solución de errores------ Solución de errores ///////////////////-->
       <!--*******************************************************************************************************-->
       <!-- Divider -->
@@ -436,12 +436,12 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseActualizar"
           aria-expanded="true" aria-controls="collapseActualizar">
           <i class="fas fa-fw fa-folder"></i>
-          <span style="color:rgb(128, 128, 128);">Actualizar servicios</span>
+          <span>Actualizar servicios</span>
         </a>
         <div id="collapseActualizar" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" id="a_direcpormany" href="javascript:void(0);" onclick="cargarActualizacionManual();"
-            style="color:rgb(202, 202, 202);">Actualizar todo</a>
+            <a class="collapse-item" id="a_direcpormany" href="javascript:void(0);"
+              onclick="cargarActualizacionManual();">Actualizar todo</a>
           </div>
         </div>
       </li>
@@ -545,7 +545,8 @@
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="" id="id_cant_alert"><!--La clase de el span se cargar desde notificaciones.js-->
+                <span class="" id="id_cant_alert">
+                  <!--La clase de el span se cargar desde notificaciones.js-->
                   <font style="vertical-align: inherit;">
                     <font style="vertical-align: inherit;" id="cantidad_alertas"></font>
                   </font>
@@ -558,8 +559,8 @@
                   Alertas
                 </h6>
                 <div id="div_alertas">
-                  
-              <!--  <a class="dropdown-item d-flex align-items-center" href="#">
+
+                  <!--  <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-primary">
                       <i class="fas fa-exclamation-triangle text-white"></i>
@@ -580,8 +581,8 @@
                     <div class="small text-gray-500">Error</div>
                     <span class="font-weight-bold">No se cargó Reporte Entrega Subsidiado 2019-01-06</span>
                   </div>
-                </a>  -->              
-              </div>
+                </a>  -->
+                </div>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
             </li>
@@ -648,12 +649,11 @@
 
   <script src="js/menu.js"></script>
   <script src="js/notificaciones.js"></script>
-<script>
-//Cargar procedieintos iniciales
-cargarPanel();
-cargarNotificaciones();
-</script>
+  <script>
+    //Cargar procedieintos iniciales
+    cargarPanel();
+    cargarNotificaciones();
+  </script>
 </body>
 
 </html>
-
