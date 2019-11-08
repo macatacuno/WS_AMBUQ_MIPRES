@@ -39,5 +39,18 @@ function cargarPrescripcionPorFecha (){
       $("#a_prescripcionporfecha").addClass("active");//agrega la clase active al item seleccionado
 }
 
+function cargarPrescripcionPorPaciente (){
+      $('#contenido_principal').load('./Reportes/Prescripcion/GetPrescripcionPaciente/PrescripcionPaciente.html'); 
+      $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
+      $("#a_prescripcionporpaciente").addClass("active");//agrega la clase active al item seleccionado
+}
+
+
+function cargarPrescripcionXNumero (){
+      $('#contenido_principal').load('./Reportes/Prescripcion/GetPrescripcionXNumero/PrescripcionXNumero.html'); 
+      $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
+      $("#a_prescripcionpornumero").addClass("active");//agrega la clase active al item seleccionado
+}
+
 
 
