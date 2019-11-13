@@ -52,5 +52,11 @@ function cargarPrescripcionXNumero (){
       $("#a_prescripcionpornumero").addClass("active");//agrega la clase active al item seleccionado
 }
 
+function cargarNovedadesPrescripcion (){
+      $('#contenido_principal').load('./Reportes/Prescripcion/GetNovedadesPrescripcion/vistaNovedadesPrescripcion.html'); 
+      $(".collapse-item").removeClass("active");//elimina la clase active de cualquir item que la tenga
+      $("#a_novedadesprescripcion").addClass("active");//agrega la clase active al item seleccionado
+}
+
 
 
