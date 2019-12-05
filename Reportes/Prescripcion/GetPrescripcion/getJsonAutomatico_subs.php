@@ -67,7 +67,7 @@ $date1 = new DateTime($periodo_inicial);
 $date2 = new DateTime($periodo_final);
 $diff = $date1->diff($date2);
 $cant_dias=$diff->days+1;
-echo "/////////////////////////////////////////////Pruebas de cambios/////////////////////////////////////////////////";
+echo "//////////////////////////////////////////////////////////////////////////////////////////////";
 echo "<br> Servicio cargado: WSPRESCRIPCION-> ".$serv_nombre."-> ".$tipo_get."<br>";
 echo ' dia(s) consultado(s): '.$cant_dias;
 
