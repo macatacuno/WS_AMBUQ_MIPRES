@@ -85,6 +85,9 @@ $nit = '818000140';
 
 */
 $periodo_inicial='20'.date('y-m-d');
+//echo $periodo_inicial."<br>";
+$periodo_inicial='2019-10-29';
+
 $periodo_final = $periodo_inicial;
 
 
@@ -105,7 +108,12 @@ if($periodo_final<$periodo_inicial){
       //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
       $url =$url_bd."/".$nit.'/'."20".$periodo_conteo.'/'.$token;
       //echo $url;
-      $json = file_get_contents($url);
+      //$json = file_get_contents($url);
+      $json = "hola\t\t como\n \\\"esta\"s.";
+      
+      $json = str_replace("\n", "", $json);
+      $json = str_replace("\t", "", $json);
+     // $json = str_replace("\\\"", "\\\\\"", $json);
       if ($json == "") {
         $peri_error= $peri_error."20".$periodo_conteo."<br>";
       }else{
@@ -120,10 +128,10 @@ if($Json_final==""){
 
   echo "<script>alert('Error al conectar con la API, favor volver a intentar.');</script>";
 }else{
-
+  
   $filecontent=$json;
 $downloadfile="Json prescripcion ".$_POST['tipo']." ".$periodo_inicial." - ".$periodo_final.".txt";
- 
+ /*
 header("Content-disposition: attachment; filename=$downloadfile");
 header("Content-Type: application/force-download");
 header("Content-Transfer-Encoding: binary");
@@ -132,12 +140,12 @@ header("Pragma: no-cache");
 header("Expires: 0");
  
 echo $filecontent;
-
+*/
 }
 
   }
 
-//echo $json; //Escribir el Json en la vista
+echo $json; //Escribir el Json en la vista
 mysqli_close($conn);
 
 ?>

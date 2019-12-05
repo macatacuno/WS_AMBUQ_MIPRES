@@ -82,7 +82,7 @@ $objPHPExcel->setActiveSheetIndex(0)
   }
 
   $json="[".$json."]";
-  $json = str_replace("\n", '', $json);
+  //$json = str_replace("\n", '', $json);
  /* $json = str_replace("[,", '[', $json); 
   $json = str_replace(",]", ']', $json); 
   $json = str_replace("\n", '', $json); */
@@ -95,7 +95,7 @@ $objPHPExcel->setActiveSheetIndex(0)
 */
  
     }
-
+/*
 $filecontent=$json;
 $downloadfile="Json prescripcion ".$_POST['tipo']." ".$periodo_inicial." - ".$periodo_final.".txt";
  
@@ -107,8 +107,8 @@ header("Pragma: no-cache");
 header("Expires: 0");
  
 echo $filecontent;
-
-//echo $json; //Escribir el Json en la vista
+*/
+echo $json; //Escribir el Json en la vista
 mysqli_close($conn);
 }
 ?>

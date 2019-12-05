@@ -104,6 +104,11 @@ $consulta = "SELECT repo_periodo, repo_json FROM reportesws  where serv_id=".$se
   if ($json == "") {
     $peri_error= $peri_error."20".$periodo_conteo."(Error al consumir la API)<br>";
     $peri_error_conteo=$peri_error_conteo+1;
+    /*Nota 1:Al remplazar los valores se debe hacer con comillas dobles, 
+    ya que con commillas simples la funcion str_replace no encuentra los datos buscados*/
+    $json = str_replace("\n", "", $json);//quitar \n
+    $json = str_replace("\t", "", $json);//quitar \t
+    $json = str_replace("\\\"", "\\\\\"", $json);//Colocrale un \ adicional a los cometarios que tengan \"
     $sql="INSERT INTO log_errores(serv_id, tire_id, logErr_periodo, log_Err_nombre, logErr_descripcion) 
     VALUES (".$servicio_id.",".$tipo_id.",'20".$periodo_conteo."', 'WSPRESCRIPCION: Error al consumir la API','No se cargó ".$serv_nombre." ".$tipo_get." 20".$periodo_conteo."')";
     mysqli_query($conn, $sql);
