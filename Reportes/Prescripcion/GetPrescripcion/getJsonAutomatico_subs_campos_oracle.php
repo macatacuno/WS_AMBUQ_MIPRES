@@ -1,6 +1,8 @@
 <?php
 
 set_time_limit(9999999);
+//ini_set('memory_limit', '-1');
+
 $servername = "localhost";
 $database = "db_app_ambuq";
 $username = "root";
@@ -98,8 +100,9 @@ oci_free_statement($st_tire);
 $periodo_inicial ="17-01-01"; 
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 */
-$periodo_inicial = "20-01-01";
-$periodo_final =   "20-01-13";
+//19-10-29  ---YY/mm/dd
+$periodo_inicial = "19-01-01";
+$periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 
 
 
@@ -126,7 +129,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
   
   
   $periodo_conteo = date("y-m-d", strtotime($periodo_inicial . "+ " . $i_Principal . " day"));
-  echo "<br>/////////////////////// Json #".$i_Principal." Periodo: ".$periodo_conteo."<br>";
+
   
   //Codico para validar si existe el registro antes de insertarlo
 
@@ -213,7 +216,19 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
         /////////////////////////////////////////////////////////////////////////////////////insertar en el log de errores
 
-      } else {
+      } else if($json == "[]"){
+        echo "<br>/////////////////////// Json #".$i_Principal." Periodo: 20".$periodo_conteo."<br>";
+        $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (".$servicio_id.",".$tipo_id.",'".$fecha_oracle."', 'NO')";//no se inserta el json porque provoca error al insertar el registro
+        //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
+       echo $sql_exc;
+
+       $st = oci_parse($conn_oracle, $sql_exc);
+
+       $result = oci_execute($st);
+       oci_free_statement($st);
+
+      } else{
+        echo "<br>/////////////////////// Json #".$i_Principal." Periodo: 20".$periodo_conteo."<br>";
         /*Nota 1:Al remplazar los valores se debe hacer con comillas dobles, 
     ya que con commillas simples la funcion str_replace no encuentra los datos buscados*/
         $json = str_replace("\n", "", $json); //quitar \n
@@ -231,30 +246,32 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           
         
            /////Insertar prescripcion (Inicio)
-           $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (".$servicio_id.",".$tipo_id.",'".$fecha_oracle."', '')";//no se inserta el json porque provoca error al insertar el registro
+
+           $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (".$servicio_id.",".$tipo_id.",'".$fecha_oracle."', 'SI')";//no se inserta el json porque provoca error al insertar el registro
             //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
-           echo $sql_exc;
+           echo "<br>".$sql_exc;
 
            $st = oci_parse($conn_oracle, $sql_exc);
 
            $result = oci_execute($st);
            oci_free_statement($st);
+
            if ($result) {
-            echo "<br>Insercion Correcta ";
+            //echo "<br>Insercion Correcta ";
             $periodos_cargados=$periodos_cargados."20".$periodo_conteo."<br>";
             $periodos_cargados_conteo=$periodos_cargados_conteo+1;
             $sql_log_err="delete from webserv_log_errores where serv_id=".$servicio_id." and tire_id=".$tipo_id." and  periodo = '".$fecha_oracle."'";
              
-             echo $sql_log_err;
+            // echo $sql_log_err;
 
              $st_log_err = oci_parse($conn_oracle, $sql_log_err);
   
              $result = oci_execute($st_log_err);
              oci_free_statement($st_log_err);
              if ($result) {
-              echo "<br>Se elimino el error ";
+              //echo ""<br>Se elimino el error ";
              }else{
-              echo "<br>No se elimino el error ";
+              //echo ""<br>No se elimino el error ";
              }
            } else {
 
@@ -390,7 +407,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresGene = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          echo "<br><br>-------------------------------------------------------------------------prescripcion";
+          //echo "<br><br>-------------------------------------------------------------------------prescripcion";
 
           if ($cadena_presc != '') {
             //echo "<br> cadena_presc: " . $cadena_presc;
@@ -401,7 +418,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NoPrescripcion_busc_ini) + strlen($NoPrescripcion_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NoPrescripcion_busc_fin);
             $noPrescripcion = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NoPrescripcion: " . $noPrescripcion;
+            //echo "<br> NoPrescripcion: " . $noPrescripcion;
             //FPrescripcion
             $FPrescripcion_busc_ini = '"FPrescripcion":';
             $FPrescripcion_busc_fin = ',"HPrescripcion"';
@@ -409,7 +426,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $FPrescripcion_busc_ini) + strlen($FPrescripcion_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $FPrescripcion_busc_fin);
             $FPrescripcion = "'" . substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial) . "'";
-            echo "<br> FPrescripcion: " . $FPrescripcion;
+            //echo "<br> FPrescripcion: " . $FPrescripcion;
             //HPrescripcion
             $HPrescripcion_busc_ini = '"HPrescripcion":';
             $HPrescripcion_busc_fin = ',"CodHabIPS"';
@@ -417,7 +434,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $HPrescripcion_busc_ini) + strlen($HPrescripcion_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $HPrescripcion_busc_fin);
             $HPrescripcion = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> HPrescripcion: " . $HPrescripcion;
+            //echo "<br> HPrescripcion: " . $HPrescripcion;
             //CodHabIPS
             $CodHabIPS_busc_ini = '"CodHabIPS":';
             $CodHabIPS_busc_fin = ',"TipoIDIPS"';
@@ -425,7 +442,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodHabIPS_busc_ini) + strlen($CodHabIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodHabIPS_busc_fin);
             $CodHabIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodHabIPS: " . $CodHabIPS;
+            //echo "<br> CodHabIPS: " . $CodHabIPS;
             //TipoIDIPS
             $TipoIDIPS_busc_ini = '"TipoIDIPS":';
             $TipoIDIPS_busc_fin = ',"NroIDIPS"';
@@ -433,7 +450,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoIDIPS_busc_ini) + strlen($TipoIDIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoIDIPS_busc_fin);
             $TipoIDIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoIDIPS: " . $TipoIDIPS;
+            //echo "<br> TipoIDIPS: " . $TipoIDIPS;
             //NroIDIPS
             $NroIDIPS_busc_ini = '"NroIDIPS":';
             $NroIDIPS_busc_fin = ',"CodDANEMunIPS"';
@@ -441,7 +458,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NroIDIPS_busc_ini) + strlen($NroIDIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NroIDIPS_busc_fin);
             $NroIDIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NroIDIPS: " . $NroIDIPS;
+            //echo "<br> NroIDIPS: " . $NroIDIPS;
             //CodDANEMunIPS
             $CodDANEMunIPS_busc_ini = '"CodDANEMunIPS":';
             $CodDANEMunIPS_busc_fin = ',"DirSedeIPS"';
@@ -449,7 +466,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodDANEMunIPS_busc_ini) + strlen($CodDANEMunIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodDANEMunIPS_busc_fin);
             $CodDANEMunIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodDANEMunIPS: " . $CodDANEMunIPS;
+            //echo "<br> CodDANEMunIPS: " . $CodDANEMunIPS;
             //DirSedeIPS
             $DirSedeIPS_busc_ini = '"DirSedeIPS":';
             $DirSedeIPS_busc_fin = ',"TelSedeIPS"';
@@ -457,7 +474,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $DirSedeIPS_busc_ini) + strlen($DirSedeIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $DirSedeIPS_busc_fin);
             $DirSedeIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> DirSedeIPS: " . $DirSedeIPS;
+            //echo "<br> DirSedeIPS: " . $DirSedeIPS;
             //TelSedeIPS
             $TelSedeIPS_busc_ini = '"TelSedeIPS":';
             $TelSedeIPS_busc_fin = ',"TipoIDProf"';
@@ -465,7 +482,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TelSedeIPS_busc_ini) + strlen($TelSedeIPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TelSedeIPS_busc_fin);
             $TelSedeIPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TelSedeIPS: " . $TelSedeIPS;
+            //echo "<br> TelSedeIPS: " . $TelSedeIPS;
             //TipoIDProf
             $TipoIDProf_busc_ini = '"TipoIDProf":';
             $TipoIDProf_busc_fin = ',"NumIDProf"';
@@ -473,7 +490,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoIDProf_busc_ini) + strlen($TipoIDProf_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoIDProf_busc_fin);
             $TipoIDProf = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoIDProf: " . $TipoIDProf;
+            //echo "<br> TipoIDProf: " . $TipoIDProf;
             //NumIDProf
             $NumIDProf_busc_ini = '"NumIDProf":';
             $NumIDProf_busc_fin = ',"PNProfS"';
@@ -481,7 +498,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NumIDProf_busc_ini) + strlen($NumIDProf_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NumIDProf_busc_fin);
             $NumIDProf = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NumIDProf: " . $NumIDProf;
+            //echo "<br> NumIDProf: " . $NumIDProf;
             //PNProfS
             $PNProfS_busc_ini = '"PNProfS":';
             $PNProfS_busc_fin = ',"SNProfS"';
@@ -489,7 +506,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $PNProfS_busc_ini) + strlen($PNProfS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $PNProfS_busc_fin);
             $PNProfS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> PNProfS: " . $PNProfS;
+            //echo "<br> PNProfS: " . $PNProfS;
             //SNProfS
             $SNProfS_busc_ini = '"SNProfS":';
             $SNProfS_busc_fin = ',"PAProfS"';
@@ -497,7 +514,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $SNProfS_busc_ini) + strlen($SNProfS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $SNProfS_busc_fin);
             $SNProfS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> SNProfS: " . $SNProfS;
+            //echo "<br> SNProfS: " . $SNProfS;
             //PAProfS
             $PAProfS_busc_ini = '"PAProfS":';
             $PAProfS_busc_fin = ',"SAProfS"';
@@ -505,7 +522,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $PAProfS_busc_ini) + strlen($PAProfS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $PAProfS_busc_fin);
             $PAProfS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> PAProfS: " . $PAProfS;
+            //echo "<br> PAProfS: " . $PAProfS;
             //SAProfS
             $SAProfS_busc_ini = '"SAProfS":';
             $SAProfS_busc_fin = ',"RegProfS"';
@@ -513,7 +530,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $SAProfS_busc_ini) + strlen($SAProfS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $SAProfS_busc_fin);
             $SAProfS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> SAProfS: " . $SAProfS;
+            //echo "<br> SAProfS: " . $SAProfS;
             //RegProfS
             $RegProfS_busc_ini = '"RegProfS":';
             $RegProfS_busc_fin = ',"TipoIDPaciente"';
@@ -521,7 +538,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $RegProfS_busc_ini) + strlen($RegProfS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $RegProfS_busc_fin);
             $RegProfS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> RegProfS: " . $RegProfS;
+            //echo "<br> RegProfS: " . $RegProfS;
             //TipoIDPaciente
             $TipoIDPaciente_busc_ini = '"TipoIDPaciente":';
             $TipoIDPaciente_busc_fin = ',"NroIDPaciente"';
@@ -529,7 +546,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoIDPaciente_busc_ini) + strlen($TipoIDPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoIDPaciente_busc_fin);
             $TipoIDPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoIDPaciente: " . $TipoIDPaciente;
+            //echo "<br> TipoIDPaciente: " . $TipoIDPaciente;
             //NroIDPaciente
             $NroIDPaciente_busc_ini = '"NroIDPaciente":';
             $NroIDPaciente_busc_fin = ',"PNPaciente"';
@@ -537,7 +554,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NroIDPaciente_busc_ini) + strlen($NroIDPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NroIDPaciente_busc_fin);
             $NroIDPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NroIDPaciente: " . $NroIDPaciente;
+            //echo "<br> NroIDPaciente: " . $NroIDPaciente;
             //PNPaciente
             $PNPaciente_busc_ini = '"PNPaciente":';
             $PNPaciente_busc_fin = ',"SNPaciente"';
@@ -545,7 +562,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $PNPaciente_busc_ini) + strlen($PNPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $PNPaciente_busc_fin);
             $PNPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> PNPaciente: " . $PNPaciente;
+            //echo "<br> PNPaciente: " . $PNPaciente;
             //SNPaciente
             $SNPaciente_busc_ini = '"SNPaciente":';
             $SNPaciente_busc_fin = ',"PAPaciente"';
@@ -553,7 +570,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $SNPaciente_busc_ini) + strlen($SNPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $SNPaciente_busc_fin);
             $SNPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> SNPaciente: " . $SNPaciente;
+            //echo "<br> SNPaciente: " . $SNPaciente;
             //PAPaciente
             $PAPaciente_busc_ini = '"PAPaciente":';
             $PAPaciente_busc_fin = ',"SAPaciente"';
@@ -561,7 +578,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $PAPaciente_busc_ini) + strlen($PAPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $PAPaciente_busc_fin);
             $PAPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> PAPaciente: " . $PAPaciente;
+            //echo "<br> PAPaciente: " . $PAPaciente;
             //SAPaciente
             $SAPaciente_busc_ini = '"SAPaciente":';
             $SAPaciente_busc_fin = ',"CodAmbAte"';
@@ -569,7 +586,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $SAPaciente_busc_ini) + strlen($SAPaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $SAPaciente_busc_fin);
             $SAPaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> SAPaciente: " . $SAPaciente;
+            //echo "<br> SAPaciente: " . $SAPaciente;
             //CodAmbAte
             $CodAmbAte_busc_ini = '"CodAmbAte":';
             $CodAmbAte_busc_fin = ',"RefAmbAte"';
@@ -577,7 +594,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodAmbAte_busc_ini) + strlen($CodAmbAte_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodAmbAte_busc_fin);
             $CodAmbAte = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodAmbAte: " . $CodAmbAte;
+            //echo "<br> CodAmbAte: " . $CodAmbAte;
             //RefAmbAte
             $RefAmbAte_busc_ini = '"RefAmbAte":';
             $RefAmbAte_busc_fin = ',"EnfHuerfana"';
@@ -585,7 +602,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_ini) + strlen($RefAmbAte_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_fin);
             $RefAmbAte = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> RefAmbAte: " . $RefAmbAte;
+            //echo "<br> RefAmbAte: " . $RefAmbAte;
             //EnfHuerfana
             $EnfHuerfana_busc_ini = '"EnfHuerfana":';
             $EnfHuerfana_busc_fin = ',"CodEnfHuerfana"';
@@ -593,7 +610,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $EnfHuerfana_busc_ini) + strlen($EnfHuerfana_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $EnfHuerfana_busc_fin);
             $EnfHuerfana = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> EnfHuerfana: " . $EnfHuerfana;
+            //echo "<br> EnfHuerfana: " . $EnfHuerfana;
             //CodEnfHuerfana
             $CodEnfHuerfana_busc_ini = '"CodEnfHuerfana":';
             $CodEnfHuerfana_busc_fin = ',"EnfHuerfanaDX"';
@@ -601,7 +618,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodEnfHuerfana_busc_ini) + strlen($CodEnfHuerfana_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodEnfHuerfana_busc_fin);
             $CodEnfHuerfana = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodEnfHuerfana: " . $CodEnfHuerfana;
+            //echo "<br> CodEnfHuerfana: " . $CodEnfHuerfana;
             //EnfHuerfanaDX
             $EnfHuerfanaDX_busc_ini = '"EnfHuerfanaDX":';
             $EnfHuerfanaDX_busc_fin = ',"CodDxPpal"';
@@ -609,7 +626,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $EnfHuerfanaDX_busc_ini) + strlen($EnfHuerfanaDX_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $EnfHuerfanaDX_busc_fin);
             $EnfHuerfanaDX = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> EnfHuerfanaDX: " . $EnfHuerfanaDX;
+            //echo "<br> EnfHuerfanaDX: " . $EnfHuerfanaDX;
             //CodDxPpal
             $CodDxPpal_busc_ini = '"CodDxPpal":';
             $CodDxPpal_busc_fin = ',"CodDxRel1"';
@@ -617,7 +634,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodDxPpal_busc_ini) + strlen($CodDxPpal_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodDxPpal_busc_fin);
             $CodDxPpal = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodDxPpal: " . $CodDxPpal;
+            //echo "<br> CodDxPpal: " . $CodDxPpal;
             //CodDxRel1
             $CodDxRel1_busc_ini = '"CodDxRel1":';
             $CodDxRel1_busc_fin = ',"CodDxRel2"';
@@ -625,7 +642,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodDxRel1_busc_ini) + strlen($CodDxRel1_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodDxRel1_busc_fin);
             $CodDxRel1 = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodDxRel1: " . $CodDxRel1;
+            //echo "<br> CodDxRel1: " . $CodDxRel1;
             //CodDxRel2
             $CodDxRel2_busc_ini = '"CodDxRel2":';
             $CodDxRel2_busc_fin = ',"SopNutricional"';
@@ -633,7 +650,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodDxRel2_busc_ini) + strlen($CodDxRel2_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodDxRel2_busc_fin);
             $CodDxRel2 = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodDxRel2: " . $CodDxRel2;
+            //echo "<br> CodDxRel2: " . $CodDxRel2;
             //SopNutricional
             $SopNutricional_busc_ini = '"SopNutricional":';
             $SopNutricional_busc_fin = ',"CodEPS"';
@@ -641,7 +658,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $SopNutricional_busc_ini) + strlen($SopNutricional_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $SopNutricional_busc_fin);
             $SopNutricional = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> SopNutricional: " . $SopNutricional;
+            //echo "<br> SopNutricional: " . $SopNutricional;
             //CodEPS
             $CodEPS_busc_ini = '"CodEPS":';
             $CodEPS_busc_fin = ',"TipoIDMadrePaciente"';
@@ -649,7 +666,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $CodEPS_busc_ini) + strlen($CodEPS_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $CodEPS_busc_fin);
             $CodEPS = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> CodEPS: " . $CodEPS;
+            //echo "<br> CodEPS: " . $CodEPS;
             //TipoIDMadrePaciente
             $TipoIDMadrePaciente_busc_ini = '"TipoIDMadrePaciente":';
             $TipoIDMadrePaciente_busc_fin = ',"NroIDMadrePaciente"';
@@ -657,7 +674,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoIDMadrePaciente_busc_ini) + strlen($TipoIDMadrePaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoIDMadrePaciente_busc_fin);
             $TipoIDMadrePaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoIDMadrePaciente: " . $TipoIDMadrePaciente;
+            //echo "<br> TipoIDMadrePaciente: " . $TipoIDMadrePaciente;
             //NroIDMadrePaciente
             $NroIDMadrePaciente_busc_ini = '"NroIDMadrePaciente":';
             $NroIDMadrePaciente_busc_fin = ',"TipoTransc"';
@@ -665,7 +682,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NroIDMadrePaciente_busc_ini) + strlen($NroIDMadrePaciente_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NroIDMadrePaciente_busc_fin);
             $NroIDMadrePaciente = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NroIDMadrePaciente: " . $NroIDMadrePaciente;
+            //echo "<br> NroIDMadrePaciente: " . $NroIDMadrePaciente;
             //TipoTransc
             $TipoTransc_busc_ini = '"TipoTransc":';
             $TipoTransc_busc_fin = ',"TipoIDDonanteVivo"';
@@ -673,7 +690,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoTransc_busc_ini) + strlen($TipoTransc_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoTransc_busc_fin);
             $TipoTransc = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoTransc: " . $TipoTransc;
+            //echo "<br> TipoTransc: " . $TipoTransc;
             //TipoIDDonanteVivo
             $TipoIDDonanteVivo_busc_ini = '"TipoIDDonanteVivo":';
             $TipoIDDonanteVivo_busc_fin = ',"NroIDDonanteVivo"';
@@ -681,7 +698,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $TipoIDDonanteVivo_busc_ini) + strlen($TipoIDDonanteVivo_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $TipoIDDonanteVivo_busc_fin);
             $TipoIDDonanteVivo = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> TipoIDDonanteVivo: " . $TipoIDDonanteVivo;
+            //echo "<br> TipoIDDonanteVivo: " . $TipoIDDonanteVivo;
             //NroIDDonanteVivo
             $NroIDDonanteVivo_busc_ini = '"NroIDDonanteVivo":';
             $NroIDDonanteVivo_busc_fin = ',"EstPres"';
@@ -689,7 +706,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NroIDDonanteVivo_busc_ini) + strlen($NroIDDonanteVivo_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NroIDDonanteVivo_busc_fin);
             $NroIDDonanteVivo = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> NroIDDonanteVivo: " . $NroIDDonanteVivo;
+            //echo "<br> NroIDDonanteVivo: " . $NroIDDonanteVivo;
             //EstPres
             $EstPres_busc_ini = '"EstPres":';
             $EstPres_busc_fin = '}';
@@ -697,7 +714,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $EstPres_busc_ini) + strlen($EstPres_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $EstPres_busc_fin);
             $EstPres = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            echo "<br> EstPres: " . $EstPres;
+            //echo "<br> EstPres: " . $EstPres;
 
 
             ////ID_PRES
@@ -706,7 +723,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             oci_execute($st_id_pres, OCI_DEFAULT);
             while (($row = oci_fetch_array($st_id_pres, OCI_BOTH)) != false) {
               $id_pres = $row[0];
-              echo "<br>: id_pres_ver" . $id_pres;
+              //echo "<br>: id_pres_ver" . $id_pres;
             }
             oci_free_statement($st_id_pres);
 
@@ -723,9 +740,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posIniFPrescripcion = 2;
             $posFinFPrescripcion = strpos($FPrescripcion, "T") - 2;
             $FPrescripcion = substr($FPrescripcion, $posIniFPrescripcion, $posFinFPrescripcion);
-            echo "<br>: FPrescripcion: " . $FPrescripcion;
+            //echo "<br>: FPrescripcion: " . $FPrescripcion;
             $FPrescripcion = "'" . date("d/m/Y", strtotime($FPrescripcion)) . "'"; //formato originar "y/m/d"
-            echo "<br>: FPrescripcion: " . $FPrescripcion . "<br>";
+            //echo "<br>: FPrescripcion: " . $FPrescripcion . "<br>";
             //oci_bind_by_name($st, ":FPrescripcion", $FPrescripcion);
 
             //$HPrescripcion;
@@ -972,7 +989,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             /* if ($NroIDDonanteVivo == "null") {
               $NroIDDonanteVivo = '';
             }*/
-            //echo "<br> NroIDDonanteVivo: " . $NroIDDonanteVivo;
+            ////echo "<br> NroIDDonanteVivo: " . $NroIDDonanteVivo;
             //oci_bind_by_name($st, ":NroIDDonanteVivo", $NroIDDonanteVivo);
 
             //$EstPres;
@@ -999,16 +1016,16 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
          )  VALUES (SEQ_WEBSERV_PRES_PRES.nextval,concat('201941283780012888',SEQ_WEBSERV_PRES_PRES.nextval),:FPRESCRIPCION, :HPRESCRIPCION, '080010003701', 'NI', '890102768', '08001', 'CARRERA 48 # 70-38', '3091999', 'CC', '8755608', 'SAUL', 'ALFREDO', 'CHRISTIANSEN', 'MARTELO', '1572', 'CC', '3754775', 'HERNANDO', '', 'ESTRADA', 'GOMEZ',22, null,0, null, null, 'R579', null, null, null, 'ESS076', null, null, null, null, null,4)";
              */
 
-            echo $sql_exc;
+            //echo $sql_exc;
 
             $st = oci_parse($conn_oracle, $sql_exc);
 
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
-              echo "<br>Insercion Incorrecta ";
+              //echo  "<br>Insercion Incorrecta ";
             }
             /////Insertar prescripcion (Fin)
 
@@ -1018,7 +1035,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           ///////////////////////////////////////////////////////////////////////////////////////////medicamentos
           ///////////////////////////////////////////////////////////////////////////////////////////medicamentos
           ///////////////////////////////////////////////////////////////////////////////////////////medicamentos
-          echo "<br><br>-------------------------------------------------------------------------medicamentos";
+          //echo  "<br><br>-------------------------------------------------------------------------medicamentos";
           //Obtener cadena general de prescripcion
           $cad_pres_busc_ini = '},"medicamentos"';
           $cad_pres_busc_fin = ',"procedimientos"';
@@ -1026,7 +1043,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresMedi = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          //echo "<br> subCadenaPresMedi: " . $subCadenaPresMedi . "<br>";
+          ////echo "<br> subCadenaPresMedi: " . $subCadenaPresMedi . "<br>";
           /****************************************************************************************************** */
           ////Crear un ciclo con el while para recorrer todos los medicamentos////////////////
 
@@ -1034,7 +1051,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $cadenaMedi = str_replace('},"medicamentos":[', 'inicio_cad_medi', $cadenaMedi);
           $cadenaMedi = str_replace(']},{"ConOrden"', ']},inicio_cad_medi{"ConOrden"', $cadenaMedi);
           $subcadenaMediBuscadaInicial   = 'inicio_cad_medi{"ConOrden"';
-          //echo "<br> cadenaMedi: " . $cadenaMedi . "<br>";
+          ////echo "<br> cadenaMedi: " . $cadenaMedi . "<br>";
           $posInicial = strpos($cadenaMedi, $subcadenaMediBuscadaInicial);
           $count_report = 0;
 
@@ -1046,19 +1063,19 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             ///////////////////////////////////////////Prescripcion/////////////////////////////////////////
 
             $subcadenaMediBuscadaInicial   = 'inicio_cad_medi{"ConOrden"';
-            // echo "<br> sub cadenaMedi Buscada Inicial: " . $subcadenaMediBuscadaInicial;
+            // //echo "<br> sub cadenaMedi Buscada Inicial: " . $subcadenaMediBuscadaInicial;
             $subcadenaMediBuscadaFinal   = ']}';
-            //echo "<br> sub cadenaMedi Buscada Final: " . $subcadenaMediBuscadaFinal;
+            ////echo "<br> sub cadenaMedi Buscada Final: " . $subcadenaMediBuscadaFinal;
             $posInicial = strpos($cadenaMedi, $subcadenaMediBuscadaInicial);
-            // echo "<br> pos Inicial: " . $posInicial;
+            // //echo "<br> pos Inicial: " . $posInicial;
             $posFinal = strpos($cadenaMedi, $subcadenaMediBuscadaFinal) + 2;
-            //echo "<br> pos Final: " . $posFinal;
+            ////echo "<br> pos Final: " . $posFinal;
             if ($posFinal == "") {
               $posFinal = strlen($cadenaMedi) - 2; //Sera igual a la última posición de la cadenaMedi
-              // echo "<br> pos Final no encontrado: " . $posFinal;
+              // //echo "<br> pos Final no encontrado: " . $posFinal;
             }
             $subcadenaMediFinal = substr($cadenaMedi, $posInicial, $posFinal - $posInicial + 1);
-            //echo "<br> Sub cadenaMedi: " . $subcadenaMediFinal;
+            ////echo "<br> Sub cadenaMedi: " . $subcadenaMediFinal;
             if ($subcadenaMediFinal != '[' && $subcadenaMediFinal != '') {
               $vector_medicamentos[$count_report] = str_replace('inicio_cad_medi', '},"medicamentos":[', $subcadenaMediFinal);
               $count_report++;
@@ -1071,8 +1088,8 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           /*******************Leer cada uno de los medicamentos(Inicio)********************************/
           $longitud_vec_medi = count($vector_medicamentos);
           for ($count_vec_medi = 0; $count_vec_medi < $longitud_vec_medi; $count_vec_medi++) {
-            echo "<br><br>-------------------------------------medicamento# " . ($count_vec_medi + 1);
-            //echo "<br> Cadena#" . $count_vec_medi . ": " . $vector_medicamentos[$count_vec_medi];
+            //echo "<br><br>-------------------------------------medicamento# " . ($count_vec_medi + 1);
+            ////echo "<br> Cadena#" . $count_vec_medi . ": " . $vector_medicamentos[$count_vec_medi];
             $subCadenaPresMedi = $vector_medicamentos[$count_vec_medi];
             //Guardar en un vector cada una de las variables de la cadena de medicamentos
             $vector_parametros[0] = $subCadenaPresMedi;
@@ -1084,7 +1101,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $longitud_vector_subCadenaPresMedi = count($vector_subCadenaPresMedi);
 
             //obtener los datos de cada una de las variables del json
-             echo "<br> subCadenaPresMedi: " . $subCadenaPresMedi."<br>";
+             //echo "<br> subCadenaPresMedi: " . $subCadenaPresMedi."<br>";
             if ($subCadenaPresMedi !== '},"medicamentos":[]' && $subCadenaPresMedi !== '') {
               ////ID_MEDI
               $sql_id_medi = "select SEQ_WEBSERV_PRES_MEDI.nextval as ID_MEDI from dual";
@@ -1093,7 +1110,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               while (($row = oci_fetch_array($st_id_medi, OCI_BOTH)) != false) {
                 $id_medi = $row[0];
                 //$id_medi = $row['ID_MEDI'];
-                // echo "<br>: id_medi_ver" . $id_medi;
+                // //echo "<br>: id_medi_ver" . $id_medi;
               }
               oci_free_statement($st_id_medi);
 
@@ -1119,14 +1136,14 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
                   $dato = str_replace('"', "'", $dato);
-                  echo   "<br> " . $nombre_dato . ": " . $dato;
+                 // echo   "<br> " . $nombre_dato . ": " . $dato;
                   //$dato_vec[$a] = $dato;
                   // oci_bind_by_name($st_medi, ":" . $nombre_dato, $dato);
                   $sql_exc = $sql_exc . "," . $dato;
                 }
               }
               $sql_exc = $sql_exc . ")";
-              echo $sql_exc;
+              //echo $sql_exc;
 
               $st_medi = oci_parse($conn_oracle, $sql_exc);
               unset($vector_subCadenaPresMedi); //Vaciar el vector
@@ -1139,9 +1156,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $result = oci_execute($st_medi);
               oci_free_statement($st_medi);
               if ($result) {
-                echo "<br>Insercion Correcta ";
+                //echo  "<br>Insercion Correcta ";
               } else {
-                echo "<br>Insercion Incorrecta ";
+                //echo  "<br>Insercion Incorrecta ";
               }
 
 
@@ -1158,7 +1175,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $PrincipiosActivos = substr($cadena_PrincipiosActivos, $posPresInicial, $posPresFinal - $posPresInicial + 2); //Se le suman dos caracteres para incluir el }] en el final de la cadena
 
               if ($PrincipiosActivos != "") {
-                echo "<br>---------------------------------";
+                //echo  "<br>---------------------------------";
                 //Guardar en un vector cada uno de los principios activos
                 $subCadenaBuscadaInicial   = '[{"ConOrden":';
                 $cadena = $PrincipiosActivos;
@@ -1190,11 +1207,11 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
                 //saco el numero de elementos
                 $longitud_vector_PrincipiosActivos = count($vector_PrincipiosActivos);
-                echo "<br> [PrincipiosActivos]: Cantidad:" . $longitud_vector_PrincipiosActivos; //. $PrincipiosActivos;
+                //echo "<br> [PrincipiosActivos]: Cantidad:" . $longitud_vector_PrincipiosActivos; //. $PrincipiosActivos;
                 //echo "<br>longitud_vector_PrincipiosActivos: " . $longitud_vector_PrincipiosActivos;
                 //Recorro todos los elementos
                 for ($e = 0; $e < $longitud_vector_PrincipiosActivos; $e++) {
-                  echo "<br>-------";
+                  //echo  "<br>-------";
                   $cadena_principio_activo = $vector_PrincipiosActivos[$e];
                   if ($cadena_principio_activo != '') {
                     //Obtener la cadena de cada uno de los Principios Activos
@@ -1205,7 +1222,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'ConOrden';
                     $pa_ConOrden = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_ConOrden = str_replace('"', "'", $pa_ConOrden);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_ConOrden;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_ConOrden;
 
                     //CodPriAct
                     $parametro_inicial = '"CodPriAct":';
@@ -1213,7 +1230,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'CodPriAct';
                     $pa_CodPriAct = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_CodPriAct = str_replace('"', "'", $pa_CodPriAct);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_CodPriAct;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_CodPriAct;
 
                     //ConcCant
                     $parametro_inicial = '"ConcCant":';
@@ -1221,7 +1238,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'ConcCant';
                     $pa_ConcCant = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_ConcCant = str_replace('"', "'", $pa_ConcCant);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_ConcCant;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_ConcCant;
 
                     //UMedConc
                     $parametro_inicial = '"UMedConc":';
@@ -1229,7 +1246,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'UMedConc';
                     $pa_UMedConc = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_UMedConc = str_replace('"', "'", $pa_UMedConc);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_UMedConc;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_UMedConc;
 
                     //CantCont
                     $parametro_inicial = '"CantCont":';
@@ -1237,7 +1254,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'CantCont';
                     $pa_CantCont = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_CantCont = str_replace('"', "'", $pa_CantCont);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_CantCont;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_CantCont;
 
                     //UMedCantCont
                     $parametro_inicial = '"UMedCantCont":';
@@ -1245,22 +1262,22 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'UMedCantCont';
                     $pa_UMedCantCont = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $pa_UMedCantCont = str_replace('"', "'", $pa_UMedCantCont);
-                    echo   "<br> " . $nombre_dato . ": " . $pa_UMedCantCont;
+                    //echo   "<br> " . $nombre_dato . ": " . $pa_UMedCantCont;
 
                     /////Insertar prescripcion (Inicio)
                     $sql_exc = "INSERT INTO WEBSERV_PRES_PRIN_ACTI 
                     (ID_PRAC,ID_MEDI,CONORDEN,CODPRIACT,CONCCANT,UMEDCONC,CANTCONT,UMEDCANTCONT)  VALUES 
                     (SEQ_WEBSERV_PRES_PRIN_ACTI.nextval," . $id_medi . "," . $pa_ConOrden . "," . $pa_CodPriAct . "," . $pa_ConcCant . "," . $pa_UMedConc . "," . $pa_CantCont . "," . $pa_UMedCantCont . ")";
-                    echo $sql_exc;
+                    //echo $sql_exc;
 
                     $st_pr_ac = oci_parse($conn_oracle, $sql_exc);
 
                     $result = oci_execute($st_pr_ac);
                     oci_free_statement($st_pr_ac);
                     if ($result) {
-                      echo "<br>Insercion Correcta ";
+                      //echo  "<br>Insercion Correcta ";
                     } else {
-                      echo "<br>Insercion Incorrecta ";
+                      //echo  "<br>Insercion Incorrecta ";
                     }
                     /////Insertar prescripcion (Fin)
 
@@ -1291,7 +1308,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndicacionesUNIRS, $IndicacionesUNIRS_busc_fin);
               $IndicacionesUNIRS = substr($cadena_IndicacionesUNIRS, $posPresInicial, $posPresFinal - $posPresInicial + 2); //Se le suman dos caracteres  para incluir el }] en el final de la cadena
               if ($IndicacionesUNIRS != '') {
-                echo "<br>---------------------------------";
+                //echo "<br>---------------------------------";
                 //Guardar en un vector cada uno de los IndicacionesUNIRS
                 $subCadenaBuscadaInicial   = '[{"ConOrden":';
                 $cadena = $IndicacionesUNIRS;
@@ -1324,11 +1341,11 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                 //saco el numero de elementos
                 $longitud_vector_IndicacionesUNIRS = count($vector_IndicacionesUNIRS);
 
-                echo "<br> [IndicacionesUNIRS]: Cantidad: " . $longitud_vector_IndicacionesUNIRS; // . $IndicacionesUNIRS;
-                //echo "<br>longitud_vector_IndicacionesUNIRS: " . $longitud_vector_IndicacionesUNIRS;
+                //echo "<br> [IndicacionesUNIRS]: Cantidad: " . $longitud_vector_IndicacionesUNIRS; // . $IndicacionesUNIRS;
+                ////echo "<br>longitud_vector_IndicacionesUNIRS: " . $longitud_vector_IndicacionesUNIRS;
                 //Recorro todos los elementos
                 for ($e = 0; $e < $longitud_vector_IndicacionesUNIRS; $e++) {
-                  echo "<br>-------";
+                  //echo  "<br>-------";
                   $cadena_principio_activo = $vector_IndicacionesUNIRS[$e];
                   if ($cadena_principio_activo != '') {
                     //Obtener la cadena de cada uno de los IndicacionesUNIRS
@@ -1339,7 +1356,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'ConOrden';
                     $iu_ConOrden = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $iu_ConOrden = str_replace('"', "'", $iu_ConOrden);
-                    echo   "<br> " . $nombre_dato . ": " . $dato;
+                    //echo   "<br> " . $nombre_dato . ": " . $dato;
 
 
                     //UMedCantCont
@@ -1348,23 +1365,23 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     $nombre_dato = 'CodIndicacion';
                     $iu_CodIndicacion = obtener_dato_json($parametro_inicial, $parametro_final, $cadena_principio_activo, $nombre_dato);
                     $iu_CodIndicacion = str_replace('"', "'", $iu_CodIndicacion);
-                    echo   "<br> " . $nombre_dato . ": " . $dato;
+                    //echo   "<br> " . $nombre_dato . ": " . $dato;
 
 
                     /////Insertar prescripcion (Inicio)
                     $sql_exc = "INSERT INTO WEBSERV_PRES_INDI_UNIRS 
                      (ID_IMUN,ID_MEDI,CONORDEN,CODINDICACION)  VALUES 
                      (SEQ_WEBSERV_PRES_INDI_UNIRS.nextval," . $id_medi . "," . $iu_ConOrden . "," . $iu_CodIndicacion . ")";
-                    echo $sql_exc;
+                    //echo $sql_exc;
 
                     $st_in_un = oci_parse($conn_oracle, $sql_exc);
 
                     $result = oci_execute($st_in_un);
                     oci_free_statement($st_in_un);
                     if ($result) {
-                      echo "<br>Insercion Correcta ";
+                      //echo  "<br>Insercion Correcta ";
                     } else {
-                      echo "<br>Insercion Incorrecta ";
+                      //echo  "<br>Insercion Incorrecta ";
                     }
                     /////Insertar prescripcion (Fin)
 
@@ -1430,7 +1447,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
           ///////////////////////////////////////////////////////////////////////////////////////////procedimientos
-          echo "<br><br>-------------------------------------------------------------------------procedimientos";
+          //echo  "<br><br>-------------------------------------------------------------------------procedimientos";
 
 
           //Obtener cadena general de prescripcion
@@ -1440,7 +1457,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresProc = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          echo "<br> subCadenaPresProc: " . $subCadenaPresProc . "<br>";
+          //echo "<br> subCadenaPresProc: " . $subCadenaPresProc . "<br>";
           /****************************************************************************************************** */
           ////Crear un ciclo con el while para recorrer todos los procedimientos////////////////
 
@@ -1448,7 +1465,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           // $cadenaProc = str_replace('},"procedimientos":[', 'inicio', $cadenaProc);
           // $cadenaProc = str_replace('},{"ConOrden"', '},inicio{"ConOrden"', $cadenaProc);
           $subcadenaProcBuscadaInicial   = '{"ConOrden"';
-          //echo "<br> cadenaProc: " . $cadenaProc . "<br>";
+          ////echo "<br> cadenaProc: " . $cadenaProc . "<br>";
           $posInicial = strpos($cadenaProc, $subcadenaProcBuscadaInicial);
           $count_report = 0;
 
@@ -1461,19 +1478,19 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             ///////////////////////////////////////////Prescripcion///////////////////////////////////////////
 
             $subcadenaProcBuscadaInicial   = '{"ConOrden"';
-            // echo "<br> sub cadenaProc Buscada Inicial: " . $subcadenaProcBuscadaInicial;
+            // //echo "<br> sub cadenaProc Buscada Inicial: " . $subcadenaProcBuscadaInicial;
             $subcadenaProcBuscadaFinal   = '}';
-            //echo "<br> sub cadenaProc Buscada Final: " . $subcadenaProcBuscadaFinal;
+            ////echo "<br> sub cadenaProc Buscada Final: " . $subcadenaProcBuscadaFinal;
             $posInicial = strpos($cadenaProc, $subcadenaProcBuscadaInicial);
-            // echo "<br> pos Inicial: " . $posInicial;
+            // //echo "<br> pos Inicial: " . $posInicial;
             $posFinal = strpos($cadenaProc, $subcadenaProcBuscadaFinal) + 2;
-            //echo "<br> pos Final: " . $posFinal;
+            ////echo "<br> pos Final: " . $posFinal;
             if ($posFinal == "") {
               $posFinal = strlen($cadenaProc) - 2; //Sera igual a la última posición de la cadenaProc
-              // echo "<br> pos Final no encontrado: " . $posFinal;
+              // //echo "<br> pos Final no encontrado: " . $posFinal;
             }
             $subcadenaProcFinal = substr($cadenaProc, $posInicial, $posFinal - $posInicial);
-            echo "<br> Sub cadenaProc: " . $subcadenaProcFinal;
+            //echo "<br> Sub cadenaProc: " . $subcadenaProcFinal;
             if ($subcadenaProcFinal != '[' && $subcadenaProcFinal != '') {
               //$vector_procedimientos[$count_report] = str_replace('inicio', '},"procedimientos":[', $subcadenaProcFinal);
               $vector_procedimientos[$count_report] =  $subcadenaProcFinal;
@@ -1487,13 +1504,13 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           /*******************Leer cada uno de los procedimientos(Inicio)********************************/
           $longitud_vec_Proc = count($vector_procedimientos);
           for ($count_vec_Proc = 0; $count_vec_Proc < $longitud_vec_Proc; $count_vec_Proc++) {
-            //echo "<br> Cadena#" . $count_vec_Proc . ": " . $vector_procedimientos[$count_vec_Proc];
+            ////echo "<br> Cadena#" . $count_vec_Proc . ": " . $vector_procedimientos[$count_vec_Proc];
             $subCadenaPresProc = $vector_procedimientos[$count_vec_Proc];
 
 
             if (strlen($subCadenaPresProc) > 5) { //Si la cadena tiene mas de 5 caracteres entonces se entiende que hay datos para leer
-              echo "<br><br>-------------------------------------procedimiento# " . ($count_vec_Proc + 1);
-              echo "<br> subCadenaPresProc: " . $subCadenaPresProc;
+              //echo  "<br><br>-------------------------------------procedimiento# " . ($count_vec_Proc + 1);
+              //echo "<br> subCadenaPresProc: " . $subCadenaPresProc;
               //ConOrden
               $ConOrden_busc_ini = '"ConOrden":';
               $ConOrden_busc_fin = ',"TipoPrest"';
@@ -1502,7 +1519,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ConOrden, $ConOrden_busc_fin);
               $ConOrden = substr($cadena_ConOrden, $posPresInicial, $posPresFinal - $posPresInicial);
               $ConOrden = str_replace('"', "'", $ConOrden);
-              echo "<br> ConOrden: " . $ConOrden;
+              //echo "<br> ConOrden: " . $ConOrden;
               //TipoPrest
               $TipoPrest_busc_ini = '"TipoPrest":';
               $TipoPrest_busc_fin = ',"CausaS11"';
@@ -1511,7 +1528,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoPrest, $TipoPrest_busc_fin);
               $TipoPrest = substr($cadena_TipoPrest, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoPrest = str_replace('"', "'", $TipoPrest);
-              echo "<br> TipoPrest: " . $TipoPrest;
+              //echo "<br> TipoPrest: " . $TipoPrest;
               //CausaS11
               $CausaS11_busc_ini = '"CausaS11":';
               $CausaS11_busc_fin = ',"CausaS12"';
@@ -1520,7 +1537,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS11, $CausaS11_busc_fin);
               $CausaS11 = substr($cadena_CausaS11, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS11 = str_replace('"', "'", $CausaS11);
-              echo "<br> CausaS11: " . $CausaS11;
+              //echo "<br> CausaS11: " . $CausaS11;
               //CausaS12
               $CausaS12_busc_ini = '"CausaS12":';
               $CausaS12_busc_fin = ',"CausaS2"';
@@ -1529,7 +1546,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS12, $CausaS12_busc_fin);
               $CausaS12 = substr($cadena_CausaS12, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS12 = str_replace('"', "'", $CausaS12);
-              echo "<br> CausaS12: " . $CausaS12;
+              //echo "<br> CausaS12: " . $CausaS12;
               //CausaS2
               $CausaS2_busc_ini = '"CausaS2":';
               $CausaS2_busc_fin = ',"CausaS3"';
@@ -1538,7 +1555,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS2, $CausaS2_busc_fin);
               $CausaS2 = substr($cadena_CausaS2, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS2 = str_replace('"', "'", $CausaS2);
-              echo "<br> CausaS2: " . $CausaS2;
+              //echo "<br> CausaS2: " . $CausaS2;
               //CausaS3
               $CausaS3_busc_ini = '"CausaS3":';
               $CausaS3_busc_fin = ',"CausaS4"';
@@ -1547,7 +1564,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS3, $CausaS3_busc_fin);
               $CausaS3 = substr($cadena_CausaS3, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS3 = str_replace('"', "'", $CausaS3);
-              echo "<br> CausaS3: " . $CausaS3;
+              //echo "<br> CausaS3: " . $CausaS3;
               //CausaS4
               $CausaS4_busc_ini = '"CausaS4":';
               $CausaS4_busc_fin = ',"ProPBSUtilizado"';
@@ -1556,7 +1573,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS4, $CausaS4_busc_fin);
               $CausaS4 = substr($cadena_CausaS4, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS4 = str_replace('"', "'", $CausaS4);
-              echo "<br> CausaS4: " . $CausaS4;
+              //echo "<br> CausaS4: " . $CausaS4;
               //ProPBSUtilizado
               $ProPBSUtilizado_busc_ini = '"ProPBSUtilizado":';
               $ProPBSUtilizado_busc_fin = ',"CausaS5"';
@@ -1565,7 +1582,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ProPBSUtilizado, $ProPBSUtilizado_busc_fin);
               $ProPBSUtilizado = substr($cadena_ProPBSUtilizado, $posPresInicial, $posPresFinal - $posPresInicial);
               $ProPBSUtilizado = str_replace('"', "'", $ProPBSUtilizado);
-              echo "<br> ProPBSUtilizado: " . $ProPBSUtilizado;
+              //echo "<br> ProPBSUtilizado: " . $ProPBSUtilizado;
               //CausaS5
               $CausaS5_busc_ini = '"CausaS5":';
               $CausaS5_busc_fin = ',"ProPBSDescartado"';
@@ -1574,7 +1591,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS5, $CausaS5_busc_fin);
               $CausaS5 = substr($cadena_CausaS5, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS5 = str_replace('"', "'", $CausaS5);
-              echo "<br> CausaS5: " . $CausaS5;
+              //echo "<br> CausaS5: " . $CausaS5;
               //ProPBSDescartado
               $ProPBSDescartado_busc_ini = '"ProPBSDescartado":';
               $ProPBSDescartado_busc_fin = ',"RznCausaS51"';
@@ -1583,7 +1600,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ProPBSDescartado, $ProPBSDescartado_busc_fin);
               $ProPBSDescartado = substr($cadena_ProPBSDescartado, $posPresInicial, $posPresFinal - $posPresInicial);
               $ProPBSDescartado = str_replace('"', "'", $ProPBSDescartado);
-              echo "<br> ProPBSDescartado: " . $ProPBSDescartado;
+              //echo "<br> ProPBSDescartado: " . $ProPBSDescartado;
               //RznCausaS51
               $RznCausaS51_busc_ini = '"RznCausaS51":';
               $RznCausaS51_busc_fin = ',"DescRzn51"';
@@ -1592,7 +1609,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS51, $RznCausaS51_busc_fin);
               $RznCausaS51 = substr($cadena_RznCausaS51, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS51 = str_replace('"', "'", $RznCausaS51);
-              echo "<br> RznCausaS51: " . $RznCausaS51;
+              //echo "<br> RznCausaS51: " . $RznCausaS51;
               //DescRzn51
               $DescRzn51_busc_ini = '"DescRzn51":';
               $DescRzn51_busc_fin = ',"RznCausaS52"';
@@ -1601,7 +1618,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn51, $DescRzn51_busc_fin);
               $DescRzn51 = substr($cadena_DescRzn51, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn51 = str_replace('"', "'", $DescRzn51);
-              echo "<br> DescRzn51: " . $DescRzn51;
+              //echo "<br> DescRzn51: " . $DescRzn51;
               //RznCausaS52
               $RznCausaS52_busc_ini = '"RznCausaS52":';
               $RznCausaS52_busc_fin = ',"DescRzn52"';
@@ -1610,7 +1627,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS52, $RznCausaS52_busc_fin);
               $RznCausaS52 = substr($cadena_RznCausaS52, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS52 = str_replace('"', "'", $RznCausaS52);
-              echo "<br> RznCausaS52: " . $RznCausaS52;
+              //echo "<br> RznCausaS52: " . $RznCausaS52;
               //DescRzn52
               $DescRzn52_busc_ini = '"DescRzn52":';
               $DescRzn52_busc_fin = ',"CausaS6"';
@@ -1619,7 +1636,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn52, $DescRzn52_busc_fin);
               $DescRzn52 = substr($cadena_DescRzn52, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn52 = str_replace('"', "'", $DescRzn52);
-              echo "<br> DescRzn52: " . $DescRzn52;
+              //echo "<br> DescRzn52: " . $DescRzn52;
               //CausaS6
               $CausaS6_busc_ini = '"CausaS6":';
               $CausaS6_busc_fin = ',"CausaS7"';
@@ -1628,7 +1645,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS6, $CausaS6_busc_fin);
               $CausaS6 = substr($cadena_CausaS6, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS6 = str_replace('"', "'", $CausaS6);
-              echo "<br> CausaS6: " . $CausaS6;
+              //echo "<br> CausaS6: " . $CausaS6;
               //CausaS7
               $CausaS7_busc_ini = '"CausaS7":';
               $CausaS7_busc_fin = ',"CodCUPS"';
@@ -1637,7 +1654,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS7, $CausaS7_busc_fin);
               $CausaS7 = substr($cadena_CausaS7, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS7 = str_replace('"', "'", $CausaS7);
-              echo "<br> CausaS7: " . $CausaS7;
+              //echo "<br> CausaS7: " . $CausaS7;
               //CodCUPS
               $CodCUPS_busc_ini = '"CodCUPS":';
               $CodCUPS_busc_fin = ',"CanForm"';
@@ -1646,7 +1663,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodCUPS, $CodCUPS_busc_fin);
               $CodCUPS = substr($cadena_CodCUPS, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodCUPS = str_replace('"', "'", $CodCUPS);
-              echo "<br> CodCUPS: " . $CodCUPS;
+              //echo "<br> CodCUPS: " . $CodCUPS;
               //CanForm
               $CanForm_busc_ini = '"CanForm":';
               $CanForm_busc_fin = ',"CadaFreUso"';
@@ -1655,7 +1672,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CanForm, $CanForm_busc_fin);
               $CanForm = substr($cadena_CanForm, $posPresInicial, $posPresFinal - $posPresInicial);
               $CanForm = str_replace('"', "'", $CanForm);
-              echo "<br> CanForm: " . $CanForm;
+              //echo "<br> CanForm: " . $CanForm;
               //CadaFreUso
               $CadaFreUso_busc_ini = '"CadaFreUso":';
               $CadaFreUso_busc_fin = ',"CodFreUso"';
@@ -1664,7 +1681,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CadaFreUso, $CadaFreUso_busc_fin);
               $CadaFreUso = substr($cadena_CadaFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CadaFreUso = str_replace('"', "'", $CadaFreUso);
-              echo "<br> CadaFreUso: " . $CadaFreUso;
+              //echo "<br> CadaFreUso: " . $CadaFreUso;
               //CodFreUso
               $CodFreUso_busc_ini = '"CodFreUso":';
               $CodFreUso_busc_fin = ',"Cant"';
@@ -1673,7 +1690,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodFreUso, $CodFreUso_busc_fin);
               $CodFreUso = substr($cadena_CodFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodFreUso = str_replace('"', "'", $CodFreUso);
-              echo "<br> CodFreUso: " . $CodFreUso;
+              //echo "<br> CodFreUso: " . $CodFreUso;
               //Cant
               $Cant_busc_ini = '"Cant":';
               $Cant_busc_fin = ',"CantTotal"';
@@ -1682,7 +1699,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_Cant, $Cant_busc_fin);
               $Cant = substr($cadena_Cant, $posPresInicial, $posPresFinal - $posPresInicial);
               $Cant = str_replace('"', "'", $Cant);
-              echo "<br> Cant: " . $Cant;
+              //echo "<br> Cant: " . $Cant;
               //CantTotal
               $CantTotal_busc_ini = '"CantTotal":';
               $CantTotal_busc_fin = ',"CodPerDurTrat"';
@@ -1691,7 +1708,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CantTotal, $CantTotal_busc_fin);
               $CantTotal = substr($cadena_CantTotal, $posPresInicial, $posPresFinal - $posPresInicial);
               $CantTotal = str_replace('"', "'", $CantTotal);
-              echo "<br> CantTotal: " . $CantTotal;
+              //echo "<br> CantTotal: " . $CantTotal;
               //CodPerDurTrat
               $CodPerDurTrat_busc_ini = '"CodPerDurTrat":';
               $CodPerDurTrat_busc_fin = ',"JustNoPBS"';
@@ -1700,7 +1717,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_fin);
               $CodPerDurTrat = substr($cadena_CodPerDurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodPerDurTrat = str_replace('"', "'", $CodPerDurTrat);
-              echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
+              //echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
               //JustNoPBS
               $JustNoPBS_busc_ini = '"JustNoPBS":';
               $JustNoPBS_busc_fin = ',"IndRec"';
@@ -1709,7 +1726,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
-              echo "<br> JustNoPBS: " . $JustNoPBS;
+              //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
               $IndRec_busc_ini = '"IndRec":';
               $IndRec_busc_fin = ',"EstJM"';
@@ -1718,7 +1735,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndRec = str_replace('"', "'", $IndRec);
-              echo "<br> IndRec: " . $IndRec;
+              //echo "<br> IndRec: " . $IndRec;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -1727,7 +1744,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);
               $EstJM = substr($cadena_EstJM, $posPresInicial, $posPresFinal - $posPresInicial);
               $EstJM = str_replace('"', "'", $EstJM);
-              echo "<br> EstJM: " . $EstJM;
+              //echo "<br> EstJM: " . $EstJM;
 
 
               /////Insertar prescripcion (Inicio)
@@ -1735,16 +1752,16 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             (ID_PROC,ID_PRES,CONORDEN,TIPOPREST,CAUSAS11,CAUSAS12,CAUSAS2,CAUSAS3,CAUSAS4,PROPBSUTILIZADO,CAUSAS5,PROPBSDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,CAUSAS6,CAUSAS7,CODCUPS,CANFORM,CADAFREUSO,CODFREUSO,CANT,CANTTOTAL,CODPERDURTRAT,JUSTNOPBS,INDREC,ESTJM)  VALUES 
             (SEQ_WEBSERV_PRES_PROC.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS11 . "," . $CausaS12 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProPBSUtilizado . "," . $CausaS5 . "," . $ProPBSDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $CausaS6 . "," . $CausaS7 . "," . $CodCUPS . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
-              echo $sql_exc;
+              //echo $sql_exc;
 
               $st_proc = oci_parse($conn_oracle, $sql_exc);
 
               $result = oci_execute($st_proc);
               oci_free_statement($st_proc);
               if ($result) {
-                echo "<br>Insercion Correcta ";
+                //echo  "<br>Insercion Correcta ";
               } else {
-                echo "<br>Insercion Incorrecta ";
+                //echo  "<br>Insercion Incorrecta ";
               }
               /////Insertar prescripcion (Fin)
 
@@ -1755,7 +1772,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
           ///////////////////////////////////////////////////////////////////////////////////////////dispositivos (Inicio)
-          echo "<br><br>-------------------------------------------------------------------------dispositivos";
+          //echo  "<br><br>-------------------------------------------------------------------------dispositivos";
 
 
           //Obtener cadena general de dispositivos
@@ -1765,7 +1782,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresDisp = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          echo "<br> subCadenaPresDisp: " . $subCadenaPresDisp . "<br>";
+          //echo "<br> subCadenaPresDisp: " . $subCadenaPresDisp . "<br>";
           /****************************************************************************************************** */
           ////Crear un ciclo con el while para recorrer todos los dispositivos////////////////
 
@@ -1773,7 +1790,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           // $cadenaDisp = str_replace('},"dispositivos":[', 'inicio', $cadenaDisp);
           // $cadenaDisp = str_replace('},{"ConOrden"', '},inicio{"ConOrden"', $cadenaDisp);
           $subcadenaDispBuscadaInicial   = '{"ConOrden"';
-          //echo "<br> cadenaDisp: " . $cadenaDisp . "<br>";
+          ////echo "<br> cadenaDisp: " . $cadenaDisp . "<br>";
           $posInicial = strpos($cadenaDisp, $subcadenaDispBuscadaInicial);
           $count_report = 0;
 
@@ -1786,19 +1803,19 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             ///////////////////////////////////////////dispositivos///////////////////////////////////////////
 
             $subcadenaDispBuscadaInicial   = '{"ConOrden"';
-            // echo "<br> sub cadenaDisp Buscada Inicial: " . $subcadenaDispBuscadaInicial;
+            // //echo "<br> sub cadenaDisp Buscada Inicial: " . $subcadenaDispBuscadaInicial;
             $subcadenaDispBuscadaFinal   = '}';
-            //echo "<br> sub cadenaDisp Buscada Final: " . $subcadenaDispBuscadaFinal;
+            ////echo "<br> sub cadenaDisp Buscada Final: " . $subcadenaDispBuscadaFinal;
             $posInicial = strpos($cadenaDisp, $subcadenaDispBuscadaInicial);
-            // echo "<br> pos Inicial: " . $posInicial;
+            // //echo "<br> pos Inicial: " . $posInicial;
             $posFinal = strpos($cadenaDisp, $subcadenaDispBuscadaFinal) + 2;
-            //echo "<br> pos Final: " . $posFinal;
+            ////echo "<br> pos Final: " . $posFinal;
             if ($posFinal == "") {
               $posFinal = strlen($cadenaDisp) - 2; //Sera igual a la última posición de la cadenaDisp
-              // echo "<br> pos Final no encontrado: " . $posFinal;
+              // //echo "<br> pos Final no encontrado: " . $posFinal;
             }
             $subcadenaDispFinal = substr($cadenaDisp, $posInicial, $posFinal - $posInicial);
-            echo "<br> Sub cadenaDisp: " . $subcadenaDispFinal;
+            //echo "<br> Sub cadenaDisp: " . $subcadenaDispFinal;
             if ($subcadenaDispFinal != '[' && $subcadenaDispFinal != '') {
               //$vector_dispositivos[$count_report] = str_replace('inicio', '},"dispositivos":[', $subcadenaDispFinal);
               $vector_dispositivos[$count_report] =  $subcadenaDispFinal;
@@ -1817,8 +1834,8 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
             if (strlen($subCadenaPresDisp) > 5) { //Si la cadena tiene mas de 5 caracteres entonces se entiende que hay datos para leer
-              echo "<br><br>-------------------------------------dispositivo# " . ($count_vec_Disp + 1);
-              echo "<br> subCadenaPresDisp: " . $subCadenaPresDisp;
+              //echo  "<br><br>-------------------------------------dispositivo# " . ($count_vec_Disp + 1);
+              //echo "<br> subCadenaPresDisp: " . $subCadenaPresDisp;
 
               //ConOrden
               $ConOrden_busc_ini = '"ConOrden":';
@@ -1828,7 +1845,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ConOrden, $ConOrden_busc_fin);
               $ConOrden = substr($cadena_ConOrden, $posPresInicial, $posPresFinal - $posPresInicial);
               $ConOrden = str_replace('"', "'", $ConOrden);
-              echo "<br> ConOrden: " . $ConOrden;
+              //echo "<br> ConOrden: " . $ConOrden;
               //TipoPrest
               $TipoPrest_busc_ini = '"TipoPrest":';
               $TipoPrest_busc_fin = ',"CausaS1"';
@@ -1837,7 +1854,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoPrest, $TipoPrest_busc_fin);
               $TipoPrest = substr($cadena_TipoPrest, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoPrest = str_replace('"', "'", $TipoPrest);
-              echo "<br> TipoPrest: " . $TipoPrest;
+              //echo "<br> TipoPrest: " . $TipoPrest;
               //CausaS1
               $CausaS1_busc_ini = '"CausaS1":';
               $CausaS1_busc_fin = ',"CodDisp"';
@@ -1846,7 +1863,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS1, $CausaS1_busc_fin);
               $CausaS1 = substr($cadena_CausaS1, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS1 = str_replace('"', "'", $CausaS1);
-              echo "<br> CausaS1: " . $CausaS1;
+              //echo "<br> CausaS1: " . $CausaS1;
               //CodDisp
               $CodDisp_busc_ini = '"CodDisp":';
               $CodDisp_busc_fin = ',"CanForm"';
@@ -1855,7 +1872,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodDisp, $CodDisp_busc_fin);
               $CodDisp = substr($cadena_CodDisp, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodDisp = str_replace('"', "'", $CodDisp);
-              echo "<br> CodDisp: " . $CodDisp;
+              //echo "<br> CodDisp: " . $CodDisp;
               //CanForm
               $CanForm_busc_ini = '"CanForm":';
               $CanForm_busc_fin = ',"CadaFreUso"';
@@ -1864,7 +1881,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CanForm, $CanForm_busc_fin);
               $CanForm = substr($cadena_CanForm, $posPresInicial, $posPresFinal - $posPresInicial);
               $CanForm = str_replace('"', "'", $CanForm);
-              echo "<br> CanForm: " . $CanForm;
+              //echo "<br> CanForm: " . $CanForm;
               //CadaFreUso
               $CadaFreUso_busc_ini = '"CadaFreUso":';
               $CadaFreUso_busc_fin = ',"CodFreUso"';
@@ -1873,7 +1890,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CadaFreUso, $CadaFreUso_busc_fin);
               $CadaFreUso = substr($cadena_CadaFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CadaFreUso = str_replace('"', "'", $CadaFreUso);
-              echo "<br> CadaFreUso: " . $CadaFreUso;
+              //echo "<br> CadaFreUso: " . $CadaFreUso;
               //CodFreUso
               $CodFreUso_busc_ini = '"CodFreUso":';
               $CodFreUso_busc_fin = ',"Cant"';
@@ -1882,7 +1899,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodFreUso, $CodFreUso_busc_fin);
               $CodFreUso = substr($cadena_CodFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodFreUso = str_replace('"', "'", $CodFreUso);
-              echo "<br> CodFreUso: " . $CodFreUso;
+              //echo "<br> CodFreUso: " . $CodFreUso;
               //Cant
               $Cant_busc_ini = '"Cant":';
               $Cant_busc_fin = ',"CodPerDurTrat"';
@@ -1891,7 +1908,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_Cant, $Cant_busc_fin);
               $Cant = substr($cadena_Cant, $posPresInicial, $posPresFinal - $posPresInicial);
               $Cant = str_replace('"', "'", $Cant);
-              echo "<br> Cant: " . $Cant;
+              //echo "<br> Cant: " . $Cant;
               //CodPerDurTrat
               $CodPerDurTrat_busc_ini = '"CodPerDurTrat":';
               $CodPerDurTrat_busc_fin = ',"CantTotal"';
@@ -1900,7 +1917,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_fin);
               $CodPerDurTrat = substr($cadena_CodPerDurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodPerDurTrat = str_replace('"', "'", $CodPerDurTrat);
-              echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
+              //echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
               //CantTotal
               $CantTotal_busc_ini = '"CantTotal":';
               $CantTotal_busc_fin = ',"JustNoPBS"';
@@ -1909,7 +1926,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CantTotal, $CantTotal_busc_fin);
               $CantTotal = substr($cadena_CantTotal, $posPresInicial, $posPresFinal - $posPresInicial);
               $CantTotal = str_replace('"', "'", $CantTotal);
-              echo "<br> CantTotal: " . $CantTotal;
+              //echo "<br> CantTotal: " . $CantTotal;
               //JustNoPBS
               $JustNoPBS_busc_ini = '"JustNoPBS":';
               $JustNoPBS_busc_fin = ',"IndRec"';
@@ -1918,7 +1935,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
-              echo "<br> JustNoPBS: " . $JustNoPBS;
+              //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
               $IndRec_busc_ini = '"IndRec":';
               $IndRec_busc_fin = ',"EstJM"';
@@ -1927,7 +1944,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndRec = str_replace('"', "'", $IndRec);
-              echo "<br> IndRec: " . $IndRec;
+              //echo "<br> IndRec: " . $IndRec;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -1936,23 +1953,23 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);
               $EstJM = substr($cadena_EstJM, $posPresInicial, $posPresFinal - $posPresInicial);
               $EstJM = str_replace('"', "'", $EstJM);
-              echo "<br> EstJM: " . $EstJM;
+              //echo "<br> EstJM: " . $EstJM;
 
               /////Insertar dispositivos (Inicio)
               $sql_exc = "INSERT INTO  WEBSERV_PRES_DISP
               (ID_DISP,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CODDISP,CANFORM,CADAFREUSO,CODFREUSO,CANT,CODPERDURTRAT,CANTTOTAL,JUSTNOPBS,INDREC,ESTJM)  VALUES 
               (SEQ_WEBSERV_PRES_DISP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CodDisp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CodPerDurTrat . "," . $CantTotal . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
-              echo $sql_exc;
+              //echo $sql_exc;
 
               $st_disp = oci_parse($conn_oracle, $sql_exc);
 
               $result = oci_execute($st_disp);
               oci_free_statement($st_disp);
               if ($result) {
-                echo "<br>Insercion Correcta ";
+                //echo  "<br>Insercion Correcta ";
               } else {
-                echo "<br>Insercion Incorrecta ";
+                //echo  "<br>Insercion Incorrecta ";
               }
               /////Insertar dispositivos (Fin)
 
@@ -1964,7 +1981,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           ///////////////////////////////////////////////////////////////////////////////////////////dispositivos (Fin)
 
           ///////////////////////////////////////////////////////////////////////////////////productosnutricionales (Inicio)
-          echo "<br><br>-------------------------------------------------------------------------productosnutricionales";
+          //echo  "<br><br>-------------------------------------------------------------------------productosnutricionales";
 
           //Obtener cadena general de productosnutricionales
           $cad_pres_busc_ini = '],"productosnutricionales"';
@@ -1973,7 +1990,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresProdNutr = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          echo "<br> subCadenaPresProdNutr: " . $subCadenaPresProdNutr . "<br>";
+          //echo "<br> subCadenaPresProdNutr: " . $subCadenaPresProdNutr . "<br>";
           /****************************************************************************************************** */
           ////Crear un ciclo con el while para recorrer todos los productosnutricionales////////////////
 
@@ -1981,7 +1998,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           // $cadenaProdNutr = str_replace('},"productosnutricionales":[', 'inicio', $cadenaProdNutr);
           // $cadenaProdNutr = str_replace('},{"ConOrden"', '},inicio{"ConOrden"', $cadenaProdNutr);
           $subcadenaProdNutrBuscadaInicial   = '{"ConOrden"';
-          //echo "<br> cadenaProdNutr: " . $cadenaProdNutr . "<br>";
+          ////echo "<br> cadenaProdNutr: " . $cadenaProdNutr . "<br>";
           $posInicial = strpos($cadenaProdNutr, $subcadenaProdNutrBuscadaInicial);
           $count_report = 0;
 
@@ -1994,19 +2011,19 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             ///////////////////////////////////////////productosnutricionales///////////////////////////////////////////
 
             $subcadenaProdNutrBuscadaInicial   = '{"ConOrden"';
-            // echo "<br> sub cadenaProdNutr Buscada Inicial: " . $subcadenaProdNutrBuscadaInicial;
+            // //echo "<br> sub cadenaProdNutr Buscada Inicial: " . $subcadenaProdNutrBuscadaInicial;
             $subcadenaProdNutrBuscadaFinal   = '}';
-            //echo "<br> sub cadenaProdNutr Buscada Final: " . $subcadenaProdNutrBuscadaFinal;
+            ////echo "<br> sub cadenaProdNutr Buscada Final: " . $subcadenaProdNutrBuscadaFinal;
             $posInicial = strpos($cadenaProdNutr, $subcadenaProdNutrBuscadaInicial);
-            // echo "<br> pos Inicial: " . $posInicial;
+            // //echo "<br> pos Inicial: " . $posInicial;
             $posFinal = strpos($cadenaProdNutr, $subcadenaProdNutrBuscadaFinal) + 2;
-            //echo "<br> pos Final: " . $posFinal;
+            ////echo "<br> pos Final: " . $posFinal;
             if ($posFinal == "") {
               $posFinal = strlen($cadenaProdNutr) - 2; //Sera igual a la última posición de la cadenaProdNutr
-              // echo "<br> pos Final no encontrado: " . $posFinal;
+              // //echo "<br> pos Final no encontrado: " . $posFinal;
             }
             $subcadenaProdNutrFinal = substr($cadenaProdNutr, $posInicial, $posFinal - $posInicial);
-            echo "<br> Sub cadenaProdNutr: " . $subcadenaProdNutrFinal;
+            //echo "<br> Sub cadenaProdNutr: " . $subcadenaProdNutrFinal;
             if ($subcadenaProdNutrFinal != '[' && $subcadenaProdNutrFinal != '') {
               //$vector_productosnutricionales[$count_report] = str_replace('inicio', '},"productosnutricionales":[', $subcadenaProdNutrFinal);
               $vector_productosnutricionales[$count_report] =  $subcadenaProdNutrFinal;
@@ -2020,13 +2037,13 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           /*******************Leer cada uno de los productosnutricionales(Inicio)********************************/
           $longitud_vec_ProdNutr = count($vector_productosnutricionales);
           for ($count_vec_ProdNutr = 0; $count_vec_ProdNutr < $longitud_vec_ProdNutr; $count_vec_ProdNutr++) {
-            //echo "<br> Cadena#" . $count_vec_ProdNutr . ": " . $vector_productosnutricionales[$count_vec_ProdNutr];
+            ////echo "<br> Cadena#" . $count_vec_ProdNutr . ": " . $vector_productosnutricionales[$count_vec_ProdNutr];
             $subCadenaPresProdNutr = $vector_productosnutricionales[$count_vec_ProdNutr];
 
 
             if (strlen($subCadenaPresProdNutr) > 5) { //Si la cadena tiene mas de 5 caracteres entonces se entiende que hay datos para leer
-              echo "<br><br>-------------------------------------producto Nutricional# " . ($count_vec_ProdNutr + 1);
-              echo "<br> subCadenaPresProdNutr: " . $subCadenaPresProdNutr;
+              //echo  "<br><br>-------------------------------------producto Nutricional# " . ($count_vec_ProdNutr + 1);
+              //echo "<br> subCadenaPresProdNutr: " . $subCadenaPresProdNutr;
 
               //ConOrden
               $ConOrden_busc_ini = '"ConOrden":';
@@ -2036,7 +2053,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ConOrden, $ConOrden_busc_fin);
               $ConOrden = substr($cadena_ConOrden, $posPresInicial, $posPresFinal - $posPresInicial);
               $ConOrden = str_replace('"', "'", $ConOrden);
-              echo "<br> ConOrden: " . $ConOrden;
+              //echo "<br> ConOrden: " . $ConOrden;
               //TipoPrest
               $TipoPrest_busc_ini = '"TipoPrest":';
               $TipoPrest_busc_fin = ',"CausaS1"';
@@ -2045,7 +2062,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoPrest, $TipoPrest_busc_fin);
               $TipoPrest = substr($cadena_TipoPrest, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoPrest = str_replace('"', "'", $TipoPrest);
-              echo "<br> TipoPrest: " . $TipoPrest;
+              //echo "<br> TipoPrest: " . $TipoPrest;
               //CausaS1
               $CausaS1_busc_ini = '"CausaS1":';
               $CausaS1_busc_fin = ',"CausaS2"';
@@ -2054,7 +2071,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS1, $CausaS1_busc_fin);
               $CausaS1 = substr($cadena_CausaS1, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS1 = str_replace('"', "'", $CausaS1);
-              echo "<br> CausaS1: " . $CausaS1;
+              //echo "<br> CausaS1: " . $CausaS1;
               //CausaS2
               $CausaS2_busc_ini = '"CausaS2":';
               $CausaS2_busc_fin = ',"CausaS3"';
@@ -2063,7 +2080,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS2, $CausaS2_busc_fin);
               $CausaS2 = substr($cadena_CausaS2, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS2 = str_replace('"', "'", $CausaS2);
-              echo "<br> CausaS2: " . $CausaS2;
+              //echo "<br> CausaS2: " . $CausaS2;
               //CausaS3
               $CausaS3_busc_ini = '"CausaS3":';
               $CausaS3_busc_fin = ',"CausaS4"';
@@ -2072,7 +2089,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS3, $CausaS3_busc_fin);
               $CausaS3 = substr($cadena_CausaS3, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS3 = str_replace('"', "'", $CausaS3);
-              echo "<br> CausaS3: " . $CausaS3;
+              //echo "<br> CausaS3: " . $CausaS3;
               //CausaS4
               $CausaS4_busc_ini = '"CausaS4":';
               $CausaS4_busc_fin = ',"ProNutUtilizado"';
@@ -2081,7 +2098,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS4, $CausaS4_busc_fin);
               $CausaS4 = substr($cadena_CausaS4, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS4 = str_replace('"', "'", $CausaS4);
-              echo "<br> CausaS4: " . $CausaS4;
+              //echo "<br> CausaS4: " . $CausaS4;
               //ProNutUtilizado
               $ProNutUtilizado_busc_ini = '"ProNutUtilizado":';
               $ProNutUtilizado_busc_fin = ',"RznCausaS41"';
@@ -2090,7 +2107,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ProNutUtilizado, $ProNutUtilizado_busc_fin);
               $ProNutUtilizado = substr($cadena_ProNutUtilizado, $posPresInicial, $posPresFinal - $posPresInicial);
               $ProNutUtilizado = str_replace('"', "'", $ProNutUtilizado);
-              echo "<br> ProNutUtilizado: " . $ProNutUtilizado;
+              //echo "<br> ProNutUtilizado: " . $ProNutUtilizado;
               //RznCausaS41
               $RznCausaS41_busc_ini = '"RznCausaS41":';
               $RznCausaS41_busc_fin = ',"DescRzn41"';
@@ -2099,7 +2116,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS41, $RznCausaS41_busc_fin);
               $RznCausaS41 = substr($cadena_RznCausaS41, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS41 = str_replace('"', "'", $RznCausaS41);
-              echo "<br> RznCausaS41: " . $RznCausaS41;
+              //echo "<br> RznCausaS41: " . $RznCausaS41;
               //DescRzn41
               $DescRzn41_busc_ini = '"DescRzn41":';
               $DescRzn41_busc_fin = ',"RznCausaS42"';
@@ -2108,7 +2125,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn41, $DescRzn41_busc_fin);
               $DescRzn41 = substr($cadena_DescRzn41, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn41 = str_replace('"', "'", $DescRzn41);
-              echo "<br> DescRzn41: " . $DescRzn41;
+              //echo "<br> DescRzn41: " . $DescRzn41;
               //RznCausaS42
               $RznCausaS42_busc_ini = '"RznCausaS42":';
               $RznCausaS42_busc_fin = ',"DescRzn42"';
@@ -2117,7 +2134,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS42, $RznCausaS42_busc_fin);
               $RznCausaS42 = substr($cadena_RznCausaS42, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS42 = str_replace('"', "'", $RznCausaS42);
-              echo "<br> RznCausaS42: " . $RznCausaS42;
+              //echo "<br> RznCausaS42: " . $RznCausaS42;
               //DescRzn42
               $DescRzn42_busc_ini = '"DescRzn42":';
               $DescRzn42_busc_fin = ',"CausaS5"';
@@ -2126,7 +2143,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn42, $DescRzn42_busc_fin);
               $DescRzn42 = substr($cadena_DescRzn42, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn42 = str_replace('"', "'", $DescRzn42);
-              echo "<br> DescRzn42: " . $DescRzn42;
+              //echo "<br> DescRzn42: " . $DescRzn42;
               //CausaS5
               $CausaS5_busc_ini = '"CausaS5":';
               $CausaS5_busc_fin = ',"ProNutDescartado"';
@@ -2135,7 +2152,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS5, $CausaS5_busc_fin);
               $CausaS5 = substr($cadena_CausaS5, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS5 = str_replace('"', "'", $CausaS5);
-              echo "<br> CausaS5: " . $CausaS5;
+              //echo "<br> CausaS5: " . $CausaS5;
               //ProNutDescartado
               $ProNutDescartado_busc_ini = '"ProNutDescartado":';
               $ProNutDescartado_busc_fin = ',"RznCausaS51"';
@@ -2144,7 +2161,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ProNutDescartado, $ProNutDescartado_busc_fin);
               $ProNutDescartado = substr($cadena_ProNutDescartado, $posPresInicial, $posPresFinal - $posPresInicial);
               $ProNutDescartado = str_replace('"', "'", $ProNutDescartado);
-              echo "<br> ProNutDescartado: " . $ProNutDescartado;
+              //echo "<br> ProNutDescartado: " . $ProNutDescartado;
               //RznCausaS51
               $RznCausaS51_busc_ini = '"RznCausaS51":';
               $RznCausaS51_busc_fin = ',"DescRzn51"';
@@ -2153,7 +2170,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS51, $RznCausaS51_busc_fin);
               $RznCausaS51 = substr($cadena_RznCausaS51, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS51 = str_replace('"', "'", $RznCausaS51);
-              echo "<br> RznCausaS51: " . $RznCausaS51;
+              //echo "<br> RznCausaS51: " . $RznCausaS51;
               //DescRzn51
               $DescRzn51_busc_ini = '"DescRzn51":';
               $DescRzn51_busc_fin = ',"RznCausaS52"';
@@ -2162,7 +2179,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn51, $DescRzn51_busc_fin);
               $DescRzn51 = substr($cadena_DescRzn51, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn51 = str_replace('"', "'", $DescRzn51);
-              echo "<br> DescRzn51: " . $DescRzn51;
+              //echo "<br> DescRzn51: " . $DescRzn51;
               //RznCausaS52
               $RznCausaS52_busc_ini = '"RznCausaS52":';
               $RznCausaS52_busc_fin = ',"DescRzn52"';
@@ -2171,7 +2188,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS52, $RznCausaS52_busc_fin);
               $RznCausaS52 = substr($cadena_RznCausaS52, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS52 = str_replace('"', "'", $RznCausaS52);
-              echo "<br> RznCausaS52: " . $RznCausaS52;
+              //echo "<br> RznCausaS52: " . $RznCausaS52;
               //DescRzn52
               $DescRzn52_busc_ini = '"DescRzn52":';
               $DescRzn52_busc_fin = ',"RznCausaS53"';
@@ -2180,7 +2197,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn52, $DescRzn52_busc_fin);
               $DescRzn52 = substr($cadena_DescRzn52, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn52 = str_replace('"', "'", $DescRzn52);
-              echo "<br> DescRzn52: " . $DescRzn52;
+              //echo "<br> DescRzn52: " . $DescRzn52;
               //RznCausaS53
               $RznCausaS53_busc_ini = '"RznCausaS53":';
               $RznCausaS53_busc_fin = ',"DescRzn53"';
@@ -2189,7 +2206,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS53, $RznCausaS53_busc_fin);
               $RznCausaS53 = substr($cadena_RznCausaS53, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS53 = str_replace('"', "'", $RznCausaS53);
-              echo "<br> RznCausaS53: " . $RznCausaS53;
+              //echo "<br> RznCausaS53: " . $RznCausaS53;
               //DescRzn53
               $DescRzn53_busc_ini = '"DescRzn53":';
               $DescRzn53_busc_fin = ',"RznCausaS54"';
@@ -2198,7 +2215,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn53, $DescRzn53_busc_fin);
               $DescRzn53 = substr($cadena_DescRzn53, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn53 = str_replace('"', "'", $DescRzn53);
-              echo "<br> DescRzn53: " . $DescRzn53;
+              //echo "<br> DescRzn53: " . $DescRzn53;
               //RznCausaS54
               $RznCausaS54_busc_ini = '"RznCausaS54":';
               $RznCausaS54_busc_fin = ',"DescRzn54"';
@@ -2207,7 +2224,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_RznCausaS54, $RznCausaS54_busc_fin);
               $RznCausaS54 = substr($cadena_RznCausaS54, $posPresInicial, $posPresFinal - $posPresInicial);
               $RznCausaS54 = str_replace('"', "'", $RznCausaS54);
-              echo "<br> RznCausaS54: " . $RznCausaS54;
+              //echo "<br> RznCausaS54: " . $RznCausaS54;
               //DescRzn54
               $DescRzn54_busc_ini = '"DescRzn54":';
               $DescRzn54_busc_fin = ',"DXEnfHuer"';
@@ -2216,7 +2233,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescRzn54, $DescRzn54_busc_fin);
               $DescRzn54 = substr($cadena_DescRzn54, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescRzn54 = str_replace('"', "'", $DescRzn54);
-              echo "<br> DescRzn54: " . $DescRzn54;
+              //echo "<br> DescRzn54: " . $DescRzn54;
               //DXEnfHuer
               $DXEnfHuer_busc_ini = '"DXEnfHuer":';
               $DXEnfHuer_busc_fin = ',"DXVIH"';
@@ -2225,7 +2242,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DXEnfHuer, $DXEnfHuer_busc_fin);
               $DXEnfHuer = substr($cadena_DXEnfHuer, $posPresInicial, $posPresFinal - $posPresInicial);
               $DXEnfHuer = str_replace('"', "'", $DXEnfHuer);
-              echo "<br> DXEnfHuer: " . $DXEnfHuer;
+              //echo "<br> DXEnfHuer: " . $DXEnfHuer;
               //DXVIH
               $DXVIH_busc_ini = '"DXVIH":';
               $DXVIH_busc_fin = ',"DXCaPal"';
@@ -2234,7 +2251,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DXVIH, $DXVIH_busc_fin);
               $DXVIH = substr($cadena_DXVIH, $posPresInicial, $posPresFinal - $posPresInicial);
               $DXVIH = str_replace('"', "'", $DXVIH);
-              echo "<br> DXVIH: " . $DXVIH;
+              //echo "<br> DXVIH: " . $DXVIH;
               //DXCaPal
               $DXCaPal_busc_ini = '"DXCaPal":';
               $DXCaPal_busc_fin = ',"DXEnfRCEV"';
@@ -2243,7 +2260,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DXCaPal, $DXCaPal_busc_fin);
               $DXCaPal = substr($cadena_DXCaPal, $posPresInicial, $posPresFinal - $posPresInicial);
               $DXCaPal = str_replace('"', "'", $DXCaPal);
-              echo "<br> DXCaPal: " . $DXCaPal;
+              //echo "<br> DXCaPal: " . $DXCaPal;
               //DXEnfRCEV
               $DXEnfRCEV_busc_ini = '"DXEnfRCEV":';
               $DXEnfRCEV_busc_fin = ',"DXDesPro"';
@@ -2252,7 +2269,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DXEnfRCEV, $DXEnfRCEV_busc_fin);
               $DXEnfRCEV = substr($cadena_DXEnfRCEV, $posPresInicial, $posPresFinal - $posPresInicial);
               $DXEnfRCEV = str_replace('"', "'", $DXEnfRCEV);
-              echo "<br> DXEnfRCEV: " . $DXEnfRCEV;
+              //echo "<br> DXEnfRCEV: " . $DXEnfRCEV;
               //DXDesPro
               $DXDesPro_busc_ini = '"DXDesPro":';
               $DXDesPro_busc_fin = ',"TippProNut"';
@@ -2261,7 +2278,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DXDesPro, $DXDesPro_busc_fin);
               $DXDesPro = substr($cadena_DXDesPro, $posPresInicial, $posPresFinal - $posPresInicial);
               $DXDesPro = str_replace('"', "'", $DXDesPro);
-              echo "<br> DXDesPro: " . $DXDesPro;
+              //echo "<br> DXDesPro: " . $DXDesPro;
               //TippProNut
               $TippProNut_busc_ini = '"TippProNut":';
               $TippProNut_busc_fin = ',"DescProdNutr"';
@@ -2270,7 +2287,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TippProNut, $TippProNut_busc_fin);
               $TippProNut = substr($cadena_TippProNut, $posPresInicial, $posPresFinal - $posPresInicial);
               $TippProNut = str_replace('"', "'", $TippProNut);
-              echo "<br> TippProNut: " . $TippProNut;
+              //echo "<br> TippProNut: " . $TippProNut;
               //DescProdNutr
               $DescProdNutr_busc_ini = '"DescProdNutr":';
               $DescProdNutr_busc_fin = ',"CodForma"';
@@ -2279,7 +2296,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescProdNutr, $DescProdNutr_busc_fin);
               $DescProdNutr = substr($cadena_DescProdNutr, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescProdNutr = str_replace('"', "'", $DescProdNutr);
-              echo "<br> DescProdNutr: " . $DescProdNutr;
+              //echo "<br> DescProdNutr: " . $DescProdNutr;
               //CodForma
               $CodForma_busc_ini = '"CodForma":';
               $CodForma_busc_fin = ',"CodViaAdmon"';
@@ -2288,7 +2305,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodForma, $CodForma_busc_fin);
               $CodForma = substr($cadena_CodForma, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodForma = str_replace('"', "'", $CodForma);
-              echo "<br> CodForma: " . $CodForma;
+              //echo "<br> CodForma: " . $CodForma;
               //CodViaAdmon
               $CodViaAdmon_busc_ini = '"CodViaAdmon":';
               $CodViaAdmon_busc_fin = ',"JustNoPBS"';
@@ -2297,7 +2314,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodViaAdmon, $CodViaAdmon_busc_fin);
               $CodViaAdmon = substr($cadena_CodViaAdmon, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodViaAdmon = str_replace('"', "'", $CodViaAdmon);
-              echo "<br> CodViaAdmon: " . $CodViaAdmon;
+              //echo "<br> CodViaAdmon: " . $CodViaAdmon;
               //JustNoPBS
               $JustNoPBS_busc_ini = '"JustNoPBS":';
               $JustNoPBS_busc_fin = ',"Dosis"';
@@ -2306,7 +2323,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
-              echo "<br> JustNoPBS: " . $JustNoPBS;
+              //echo "<br> JustNoPBS: " . $JustNoPBS;
               //Dosis
               $Dosis_busc_ini = '"Dosis":';
               $Dosis_busc_fin = ',"DosisUM"';
@@ -2315,7 +2332,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_Dosis, $Dosis_busc_fin);
               $Dosis = substr($cadena_Dosis, $posPresInicial, $posPresFinal - $posPresInicial);
               $Dosis = str_replace('"', "'", $Dosis);
-              echo "<br> Dosis: " . $Dosis;
+              //echo "<br> Dosis: " . $Dosis;
               //DosisUM
               $DosisUM_busc_ini = '"DosisUM":';
               $DosisUM_busc_fin = ',"NoFAdmon"';
@@ -2324,7 +2341,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DosisUM, $DosisUM_busc_fin);
               $DosisUM = substr($cadena_DosisUM, $posPresInicial, $posPresFinal - $posPresInicial);
               $DosisUM = str_replace('"', "'", $DosisUM);
-              echo "<br> DosisUM: " . $DosisUM;
+              //echo "<br> DosisUM: " . $DosisUM;
               //NoFAdmon
               $NoFAdmon_busc_ini = '"NoFAdmon":';
               $NoFAdmon_busc_fin = ',"CodFreAdmon"';
@@ -2333,7 +2350,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NoFAdmon, $NoFAdmon_busc_fin);
               $NoFAdmon = substr($cadena_NoFAdmon, $posPresInicial, $posPresFinal - $posPresInicial);
               $NoFAdmon = str_replace('"', "'", $NoFAdmon);
-              echo "<br> NoFAdmon: " . $NoFAdmon;
+              //echo "<br> NoFAdmon: " . $NoFAdmon;
               //CodFreAdmon
               $CodFreAdmon_busc_ini = '"CodFreAdmon":';
               $CodFreAdmon_busc_fin = ',"IndEsp"';
@@ -2342,7 +2359,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodFreAdmon, $CodFreAdmon_busc_fin);
               $CodFreAdmon = substr($cadena_CodFreAdmon, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodFreAdmon = str_replace('"', "'", $CodFreAdmon);
-              echo "<br> CodFreAdmon: " . $CodFreAdmon;
+              //echo "<br> CodFreAdmon: " . $CodFreAdmon;
               //IndEsp
               $IndEsp_busc_ini = '"IndEsp":';
               $IndEsp_busc_fin = ',"CanTrat"';
@@ -2351,7 +2368,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndEsp, $IndEsp_busc_fin);
               $IndEsp = substr($cadena_IndEsp, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndEsp = str_replace('"', "'", $IndEsp);
-              echo "<br> IndEsp: " . $IndEsp;
+              //echo "<br> IndEsp: " . $IndEsp;
               //CanTrat
               $CanTrat_busc_ini = '"CanTrat":';
               $CanTrat_busc_fin = ',"DurTrat"';
@@ -2360,7 +2377,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CanTrat, $CanTrat_busc_fin);
               $CanTrat = substr($cadena_CanTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $CanTrat = str_replace('"', "'", $CanTrat);
-              echo "<br> CanTrat: " . $CanTrat;
+              //echo "<br> CanTrat: " . $CanTrat;
               //DurTrat
               $DurTrat_busc_ini = '"DurTrat":';
               $DurTrat_busc_fin = ',"CantTotalF"';
@@ -2369,7 +2386,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DurTrat, $DurTrat_busc_fin);
               $DurTrat = substr($cadena_DurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $DurTrat = str_replace('"', "'", $DurTrat);
-              echo "<br> DurTrat: " . $DurTrat;
+              //echo "<br> DurTrat: " . $DurTrat;
               //CantTotalF
               $CantTotalF_busc_ini = '"CantTotalF":';
               $CantTotalF_busc_fin = ',"UFCantTotal"';
@@ -2378,7 +2395,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CantTotalF, $CantTotalF_busc_fin);
               $CantTotalF = substr($cadena_CantTotalF, $posPresInicial, $posPresFinal - $posPresInicial);
               $CantTotalF = str_replace('"', "'", $CantTotalF);
-              echo "<br> CantTotalF: " . $CantTotalF;
+              //echo "<br> CantTotalF: " . $CantTotalF;
               //UFCantTotal
               $UFCantTotal_busc_ini = '"UFCantTotal":';
               $UFCantTotal_busc_fin = ',"IndRec"';
@@ -2387,7 +2404,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_UFCantTotal, $UFCantTotal_busc_fin);
               $UFCantTotal = substr($cadena_UFCantTotal, $posPresInicial, $posPresFinal - $posPresInicial);
               $UFCantTotal = str_replace('"', "'", $UFCantTotal);
-              echo "<br> UFCantTotal: " . $UFCantTotal;
+              //echo "<br> UFCantTotal: " . $UFCantTotal;
               //IndRec
               $IndRec_busc_ini = '"IndRec":';
               $IndRec_busc_fin = ',"NoPrescAso"';
@@ -2396,7 +2413,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndRec = str_replace('"', "'", $IndRec);
-              echo "<br> IndRec: " . $IndRec;
+              //echo "<br> IndRec: " . $IndRec;
               //NoPrescAso
               $NoPrescAso_busc_ini = '"NoPrescAso":';
               $NoPrescAso_busc_fin = ',"EstJM"';
@@ -2405,7 +2422,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NoPrescAso, $NoPrescAso_busc_fin);
               $NoPrescAso = substr($cadena_NoPrescAso, $posPresInicial, $posPresFinal - $posPresInicial);
               $NoPrescAso = str_replace('"', "'", $NoPrescAso);
-              echo "<br> NoPrescAso: " . $NoPrescAso;
+              //echo "<br> NoPrescAso: " . $NoPrescAso;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -2414,7 +2431,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);
               $EstJM = substr($cadena_EstJM, $posPresInicial, $posPresFinal - $posPresInicial);
               $EstJM = str_replace('"', "'", $EstJM);
-              echo "<br> EstJM: " . $EstJM;
+              //echo "<br> EstJM: " . $EstJM;
 
 
 
@@ -2423,16 +2440,16 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               (ID_PRNU,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,PRONUTUTILIZADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,CAUSAS5,PRONUTDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,RZNCAUSAS53,DESCRZN53,RZNCAUSAS54,DESCRZN54,DXENFHUER,DXVIH,DXCAPAL,DXENFRCEV,DXDESPRO,TIPPPRONUT,DESCPRODNUTR,CODFORMA,CODVIAADMON,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,NOPRESCASO,ESTJM)  VALUES 
               (SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado. "," . $RznCausaS51. "," . $DescRzn51. "," . $RznCausaS52. "," . $DescRzn52. "," . $RznCausaS53. "," . $DescRzn53. "," . $RznCausaS54. "," . $DescRzn54. "," . $DXEnfHuer. "," . $DXVIH. "," . $DXCaPal. "," . $DXEnfRCEV. "," . $DXDesPro. "," . $TippProNut. "," . $DescProdNutr. "," . $CodForma. "," . $CodViaAdmon. "," . $JustNoPBS. "," . $Dosis. "," . $DosisUM. "," . $NoFAdmon. "," . $CodFreAdmon."," . $IndEsp.  "," . $CanTrat. "," . $DurTrat. "," . $CantTotalF. "," . $UFCantTotal. "," . $IndRec. "," . $NoPrescAso. "," . $EstJM. ")";
 
-              echo $sql_exc;
+              //echo $sql_exc;
 
               $st_pr_nu = oci_parse($conn_oracle, $sql_exc);
 
               $result = oci_execute($st_pr_nu);
               oci_free_statement($st_pr_nu);
               if ($result) {
-                echo "<br>Insercion Correcta ";
+                //echo  "<br>Insercion Correcta ";
               } else {
-                echo "<br>Insercion Incorrecta ";
+                //echo  "<br>Insercion Incorrecta ";
               }
               /////Insertar productos nutricionales (Fin)
 
@@ -2444,7 +2461,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           ////////////////////////////////////////////////////////////////////////////////////productosnutricionales (Fin)
 
           //////////////////////////////////////////////////////////////////////////////serviciosComplementarios (Inicio)
-          echo "<br><br>-------------------------------------------------------------------------serviciosComplementarios";
+          //echo  "<br><br>-------------------------------------------------------------------------serviciosComplementarios";
 
           //Obtener cadena general de serviciosComplementarios
           $cad_pres_busc_ini = '],"serviciosComplementarios"';
@@ -2454,7 +2471,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strlen($cadena_presc); //strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresServComp = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
-          echo "<br> subCadenaPresServComp: " . $subCadenaPresServComp . "<br>";
+          //echo "<br> subCadenaPresServComp: " . $subCadenaPresServComp . "<br>";
           /****************************************************************************************************** */
           ////Crear un ciclo con el while para recorrer todos los serviciosComplementarios////////////////
 
@@ -2462,7 +2479,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           // $cadenaServComp = str_replace('},"serviciosComplementarios":[', 'inicio', $cadenaServComp);
           // $cadenaServComp = str_replace('},{"ConOrden"', '},inicio{"ConOrden"', $cadenaServComp);
           $subcadenaServCompBuscadaInicial   = '{"ConOrden"';
-          //echo "<br> cadenaServComp: " . $cadenaServComp . "<br>";
+          ////echo "<br> cadenaServComp: " . $cadenaServComp . "<br>";
           $posInicial = strpos($cadenaServComp, $subcadenaServCompBuscadaInicial);
           $count_report = 0;
 
@@ -2475,19 +2492,19 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //////////////////////////////////serviciosComplementarios//////////////////////////////////////////
 
             $subcadenaServCompBuscadaInicial   = '{"ConOrden"';
-            // echo "<br> sub cadenaServComp Buscada Inicial: " . $subcadenaServCompBuscadaInicial;
+            // //echo "<br> sub cadenaServComp Buscada Inicial: " . $subcadenaServCompBuscadaInicial;
             $subcadenaServCompBuscadaFinal   = '}';
-            //echo "<br> sub cadenaServComp Buscada Final: " . $subcadenaServCompBuscadaFinal;
+            ////echo "<br> sub cadenaServComp Buscada Final: " . $subcadenaServCompBuscadaFinal;
             $posInicial = strpos($cadenaServComp, $subcadenaServCompBuscadaInicial);
-            // echo "<br> pos Inicial: " . $posInicial;
+            // //echo "<br> pos Inicial: " . $posInicial;
             $posFinal = strpos($cadenaServComp, $subcadenaServCompBuscadaFinal) + 2;
-            //echo "<br> pos Final: " . $posFinal;
+            ////echo "<br> pos Final: " . $posFinal;
             if ($posFinal == "") {
               $posFinal = strlen($cadenaServComp) - 2; //Sera igual a la última posición de la cadenaServComp
-              // echo "<br> pos Final no encontrado: " . $posFinal;
+              // //echo "<br> pos Final no encontrado: " . $posFinal;
             }
             $subcadenaServCompFinal = substr($cadenaServComp, $posInicial, $posFinal - $posInicial);
-            echo "<br> Sub cadenaServComp: " . $subcadenaServCompFinal;
+            //echo "<br> Sub cadenaServComp: " . $subcadenaServCompFinal;
             if ($subcadenaServCompFinal != '[' && $subcadenaServCompFinal != '') {
               //$vector_serviciosComplementarios[$count_report] = str_replace('inicio', '},"serviciosComplementarios":[', $subcadenaServCompFinal);
               $vector_serviciosComplementarios[$count_report] =  $subcadenaServCompFinal;
@@ -2501,14 +2518,14 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           /*******************Leer cada uno de los serviciosComplementarios(Inicio)********************************/
           $longitud_vec_ServComp = count($vector_serviciosComplementarios);
           for ($count_vec_ServComp = 0; $count_vec_ServComp < $longitud_vec_ServComp; $count_vec_ServComp++) {
-            //echo "<br> Cadena#" . $count_vec_ServComp . ": " . $vector_serviciosComplementarios[$count_vec_ServComp];
+            ////echo "<br> Cadena#" . $count_vec_ServComp . ": " . $vector_serviciosComplementarios[$count_vec_ServComp];
             $subCadenaPresServComp = $vector_serviciosComplementarios[$count_vec_ServComp];
 
 
-            if (strlen($subCadenaPresServComp) > 5 && $subCadenaPresServComp!=='],"serviciosComplementarios":[},'&& $subCadenaPresServComp!=='],"serviciosComplementarios":[}') { //Si la cadena tiene mas de 5 caracteres entonces se entiende que hay datos para leer
+            if (strlen($subCadenaPresServComp) > 50 ) { //Si la cadena tiene mas de 5 caracteres entonces se entiende que hay datos para leer
               ////si la cadena tiene solamente el texto que esta en la condicion quiere decir que no hay servicios Complementarios para leer
-              echo "<br><br>-------------------------------------servicio Complementario # " . ($count_vec_ServComp + 1);
-              echo "<br> subCadenaPresServComp: " . $subCadenaPresServComp;
+              //echo  "<br><br>-------------------------------------servicio Complementario # " . ($count_vec_ServComp + 1);
+              //echo "<br> subCadenaPresServComp: " . $subCadenaPresServComp;
 
               //ConOrden
               $ConOrden_busc_ini = '"ConOrden":';
@@ -2518,7 +2535,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ConOrden, $ConOrden_busc_fin);
               $ConOrden = substr($cadena_ConOrden, $posPresInicial, $posPresFinal - $posPresInicial);
               $ConOrden = str_replace('"', "'", $ConOrden);
-              echo "<br> ConOrden: " . $ConOrden;
+              //echo "<br> ConOrden: " . $ConOrden;
               //TipoPrest
               $TipoPrest_busc_ini = '"TipoPrest":';
               $TipoPrest_busc_fin = ',"CausaS1"';
@@ -2527,7 +2544,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoPrest, $TipoPrest_busc_fin);
               $TipoPrest = substr($cadena_TipoPrest, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoPrest = str_replace('"', "'", $TipoPrest);
-              echo "<br> TipoPrest: " . $TipoPrest;
+              //echo "<br> TipoPrest: " . $TipoPrest;
               //CausaS1
               $CausaS1_busc_ini = '"CausaS1":';
               $CausaS1_busc_fin = ',"CausaS2"';
@@ -2536,7 +2553,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS1, $CausaS1_busc_fin);
               $CausaS1 = substr($cadena_CausaS1, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS1 = str_replace('"', "'", $CausaS1);
-              echo "<br> CausaS1: " . $CausaS1;
+              //echo "<br> CausaS1: " . $CausaS1;
               //CausaS2
               $CausaS2_busc_ini = '"CausaS2":';
               $CausaS2_busc_fin = ',"CausaS3"';
@@ -2545,7 +2562,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS2, $CausaS2_busc_fin);
               $CausaS2 = substr($cadena_CausaS2, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS2 = str_replace('"', "'", $CausaS2);
-              echo "<br> CausaS2: " . $CausaS2;
+              //echo "<br> CausaS2: " . $CausaS2;
               //CausaS3
               $CausaS3_busc_ini = '"CausaS3":';
               $CausaS3_busc_fin = ',"CausaS4"';
@@ -2554,7 +2571,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS3, $CausaS3_busc_fin);
               $CausaS3 = substr($cadena_CausaS3, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS3 = str_replace('"', "'", $CausaS3);
-              echo "<br> CausaS3: " . $CausaS3;
+              //echo "<br> CausaS3: " . $CausaS3;
               //CausaS4
               $CausaS4_busc_ini = '"CausaS4":';
               $CausaS4_busc_fin = ',"DescCausaS4"';
@@ -2563,7 +2580,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS4, $CausaS4_busc_fin);
               $CausaS4 = substr($cadena_CausaS4, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS4 = str_replace('"', "'", $CausaS4);
-              echo "<br> CausaS4: " . $CausaS4;
+              //echo "<br> CausaS4: " . $CausaS4;
               //DescCausaS4
               $DescCausaS4_busc_ini = '"DescCausaS4":';
               $DescCausaS4_busc_fin = ',"CausaS5"';
@@ -2572,7 +2589,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescCausaS4, $DescCausaS4_busc_fin);
               $DescCausaS4 = substr($cadena_DescCausaS4, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescCausaS4 = str_replace('"', "'", $DescCausaS4);
-              echo "<br> DescCausaS4: " . $DescCausaS4;
+              //echo "<br> DescCausaS4: " . $DescCausaS4;
               //CausaS5
               $CausaS5_busc_ini = '"CausaS5":';
               $CausaS5_busc_fin = ',"CodSerComp"';
@@ -2581,7 +2598,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CausaS5, $CausaS5_busc_fin);
               $CausaS5 = substr($cadena_CausaS5, $posPresInicial, $posPresFinal - $posPresInicial);
               $CausaS5 = str_replace('"', "'", $CausaS5);
-              echo "<br> CausaS5: " . $CausaS5;
+              //echo "<br> CausaS5: " . $CausaS5;
               //CodSerComp
               $CodSerComp_busc_ini = '"CodSerComp":';
               $CodSerComp_busc_fin = ',"DescSerComp"';
@@ -2590,7 +2607,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodSerComp, $CodSerComp_busc_fin);
               $CodSerComp = substr($cadena_CodSerComp, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodSerComp = str_replace('"', "'", $CodSerComp);
-              echo "<br> CodSerComp: " . $CodSerComp;
+              //echo "<br> CodSerComp: " . $CodSerComp;
               //DescSerComp
               $DescSerComp_busc_ini = '"DescSerComp":';
               $DescSerComp_busc_fin = ',"CanForm"';
@@ -2599,7 +2616,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_DescSerComp, $DescSerComp_busc_fin);
               $DescSerComp = substr($cadena_DescSerComp, $posPresInicial, $posPresFinal - $posPresInicial);
               $DescSerComp = str_replace('"', "'", $DescSerComp);
-              echo "<br> DescSerComp: " . $DescSerComp;
+              //echo "<br> DescSerComp: " . $DescSerComp;
               //CanForm
               $CanForm_busc_ini = '"CanForm":';
               $CanForm_busc_fin = ',"CadaFreUso"';
@@ -2608,7 +2625,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CanForm, $CanForm_busc_fin);
               $CanForm = substr($cadena_CanForm, $posPresInicial, $posPresFinal - $posPresInicial);
               $CanForm = str_replace('"', "'", $CanForm);
-              echo "<br> CanForm: " . $CanForm;
+              //echo "<br> CanForm: " . $CanForm;
               //CadaFreUso
               $CadaFreUso_busc_ini = '"CadaFreUso":';
               $CadaFreUso_busc_fin = ',"CodFreUso"';
@@ -2617,7 +2634,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CadaFreUso, $CadaFreUso_busc_fin);
               $CadaFreUso = substr($cadena_CadaFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CadaFreUso = str_replace('"', "'", $CadaFreUso);
-              echo "<br> CadaFreUso: " . $CadaFreUso;
+              //echo "<br> CadaFreUso: " . $CadaFreUso;
               //CodFreUso
               $CodFreUso_busc_ini = '"CodFreUso":';
               $CodFreUso_busc_fin = ',"Cant"';
@@ -2626,7 +2643,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodFreUso, $CodFreUso_busc_fin);
               $CodFreUso = substr($cadena_CodFreUso, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodFreUso = str_replace('"', "'", $CodFreUso);
-              echo "<br> CodFreUso: " . $CodFreUso;
+              //echo "<br> CodFreUso: " . $CodFreUso;
               //Cant
               $Cant_busc_ini = '"Cant":';
               $Cant_busc_fin = ',"CantTotal"';
@@ -2635,7 +2652,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_Cant, $Cant_busc_fin);
               $Cant = substr($cadena_Cant, $posPresInicial, $posPresFinal - $posPresInicial);
               $Cant = str_replace('"', "'", $Cant);
-              echo "<br> Cant: " . $Cant;
+              //echo "<br> Cant: " . $Cant;
               //CantTotal
               $CantTotal_busc_ini = '"CantTotal":';
               $CantTotal_busc_fin = ',"CodPerDurTrat"';
@@ -2644,7 +2661,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CantTotal, $CantTotal_busc_fin);
               $CantTotal = substr($cadena_CantTotal, $posPresInicial, $posPresFinal - $posPresInicial);
               $CantTotal = str_replace('"', "'", $CantTotal);
-              echo "<br> CantTotal: " . $CantTotal;
+              //echo "<br> CantTotal: " . $CantTotal;
               //CodPerDurTrat
               $CodPerDurTrat_busc_ini = '"CodPerDurTrat":';
               $CodPerDurTrat_busc_fin = ',"TipoTrans"';
@@ -2653,7 +2670,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_fin);
               $CodPerDurTrat = substr($cadena_CodPerDurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodPerDurTrat = str_replace('"', "'", $CodPerDurTrat);
-              echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
+              //echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
               //TipoTrans
               $TipoTrans_busc_ini = '"TipoTrans":';
               $TipoTrans_busc_fin = ',"ReqAcom"';
@@ -2662,7 +2679,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoTrans, $TipoTrans_busc_fin);
               $TipoTrans = substr($cadena_TipoTrans, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoTrans = str_replace('"', "'", $TipoTrans);
-              echo "<br> TipoTrans: " . $TipoTrans;
+              //echo "<br> TipoTrans: " . $TipoTrans;
               //ReqAcom
               $ReqAcom_busc_ini = '"ReqAcom":';
               $ReqAcom_busc_fin = ',"TipoIDAcomAlb"';
@@ -2671,7 +2688,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ReqAcom, $ReqAcom_busc_fin);
               $ReqAcom = substr($cadena_ReqAcom, $posPresInicial, $posPresFinal - $posPresInicial);
               $ReqAcom = str_replace('"', "'", $ReqAcom);
-              echo "<br> ReqAcom: " . $ReqAcom;
+              //echo "<br> ReqAcom: " . $ReqAcom;
               //TipoIDAcomAlb
               $TipoIDAcomAlb_busc_ini = '"TipoIDAcomAlb":';
               $TipoIDAcomAlb_busc_fin = ',"NroIDAcomAlb"';
@@ -2680,7 +2697,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_TipoIDAcomAlb, $TipoIDAcomAlb_busc_fin);
               $TipoIDAcomAlb = substr($cadena_TipoIDAcomAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $TipoIDAcomAlb = str_replace('"', "'", $TipoIDAcomAlb);
-              echo "<br> TipoIDAcomAlb: " . $TipoIDAcomAlb;
+              //echo "<br> TipoIDAcomAlb: " . $TipoIDAcomAlb;
               //NroIDAcomAlb
               $NroIDAcomAlb_busc_ini = '"NroIDAcomAlb":';
               $NroIDAcomAlb_busc_fin = ',"ParentAcomAlb"';
@@ -2689,7 +2706,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NroIDAcomAlb, $NroIDAcomAlb_busc_fin);
               $NroIDAcomAlb = substr($cadena_NroIDAcomAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $NroIDAcomAlb = str_replace('"', "'", $NroIDAcomAlb);
-              echo "<br> NroIDAcomAlb: " . $NroIDAcomAlb;
+              //echo "<br> NroIDAcomAlb: " . $NroIDAcomAlb;
               //ParentAcomAlb
               $ParentAcomAlb_busc_ini = '"ParentAcomAlb":';
               $ParentAcomAlb_busc_fin = ',"NombAlb"';
@@ -2698,7 +2715,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_ParentAcomAlb, $ParentAcomAlb_busc_fin);
               $ParentAcomAlb = substr($cadena_ParentAcomAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $ParentAcomAlb = str_replace('"', "'", $ParentAcomAlb);
-              echo "<br> ParentAcomAlb: " . $ParentAcomAlb;
+              //echo "<br> ParentAcomAlb: " . $ParentAcomAlb;
               //NombAlb
               $NombAlb_busc_ini = '"NombAlb":';
               $NombAlb_busc_fin = ',"CodMunOriAlb"';
@@ -2707,7 +2724,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NombAlb, $NombAlb_busc_fin);
               $NombAlb = substr($cadena_NombAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $NombAlb = str_replace('"', "'", $NombAlb);
-              echo "<br> NombAlb: " . $NombAlb;
+              //echo "<br> NombAlb: " . $NombAlb;
               //CodMunOriAlb
               $CodMunOriAlb_busc_ini = '"CodMunOriAlb":';
               $CodMunOriAlb_busc_fin = ',"CodMunDesAlb"';
@@ -2716,7 +2733,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodMunOriAlb, $CodMunOriAlb_busc_fin);
               $CodMunOriAlb = substr($cadena_CodMunOriAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodMunOriAlb = str_replace('"', "'", $CodMunOriAlb);
-              echo "<br> CodMunOriAlb: " . $CodMunOriAlb;
+              //echo "<br> CodMunOriAlb: " . $CodMunOriAlb;
               //CodMunDesAlb
               $CodMunDesAlb_busc_ini = '"CodMunDesAlb":';
               $CodMunDesAlb_busc_fin = ',"JustNoPBS"';
@@ -2725,7 +2742,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodMunDesAlb, $CodMunDesAlb_busc_fin);
               $CodMunDesAlb = substr($cadena_CodMunDesAlb, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodMunDesAlb = str_replace('"', "'", $CodMunDesAlb);
-              echo "<br> CodMunDesAlb: " . $CodMunDesAlb;
+              //echo "<br> CodMunDesAlb: " . $CodMunDesAlb;
               //JustNoPBS
               $JustNoPBS_busc_ini = '"JustNoPBS":';
               $JustNoPBS_busc_fin = ',"IndRec"';
@@ -2734,7 +2751,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
-              echo "<br> JustNoPBS: " . $JustNoPBS;
+              //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
               $IndRec_busc_ini = '"IndRec":';
               $IndRec_busc_fin = ',"EstJM"';
@@ -2743,7 +2760,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndRec = str_replace('"', "'", $IndRec);
-              echo "<br> IndRec: " . $IndRec;
+              //echo "<br> IndRec: " . $IndRec;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -2752,7 +2769,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);
               $EstJM = substr($cadena_EstJM, $posPresInicial, $posPresFinal - $posPresInicial);
               $EstJM = str_replace('"', "'", $EstJM);
-              echo "<br> EstJM: " . $EstJM;
+              //echo "<br> EstJM: " . $EstJM;
 
        
                 /////Insertar servicios Complementarios (Inicio)
@@ -2760,16 +2777,16 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                 (ID_SECO,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,DESCCAUSAS4,CAUSAS5,CODSERCOMP,DESCSERCOMP,CANFORM,CADAFREUSO,CODFREUSO,CANT,CANTTOTAL,CODPERDURTRAT,TIPOTRANS,REQACOM,TIPOIDACOMALB,NROIDACOMALB,PARENTACOMALB,NOMBALB,CODMUNORIALB,CODMUNDESALB,JUSTNOPBS,INDREC,ESTJM)  VALUES 
                 (SEQ_WEBSERV_PRES_SERV_COMP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $DescCausaS4 . "," . $CausaS5 . "," . $CodSerComp . "," . $DescSerComp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso. "," . $Cant. "," . $CantTotal. "," . $CodPerDurTrat. "," . $TipoTrans. "," . $ReqAcom. "," . $TipoIDAcomAlb. "," . $NroIDAcomAlb. "," . $ParentAcomAlb. "," . $NombAlb. "," . $CodMunOriAlb. "," . $CodMunDesAlb. "," . $JustNoPBS. "," . $IndRec. "," . $EstJM. ")";
   
-                echo "<br>".$sql_exc."<br>";
+                //echo "<br>".$sql_exc."<br>";
   
                 $st_se_co = oci_parse($conn_oracle, $sql_exc);
   
                 $result = oci_execute($st_se_co);
                 oci_free_statement($st_se_co);
                 if ($result) {
-                  echo "<br>Insercion Correcta ";
+                  //echo  "<br>Insercion Correcta ";
                 } else {
-                  echo "<br>Insercion Incorrecta ";
+                  //echo  "<br>Insercion Incorrecta ";
                 }
                 /////Insertar servicios Complementarios (Fin)
 
@@ -2780,24 +2797,24 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           ///////////////////////////////////////////////////////////////////////////////////serviciosComplementarios (Fin)
 
           //Obtener cadena general de prescripcion
-          //echo "<br> Sub Cadena: " . $array[$i];
-          echo "<br><h1 style='color:#FF0000'>-----------------------------------------------------------------------------------------------------------------------------------</h1>";
+          ////echo "<br> Sub Cadena: " . $array[$i];
+          //echo  "<br><h1 style='color:#FF0000'>-----------------------------------------------------------------------------------------------------------------------------------</h1>";
         }
-        echo "Cantidad de prescripciones: " . $longitud;
+        echo "Cantidad de prescripciones: " . $longitud."<br>";
 
 
   
       }
     }else{
-      echo "El registro ya exsiste";
+      //echo "<br>El registro ya exsiste";
     }
   }
 }
 mysqli_close($conn);
-echo "<br><br>";
+echo "<br><br>----------------------------Fin-----------------------";
 /*echo "<h3>Dias cargados</h3> <br> cantidad: ".$periodos_cargados_conteo."<br>".$periodos_cargados."<br>";
 echo "<h3>Dias no cargados</h3> <br>cantidad: ".$peri_error_conteo."<br>".$peri_error;*/
-echo "<br> restante de la cadena: " . $json;
+//echo "<br> restante de la cadena: " . $json;
 
 
 function obtener_dato_json($parametro_inicial, $parametro_final, $cadena, $nombre_dato)
