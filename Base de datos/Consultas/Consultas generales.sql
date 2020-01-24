@@ -219,8 +219,7 @@ select * from webserv_tiporeportes;
 
 
 select * from webserv_reportes_json rj 
-where  RJ.SERV_ID=3 --and RJ.TIRE_ID=2
-AND dbms_lob.substr( rj.JSON)='NO' 
+where  RJ.SERV_ID=3 and RJ.TIRE_ID=1
+--AND dbms_lob.substr( rj.JSON)='NO' 
 order by PERIODO desc;
-
 select * from webserv_log_errores;

@@ -97,7 +97,7 @@
                   <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_x_fecha" class="nav-link" onclick="cargarNumDirecXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Por Fecha
+                      <p>Por Fecha 
                         <!--Nivel 3-->
                       </p>
                     </a>
@@ -160,7 +160,7 @@
               <li id="li_open_sumi_entrega" class="nav-item has-treeview">
                 <a href="#" id="a_active_sumi_entrega" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
+                  <p style="color:#3AA946";>
                     Reporte Entrega
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
@@ -170,7 +170,7 @@
                   <li class="nav-item">
                     <a href="#" id="a_active_sumi_entrega_x_fecha" class="nav-link" onclick="cargarEntregaXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Por Fecha
+                      <p style="color:#3AA946";>Por Fecha
                         <!--Nivel 3-->
                       </p>
                     </a>
@@ -265,7 +265,7 @@
               <li id="li_open_pres_presc" class="nav-item has-treeview">
                 <a href="#" id="a_active_pres_presc" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
+                  <p  style="color:#3AA946";>
                     prescripción
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
@@ -275,7 +275,7 @@
                   <li class="nav-item">
                     <a href="#" class="nav-link" id="a_active_pres_presc_x_fecha" onclick="cargarPrescripcionPorFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>X Fecha
+                      <p style="color:#3AA946";>Por Fecha
                         <!--Nivel 3-->
                       </p>
                     </a>
