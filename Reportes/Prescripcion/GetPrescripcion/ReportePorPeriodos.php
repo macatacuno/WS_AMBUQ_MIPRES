@@ -133,9 +133,9 @@ if ($periodo_final < $periodo_inicial) {
   LEFT JOIN WEBSERV_REF_PRE_CIE_10 CIE_CODDXREL2 ON CIE_CODDXREL2.CODIGO=PP.CODDXREL2
   LEFT JOIN WEBSERV_REF_PRE_TI_TR TT ON PP.TIPOTRANSC=TT.CODIGO
   LEFT JOIN (SELECT B.ESTADO,B.TIDPODOCUMENTO,B.DOCUMENTO, B.DEPARTAMENTO, B.MUNICIPIO,B.NOM_MPIO,B.NOM_DPTO,B.MES 
-             FROM ZZZ_BDUAHISSUB@PDBLCSTBY01 B 
+             FROM ZZZ_BDUAHISSUB B 
              WHERE B.MES IN (SELECT MAX(MES) 
-                             FROM ZZZ_BDUAHISSUB@PDBLCSTBY01)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
+                             FROM ZZZ_BDUAHISSUB)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
 where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
 
   $st_tire = oci_parse($conn_oracle, $query);
@@ -227,8 +227,8 @@ where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.
     $objSheet->setCellValue('U' . $i, $row["SNPACIENTE"]);
     $objSheet->setCellValue('V' . $i, $row["PAPACIENTE"]);
     $objSheet->setCellValue('W' . $i, $row["SAPACIENTE"]);
-    $objSheet->setCellValue('X' . $i, $row["MUNICIPIO"]);
-    $objSheet->setCellValue('Y' . $i, $row["DEPARTAMENTO"]);
+    //$objSheet->setCellValue('X' . $i, $row["MUNICIPIO"]);
+    //$objSheet->setCellValue('Y' . $i, $row["DEPARTAMENTO"]);
 
     $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
     $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
