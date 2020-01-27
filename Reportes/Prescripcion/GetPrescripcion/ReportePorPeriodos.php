@@ -136,7 +136,7 @@ if ($periodo_final < $periodo_inicial) {
              FROM ZZZ_BDUAHISSUB@PDBLCSTBY01 B 
              WHERE B.MES IN (SELECT MAX(MES) 
                              FROM ZZZ_BDUAHISSUB@PDBLCSTBY01)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
-where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
 
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -473,7 +473,7 @@ LEFT JOIN WEBSERV_REF_PRE_IN_ES   IE ON PM.INDESP=     IE.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON PM.DURTRAT=    DT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_UF_CT   UC ON PM.UFCANTTOTAL=UC.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PM.ESTJM=EJ.CODIGO
-where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
 
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -797,7 +797,7 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
   LEFT JOIN WEBSERV_REF_PRE_IND_UNI FIU ON PIU.CODINDICACION=FIU.CODIGO
   LEFT JOIN WEBSERV_PRES_MEDI PM ON PIU.ID_MEDI=PM.ID_MEDI
   LEFT JOIN WEBSERV_PRES_PRES PP ON PM.ID_PRES=PP.ID_PRES
-where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
 
@@ -935,11 +935,11 @@ LEFT JOIN WEBSERV_PRES_PRES PP ON PP.ID_PRES=PPR.ID_PRES
 LEFT JOIN WEBSERV_REF_PRE_TI_PR TP ON TP.CODIGO=PPR.TIPOPREST 
 LEFT JOIN WEBSERV_REF_PRE_CUPS CPU ON CPU.CODIGO=PPR.PROPBSUTILIZADO
 LEFT JOIN WEBSERV_REF_PRE_CUPS CPD ON CPD.CODIGO=PPR.PROPBSDESCARTADO  
-LEFT JOIN WEBSERV_REF_PRE_CUPS CP ON CPD.CODIGO=PPR.CODCUPS  
+LEFT JOIN WEBSERV_REF_PRE_CUPS CP ON CP.CODIGO=PPR.CODCUPS  
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS FU ON FU.CODIGO=PPR.CODFREUSO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON DT.CODIGO=PPR.CODPERDURTRAT
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
-  where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+  where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
     $st_tire = oci_parse($conn_oracle, $query);
     oci_execute($st_tire, OCI_DEFAULT);
   
@@ -1232,7 +1232,7 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON PPN.DURTRAT=    DT.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_FP_NU FCT ON PPN.UFCANTTOTAL=FCT.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PPN.ESTJM=EJ.CODIGO
-  where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+  where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
     $st_tire = oci_parse($conn_oracle, $query);
     oci_execute($st_tire, OCI_DEFAULT);
   
@@ -1569,7 +1569,7 @@ LEFT JOIN WEBSERV_REF_PRE_TI_TRANSPORTE TT ON SC.TIPOTRANS=TT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TD_AA TA ON SC.TIPOIDACOMALB=TA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_PA_AA PA ON SC.PARENTACOMALB=PA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP EJ ON SC.ESTJM=EJ.CODIGO
-where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
 $st_tire = oci_parse($conn_oracle, $query);
 oci_execute($st_tire, OCI_DEFAULT);
 
@@ -1804,7 +1804,7 @@ LEFT JOIN WEBSERV_REF_PRE_TI_PR   TP ON PD.TIPOPREST=  TP.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TD_ME TM ON PD.CODDISP=TM.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS PDU ON PD.CODPERDURTRAT=PDU.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PD.ESTJM=EJ.CODIGO
-where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TISE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
+where  pp.REPO_SERV_ID=".$servicio_id." and pp.REPO_TIRE_ID=".$tipo_id." and pp.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
 $st_tire = oci_parse($conn_oracle, $query);
 oci_execute($st_tire, OCI_DEFAULT);
 

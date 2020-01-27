@@ -101,7 +101,7 @@ $periodo_inicial ="17-01-01";
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 */
 //19-10-29  ---YY/mm/dd
-$periodo_inicial = "19-01-01";
+$periodo_inicial = "20-01-01";
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 
 
@@ -1003,7 +1003,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
             /////Insertar prescripcion (Inicio)
             $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-            (ID_PRES,REPO_SERV_ID, REPO_TISE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
+            (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
           )  VALUES (".$id_pres.",". $servicio_id .",". $tipo_id .",'". $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
 
             /*   $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
