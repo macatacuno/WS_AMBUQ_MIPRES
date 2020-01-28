@@ -76,6 +76,9 @@ INSERT INTO webserv_tiposervicios (tise_id,ws_id,nombre,descripcion) VALUES
 (seq_webserv_tiposervicios.nextval,1, 'Prescripcion', '');
 INSERT INTO webserv_tiposervicios (tise_id,ws_id,nombre,descripcion) VALUES
 (seq_webserv_tiposervicios.nextval,2, 'ReporteEntrega', '');
+INSERT INTO webserv_tiposervicios (tise_id,ws_id,nombre,descripcion) VALUES
+(seq_webserv_tiposervicios.nextval,1, 'JuntaProfesional', '');
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +119,8 @@ create sequence seq_webserv_servicios
 (seq_webserv_servicios.nextval, 1, 'PrescripcionXNumero', 'Retorna la lista de los medicamentos asociados a la prescripción, la lista de procedimientos asociados a la prescripción, la lista de dispositivos médicos asociados a la prescripción, la lista de los productos nutricionales asociados a la prescripción y la lista de servicios complementarios asociados a la prescripción que se ingresó', 'https://wsmipres.sispro.gov.co/WSMIPRESNOPBS/api/PrescripcionXNumero');
   INSERT INTO webserv_servicios (serv_id, tise_id, nombre, descripcion, url) VALUES
 (seq_webserv_servicios.nextval, 1, 'NovedadesPrescripcion', 'Retorna la lista de novedades asociadas a la prescripción.', 'https://wsmipres.sispro.gov.co/WSMIPRESNOPBS/api/NovedadesPrescripcion');
+  INSERT INTO webserv_servicios (serv_id, tise_id, nombre, descripcion, url) VALUES
+(seq_webserv_servicios.nextval, 3, 'JuntaProfesionalXFecha', 'Retorna el estado de la Junta de Profesionales para la prescripción que se ingresó', 'https://wsmipres.sispro.gov.co/WSMIPRESNOPBS/api/JuntaProfesionalXFecha');
 
 
 -- --------------------------------------------------------

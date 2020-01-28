@@ -155,13 +155,13 @@ SELECT * FROM WEBSERV_PRES_PRES ORDER BY id_pres;
 
 --Consultar un periodo cargado
 SELECT * FROM WEBSERV_PRES_PRES PP 
---WHERE PP.REPO_PERIODO='14/02/19';
-WHERE pp.NOPRESCRIPCION='20200103157016578325';
+--WHERE PP.REPO_PERIODO='27/01/20';
+WHERE pp.NOPRESCRIPCION='20200127166017044825';
 
 --Medicamentos
 SELECT PM.* FROM WEBSERV_PRES_MEDI PM 
 join WEBSERV_PRES_PRES pp on PP.ID_PRES=PM.ID_PRES
-WHERE pp.NOPRESCRIPCION='20190214169010446919';
+WHERE pp.NOPRESCRIPCION='20200127166017044825';
 
 SELECT IU.* FROM WEBSERV_PRES_INDI_UNIRS IU 
 JOIN WEBSERV_PRES_MEDI PM ON PM.ID_MEDI=IU.ID_MEDI
@@ -217,9 +217,10 @@ select * from webserv_tiposervicios;
 select * from webserv_servicios;
 select * from webserv_tiporeportes;
 
+INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (9,2,'17/01/2019', 'SI')
 
 select * from webserv_reportes_json rj 
---where  RJ.SERV_ID=3 and RJ.TIRE_ID=1
+where  RJ.SERV_ID=9 and RJ.TIRE_ID=2
 --AND dbms_lob.substr( rj.JSON)='NO' 
 order by PERIODO desc;
 select * from webserv_log_errores;
