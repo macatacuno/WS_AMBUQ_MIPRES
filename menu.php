@@ -229,7 +229,7 @@
               <li id="li_open_pres_junta_profe" class="nav-item has-treeview">
                 <a href="#" id="a_active_pres_junta_profe"  class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>
+                  <p style="color:#3AA946";>
                     Junta profesional
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
@@ -255,7 +255,7 @@
                   <li class="nav-item">
                     <a href="#" id="a_active_pres_junta_profe_x_fecha" class="nav-link" onclick="cargarJuntProfPorfecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Por Fecha
+                      <p style="color:#3AA946";>Por Fecha
                         <!--Nivel 3-->
                       </p>
                     </a>

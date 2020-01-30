@@ -48,15 +48,15 @@
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-secondary">
+            <div class="small-box bg-olive">
               <div class="inner">
-                <h5>WEBSERVICE</h5>
-                <p>Reporte 3</p>
+                <h5>WSPRESCRIPCION</h5>
+                <p>Junta profesional por fecha</p>
               </div>
               <div class="icon">
-                <i class="ion ion-cash"></i>
+                <i class="ion ion-calendar"></i>
               </div>
-              <a href="#" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" onclick="cargarJuntProfPorfecha();" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
