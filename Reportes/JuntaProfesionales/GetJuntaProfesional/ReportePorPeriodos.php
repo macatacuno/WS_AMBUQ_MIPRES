@@ -83,12 +83,18 @@ if ($periodo_final < $periodo_inicial) {
   DECODE(JP.TIPOIDPACIENTE,NULL,'NO EXISTE',JP.TIPOIDPACIENTE)TIPOIDPACIENTE,-------
   DECODE (TA.DESCRIPCION,NULL,'NO EXISTE',TA.DESCRIPCION)DESC_TIPOIDPACIENTE,
   DECODE(JP.NROIDPACIENTE,NULL,'NO EXISTE',JP.NROIDPACIENTE)NROIDPACIENTE,
+  DECODE (UB.NOM_MPIO,NULL,'NO EXISTE',UB.NOM_MPIO) MUNICIPIO,
+  DECODE(UB.NOM_DPTO,NULL,'NO EXISTE',UB.NOM_DPTO)DEPARTAMENTO,
   DECODE(JP.CODENTJM,NULL,'NO EXISTE',JP.CODENTJM)CODENTJM
 FROM WEBSERV_JUNTA_PROFESIONAL JP 
 LEFT JOIN WEBSERV_REF_JP_TI_TE  TT ON JP.TIPOTECNOLOGIA=TT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP EJ ON JP.ESTJM=EJ.CODIGO
 LEFT JOIN WEBSERV_REF_JP_MODAL  MO ON JP.MODALIDAD=MO.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TD_AA TA ON JP.TIPOIDPACIENTE=TA.CODIGO 
+LEFT JOIN (SELECT B.ESTADO,B.TIDPODOCUMENTO,B.DOCUMENTO, B.DEPARTAMENTO, B.MUNICIPIO,B.NOM_MPIO,B.NOM_DPTO,B.MES 
+           FROM ZZZ_BDUAHISSUB@PDBLCSTBY01 B 
+           WHERE B.MES IN (SELECT MAX(MES) 
+                           FROM ZZZ_BDUAHISSUB@PDBLCSTBY01)) UB ON UB.TIDPODOCUMENTO=jp.TIPOIDPACIENTE AND UB.DOCUMENTO=jp.NROIDPACIENTE
 where  JP.REPO_SERV_ID=".$servicio_id." and JP.REPO_TIRE_ID=".$tipo_id." and JP.REPO_PERIODO BETWEEN '".$periodo_inicial_oracle."' AND '".$periodo_final_oracle."'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -118,7 +124,9 @@ where  JP.REPO_SERV_ID=".$servicio_id." and JP.REPO_TIRE_ID=".$tipo_id." and JP.
   $objSheet->setCellValue('Q1', 'TIPOIDPACIENTE'); 
   $objSheet->setCellValue('R1', 'DESC_TIPOIDPACIENTE'); 
   $objSheet->setCellValue('S1', 'NROIDPACIENTE'); 
-  $objSheet->setCellValue('T1', 'CODENTJM'); 
+  $objSheet->setCellValue('T1', 'MUNICIPIO'); 
+  $objSheet->setCellValue('U1', 'DEPARTAMENTO'); 
+  $objSheet->setCellValue('V1', 'CODENTJM'); 
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -157,7 +165,9 @@ where  JP.REPO_SERV_ID=".$servicio_id." and JP.REPO_TIRE_ID=".$tipo_id." and JP.
     $objSheet->setCellValue('R' . $i, $DESC_TIPOIDPACIENTE);
 
     $objSheet->setCellValue('S' . $i, '="'.$row["NROIDPACIENTE"].'"');
-    $objSheet->setCellValue('T' . $i, '="'.$row["CODENTJM"].'"');
+    $objSheet->setCellValue('T' . $i, $row["MUNICIPIO"]);
+    $objSheet->setCellValue('U' . $i, $row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('V' . $i, '="'.$row["CODENTJM"].'"');
 
     /*
     $DESC_TIPOTRANSC = utf8_encode($row["DESC_TIPOTRANSC"]);
@@ -186,6 +196,8 @@ where  JP.REPO_SERV_ID=".$servicio_id." and JP.REPO_TIRE_ID=".$tipo_id." and JP.
   $objXLS->getActiveSheet()->getColumnDimension("R")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("S")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("T")->setAutoSize(true);
+  $objXLS->getActiveSheet()->getColumnDimension("U")->setAutoSize(true);
+  $objXLS->getActiveSheet()->getColumnDimension("V")->setAutoSize(true);
 
 /***************************************************************************************/
 /***************************************************************************************/

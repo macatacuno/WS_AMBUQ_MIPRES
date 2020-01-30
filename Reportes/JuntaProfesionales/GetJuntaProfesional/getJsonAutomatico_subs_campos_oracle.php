@@ -70,8 +70,7 @@ $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day"));
 */
 //19-10-29  ---YY/mm/dd
 $periodo_inicial = "17-01-01";
-$periodo_final = "20-01-28";
-//$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
+$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 
 
