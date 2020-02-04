@@ -118,6 +118,14 @@
                       </p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="#" id="a_active_sumi_numero_direc_envio" class="nav-link" onclick="EnviarDireccionamiento();">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Enviar direccionamiento
+                        <!--Nivel 3-->
+                      </p>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li id="li_open_sumi_numero_no_direc" class="nav-item has-treeview">

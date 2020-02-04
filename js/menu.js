@@ -70,6 +70,25 @@ function cargarNumDirecXPacienteFecha() {
 }
 
 
+function EnviarDireccionamiento() {
+      $('#contenido_principal').load('./put/Direccionamiento/vistaPutDirec.html');
+      jQuery.get("./menu.php", function (resul) {
+            $("#div_menu").html(resul);
+            $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
+
+            $("#li_open_sumi").addClass("menu-open");//agrega la clase active al item seleccionado
+            $("#li_open_sumi_numero_direc").addClass("menu-open");//agrega la clase active al item seleccionado
+
+            $("#a_active_sumi").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_numero_direc").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_numero_direc_envio").addClass("active");//agrega la clase active al item seleccionado
+      })
+}
+
+
+
+
+
 //////////////////////////////////No Direccionamiento///////////////////////////////////////////////////////////
 function cargarNumNoDirecXFecha() {
       $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
