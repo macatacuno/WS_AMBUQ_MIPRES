@@ -1,99 +1,227 @@
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-      <div class="content-header">
-          <div class="container-fluid">
-              <div class="row mb-2">
-                  <div class="col-sm-6">
-                      <h1 class="m-0 text-dark">Reporte de entrega</h1><br><br>
-                  </div><!-- /.col -->
-              </div><!-- /.row -->
-          </div><!-- /.container-fluid -->
-      </div>
-      <!-- /.content-header -->
-      <section class="content">
-          <div class="container-fluid">
-              <div class="row">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Direccionamiento</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
 
-                  <div class="col-md-1"></div>
-                  <!-- left column -->
-                  <div class="col-md-4">
-                      <!-- general form elements -->
-                      <div class="card card-primary">
-                          <div class="card-header">
-                              <h3 class="card-title">Reporte de entrega por periodos</h3>
-                          </div>
-                          <!-- /.card-header -->
-                          <!-- form start 
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/ReporteEntrega/GetReporteEntregaXFecha/ReportePorPeriodos.php">
-                              <div class="card-body">
+                <!-- left column -->
 
-                                  <div class="form-group">
-                                      <label for="tipo" class="col-sm-5 control-label">Tipo</label>
-                                      <div class="col-sm-12">
-                                          <select name="tipo" class="form-control">
-                                              <option value="1">Contributivo</option>
-                                              <option value="2">Subsidiado</option>
-                                          </select>
-                                      </div>
-                                  </div>
 
-                                  <div class="form-group">
-                                      <label for="Periodo Inicial" class="col-sm-5 control-label">Periodo Inicial</label>
-                                      <div class="col-sm-12">
-                                          <input type="date" name="periodo_inicial" value="" placeholder="YYYY-MM-DD" class="form-control">
-                                      </div>
-                                  </div>
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Envío de direccionamiento</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" name="formulario" method="post" target="_blank"
+                            action="put/Direccionamiento/envio_put.php">
+                            <div class="card-body">
+                                <div class="row">
 
-                                  <div class="form-group">
-                                      <label for="Periodo Final" class="col-sm-5 control-label">Periodo Final</label>
-                                      <div class="col-sm-12">
-                                          <input type="date" name="periodo_final" value="" placeholder="YYYY-MM-DD" class="form-control">
-                                      </div>
-                                  </div>
-                              </div>
-                             
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="NoPrescripcion" class="col-md-12 control-label">Número de
+                                                prescripción</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" name="NoPrescripcion" value=""
+                                                    placeholder="Ingresar número" class="form-control">
+                                            </div>
+                                        </div>
 
-                              <div class="card-footer">
-                                  <center><button type="submit" class="btn btn-primary">Generar Reporte</button></center>
-                              </div>
-                          </form>-->
-                      </div>
-                      <!-- /.card -->
-                  </div>
+                                        <div class="form-group">
+                                            <label for="TipoTec" class="col-md-12 control-label">Tipo de
+                                                tecnología</label>
+                                            <div class="col-sm-12">
+                                                <select name="TipoTec" class="form-control">
+                                                    <option value="">Seleccionar opción</option>
+                                                    <option value="M">M-Medicamento</option>
+                                                    <option value="P">P-Procedimiento</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                  <div class="col-md-1"></div>
-                  <!-- left column -->
-                  <div class="col-md-4">
-                      <!-- general form elements -->
-                      <div class="card card-primary">
-                          <div class="card-header">
-                              <h3 class="card-title">Reporte de entrega día actual</h3>
-                          </div>
-                          <!-- /.card-header -->
-                          <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="put/Direccionamiento/ReporteDiaActual.php">
-                              <div class="card-body">
-                                  <div class="form-group">
-                                      <label for="tipo" class="col-sm-5 control-label">Tipo</label>
-                                      <div class="col-sm-10">
-                                          <select name="tipo" class="form-control">
-                                              <option value="1">Contributivo</option>
-                                              <option value="2">Subsidiado</option>
-                                          </select>
-                                      </div>
-                                  </div>
-                              </div>
-                              <!-- /.card-body -->
 
-                              <div class="card-footer">
-                                  <center><button type="submit" class="btn btn-primary">Generar Reporte</button> </center>
-                              </div>
-                          </form>
-                      </div>
-                      <!-- /.card -->
-                  </div>
-              </div>
-              <!-- /.row -->
-          </div><!-- /.container-fluid -->
-      </section>
+                                        <div class="form-group">
+                                            <label for="ConTec" class="col-md-12 control-label">ConTec</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="ConTec" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="TipoIDPaciente" class="col-md-12 control-label">Tipo de
+                                                documento</label>
+                                            <div class="col-sm-12">
+                                                <select disabled="disabled" name="TipoIDPaciente" class="form-control">
+                                                    <option value=""></option>
+                                                    <option value="CC">CC</option>
+                                                    <option value="CE">CE</option>
+                                                    <option value="CN">CN</option>
+                                                    <option value="NV">NV</option>
+                                                    <option value="CR">CR</option>
+                                                    <option value="TI">TI</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="NoIDPaciente" class="col-md-12 control-label">Número de
+                                                Documento</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="NoIDPaciente" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div><!-- /col-md-4 -->
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="NoEntrega" class="col-md-12 control-label">Número de
+                                                Entrega</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="NoEntrega" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="NoSubEntrega" class="col-md-12 control-label">Número de
+                                                SubEntrega</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="NoSubEntrega" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="TipoIDProv" class="col-md-12 control-label">TipoIDProv</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="TipoIDProv" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="NoIDProv" class="col-md-12 control-label">NoIDProv</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="NoIDProv" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="CodMunEnt" class="col-md-12 control-label">CodMunEnt</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="CodMunEnt" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /col-md-4 -->
+
+
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="FecMaxEnt" class="col-md-12 control-label">FecMaxEnt</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" name="FecMaxEnt" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="CantTotAEntregar"
+                                                class="col-md-12 control-label">CantTotAEntregar</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="number" name="CantTotAEntregar"
+                                                    value="" placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="DirPaciente" class="col-md-12 control-label">DirPaciente</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" name="DirPaciente" value=""
+                                                    placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="CodSerTecAEntregar"
+                                                class="col-md-12 control-label">CodSerTecAEntregar</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" name="CodSerTecAEntregar"
+                                                    value="" placeholder="" class="form-control">
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <!--
+                                <div class="form-group">
+                                    <label for="tipo" class="col-md-12 control-label">Tipo</label>
+                                    <div class="col-sm-12">
+                                        <select name="tipo" class="form-control">
+                                            <option value="1">Contributivo</option>
+                                            <option value="2">Subsidiado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="Periodo Inicial" class="col-md-12 control-label">Periodo Inicial</label>
+                                    <div class="col-sm-12">
+                                        <input type="date" name="periodo_inicial" value="" placeholder="YYYY-MM-DD"
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Periodo Final" class="col-md-12 control-label">Periodo Final</label>
+                                    <div class="col-sm-12">
+                                        <input type="date" name="periodo_final" value="" placeholder="YYYY-MM-DD"
+                                            class="form-control">
+                                    </div>
+                                </div>-->
+                                    </div><!-- /col-md-4 -->
+
+
+                                </div> <!-- row -->
+                            </div>
+
+
+                            <div class="card-footer">
+                                <center>
+                                    <button type="button" class="btn btn-primary">Consultar Datos</button>
+                                    <button type="button" class="btn btn-primary">Limpiar Formulario</button>
+                                    <button type="submit" class="btn btn-success"
+                                        disabled="disabled">Direccionar</button>
+                                </center>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
