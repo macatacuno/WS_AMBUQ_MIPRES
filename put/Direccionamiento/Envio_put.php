@@ -1,10 +1,7 @@
 <?php
-
 set_time_limit(9999999);
 //ini_set('memory_limit', '-1');
-
 $conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
-
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $peri_error = "";

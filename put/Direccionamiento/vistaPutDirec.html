@@ -36,8 +36,10 @@
                                             <label for="NoPrescripcion" class="col-md-12 control-label">Número de
                                                 prescripción</label>
                                             <div class="col-sm-12">
-                                                <input type="text" name="NoPrescripcion" value=""
-                                                    placeholder="Ingresar número" class="form-control">
+                                                <input type="text" onkeydown="cargar_tipotec_pres();"
+                                                    onkeyup="cargar_tipotec();" id="NoPrescripcion"
+                                                    name="NoPrescripcion" value="" placeholder="Ingresar número"
+                                                    class="form-control">
                                             </div>
                                         </div>
 
@@ -45,20 +47,25 @@
                                             <label for="TipoTec" class="col-md-12 control-label">Tipo de
                                                 tecnología</label>
                                             <div class="col-sm-12">
-                                                <select name="TipoTec" class="form-control">
-                                                    <option value="">Seleccionar opción</option>
-                                                    <option value="M">M-Medicamento</option>
-                                                    <option value="P">P-Procedimiento</option>
-                                                </select>
+                                                <div id="div_TipoTec">
+                                                    <select onchange="cargar_datos_con_tec(); cargar_datos_pres();"
+                                                        id="TipoTec" name="TipoTec" disabled="disabled"
+                                                        class="form-control">
+                                                    </select>
+                                                </div>
+
                                             </div>
                                         </div>
-
-
                                         <div class="form-group">
                                             <label for="ConTec" class="col-md-12 control-label">ConTec</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="ConTec" value=""
-                                                    placeholder="" class="form-control">
+                                                <div id="div_ConTec">
+                                                    <select disabled="disabled" id="ConTec" name="ConTec"
+                                                        class="form-control">
+
+                                                    </select>
+                                                </div>
+
                                             </div>
                                         </div>
 
@@ -66,15 +73,8 @@
                                             <label for="TipoIDPaciente" class="col-md-12 control-label">Tipo de
                                                 documento</label>
                                             <div class="col-sm-12">
-                                                <select disabled="disabled" name="TipoIDPaciente" class="form-control">
-                                                    <option value=""></option>
-                                                    <option value="CC">CC</option>
-                                                    <option value="CE">CE</option>
-                                                    <option value="CN">CN</option>
-                                                    <option value="NV">NV</option>
-                                                    <option value="CR">CR</option>
-                                                    <option value="TI">TI</option>
-                                                </select>
+                                                <input disabled="disabled" type="text" id="TipoIDPaciente"
+                                                    name="TipoIDPaciente" placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
 
@@ -83,8 +83,8 @@
                                             <label for="NoIDPaciente" class="col-md-12 control-label">Número de
                                                 Documento</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="NoIDPaciente" value=""
-                                                    placeholder="" class="form-control">
+                                                <input disabled="disabled" type="text" id="NoIDPaciente"
+                                                    name="NoIDPaciente" placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
                                     </div><!-- /col-md-4 -->
@@ -94,8 +94,21 @@
                                             <label for="NoEntrega" class="col-md-12 control-label">Número de
                                                 Entrega</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="NoEntrega" value=""
-                                                    placeholder="" class="form-control">
+                                                <select id="NoEntrega" name="NoEntrega" class="form-control select2">
+                                                    <option value="">Seleccionar opción</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -103,32 +116,190 @@
                                             <label for="NoSubEntrega" class="col-md-12 control-label">Número de
                                                 SubEntrega</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="NoSubEntrega" value=""
-                                                    placeholder="" class="form-control">
+                                                <input disabled="disabled" type="number" id="NoSubEntrega"
+                                                    name="NoSubEntrega" value="" placeholder=""
+                                                    class="form-control limpiar">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="TipoIDProv" class="col-md-12 control-label">TipoIDProv</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="TipoIDProv" value=""
-                                                    placeholder="" class="form-control">
+                                                <input disabled="disabled" type="text" id="TipoIDProv" name="TipoIDProv"
+                                                    value="" placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="NoIDProv" class="col-md-12 control-label">NoIDProv</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="NoIDProv" value=""
-                                                    placeholder="" class="form-control">
+                                                <select id="NoIDProv" name="NoIDProv" class="form-control select2">
+                                                    <option value="">Seleccionar opción</option>
+                                                    <option value="901260762">901260762-DIVAED CASA DE PASO</option>
+                                                    <option value="900254478">900254478-CASA PASO
+                                                        CASA MILAGRO</option>
+                                                    <option value="901159139">901159139-TUMEDIC</option>
+                                                    <option value="72125229">72125229-RODOLFO JALLER RAAD</option>
+                                                    <option value="77028533">77028533-WAKIS MAYORCA CASTILLA</option>
+                                                    <option value="800033723">800033723-SERVICIOS MEDICOS OLIMPUS IPS
+                                                        SAS</option>
+                                                    <option value="800117564">800117564-CLINICA DE LA MUJER S.A.S.
+                                                    </option>
+                                                    <option value="800129856">800129856-IPS CLINICA DE LA COSTA LTDA
+                                                    </option>
+                                                    <option value="800130625">800130625-HOSPITAL SAN CRISTÓBAL EMPRESA
+                                                        SOCIAL DEL ESTADO</option>
+                                                    <option value="800161687">800161687-UNIDAD DE GASTROENTEROLOGIA Y
+                                                        ENDOSCOPIA DIGESTIVA S.A.-UGASEND S.A</option>
+                                                    <option value="800183943">800183943-CLINICA SANTA MARIA SAS</option>
+                                                    <option value="800191916">800191916-CLINICA SAN FRANCISCO S.A
+                                                    </option>
+                                                    <option value="800194798">800194798-ORGANIZACION CLINICA BONNADONA
+                                                        PREVENIR S.A.S.</option>
+                                                    <option value="800201726">800201726-FUNDACION POLICLINICA CIENAGA
+                                                    </option>
+                                                    <option value="800204919">800204919-CLINICA RESPIRATORIA Y DE
+                                                        ALERGIAS </option>
+                                                    <option value="800231235">800231235-HOSPITAL UNIVERSITARIO SAN JORGE
+                                                    </option>
+                                                    <option value="801000713">801000713-ONCOLOGOS DEL OCCIDENTE SA
+                                                    </option>
+                                                    <option value="802000955">802000955-INSTITUTO DE LA VISION DEL NORTE
+                                                        & CIA. LTDA.</option>
+                                                    <option value="802004504">802004504-YEPES RESTREPO & CIA S EN C
+                                                        SIMPLE</option>
+                                                    <option value="802009783">802009783-CLINICA SAN RAFAEL LTDA</option>
+                                                    <option value="802013835">802013835-CLINICAS ATENAS LTDA IPS
+                                                    </option>
+                                                    <option value="802014564">802014564-CENTRO MEDICO CLINICA DE ALERGIA
+                                                        E INMUNOLOGIA SA</option>
+                                                    <option value="802018443">802018443-INSTITUTO ONCO-HEMATOLOGICA
+                                                        BETANIA LTDA</option>
+                                                    <option value="802024817">802024817-IPS MEDICAMENTOS Y EQUIPOS
+                                                        COLOMBIA SAS</option>
+                                                    <option value="804007178">804007178-COSANMED LTDA</option>
+                                                    <option value="806011261">806011261-ESTRIOS SAS</option>
+                                                    <option value="816001182">816001182-AUDIFARMA S.A.</option>
+                                                    <option value="817007493">817007493-FUNDACION HUELLAS</option>
+                                                    <option value="819000364">819000364-CLINICA DE LA MUJER S.A.
+                                                    </option>
+                                                    <option value="823002227">823002227-INSTITUTO DE CANCEROLOGIA DE
+                                                        SUCRE S.A.S.</option>
+                                                    <option value="823002342">823002342-IPS CLINICA DE VARICES S.A.S.
+                                                    </option>
+                                                    <option value="823002800">823002800-OFTALMOLOGOS ASOCIADOS DE LA
+                                                        COSTA S.A.S</option>
+                                                    <option value="824000687">824000687-SOCIEDAD DE ONCOLOGIA Y
+                                                        HEMATOLOGIA DEL CESAR LTDA</option>
+                                                    <option value="824001041">824001041-CLINICA MEDICOS S.A.</option>
+                                                    <option value="824002277">824002277-CLINICA BUENOS AIRES S.A:S
+                                                    </option>
+                                                    <option value="824004396">824004396-MEDIVALLE SAS</option>
+                                                    <option value="824004867">824004867-CLINICA OFTALMOLOGICA DE
+                                                        VALLEDUPAR LTDA.</option>
+                                                    <option value="824005609">824005609-ASISTENCIA MEDICA INMEDIATA
+                                                        AMEDI S.A.S.</option>
+                                                    <option value="824005694">824005694-CENTRO REGIONAL DE ONCOLOGIA SAS
+                                                    </option>
+                                                    <option value="830504734">830504734-VISION TOTAL S.A.S.</option>
+                                                    <option value="830514327">830514327-FUNDAVISION</option>
+                                                    <option value="860005114">860005114-LINDE COLOMBIA S.A. </option>
+                                                    <option value="860015536">860015536-HOSPITAL UNIVERSITARIO SAN
+                                                        IGNACIO</option>
+                                                    <option value="890102768">890102768-ORGANIZACION CLINICA GENERAL DEL
+                                                        NORTE</option>
+                                                    <option value="890112801">890112801-FUNDACIÓN HOSPITAL UNIVERSIDAD
+                                                        DEL NORTE</option>
+                                                    <option value="890113431">890113431-CEDIUL S.A.</option>
+                                                    <option value="890116783">890116783-UNIDAD LASER DEL ATJANTICO LTDA
+                                                    </option>
+                                                    <option value="890300513">890300513-CLINICA DE OCCIDENTE</option>
+                                                    <option value="890303461">890303461-HOSPITAL UNIVERSITARIO DEL VAL
+                                                    </option>
+                                                    <option value="890303841">890303841-HOSPITAL DE SAN JUAN DE DIOS
+                                                    </option>
+                                                    <option value="890304155">890304155-E.S.E. HOSPITAL DEPARTAMENTAL
+                                                        PSIQUIATRICO UNIVERSITARIO DEL VALLE</option>
+                                                    <option value="890324177">890324177-FUNDACION VALLE DEL LILI
+                                                    </option>
+                                                    <option value="890901826">890901826-HOSPITAL PABLO TOBON URIBE
+                                                    </option>
+                                                    <option value="892300979">892300979-CLINICA DEL CESAR S.A.</option>
+                                                    <option value="900008328">900008328-CLINICA LAURA DANIELA LTDA
+                                                    </option>
+                                                    <option value="900009141">900009141-DISTRIBUIDORA DE MEDICAMENTOS
+                                                        LIMITADA DISTRIMED LTDA</option>
+                                                    <option value="900016598">900016598-INSTITUTO CARDIOVASCULAR DEL
+                                                        CESAR S.A</option>
+                                                    <option value="900036695">900036695-INTENSIVISTAS MRC IPS S.A
+                                                    </option>
+                                                    <option value="900037169">900037169-IPS CENTRO OPTICO RIOMAR
+                                                    </option>
+                                                    <option value="900042103">900042103-EMPRESA SOCIAL DEL ESTADO
+                                                        HOSPITAL UNIVERSITARIO DEL CARIBE</option>
+                                                    <option value="900074359">900074359-UCIMED S.A</option>
+                                                    <option value="900112364">900112364-SOCIEDAD CARDIOVASCULAR DEL
+                                                        CARIBE COLOMBIANO S.A.S</option>
+                                                    <option value="900141276">900141276-INVERSIONES SMP S.A.S</option>
+                                                    <option value="900155383">900155383-SUMINISTROS INTEGRALES MAURO
+                                                        SERGIO SAS</option>
+                                                    <option value="900217343">900217343-CLINICA OFTALMOLOGICA DE SUCRE
+                                                        S.A.S</option>
+                                                    <option value="900247710">900247710-CLINICA OFTALMOLOGICA DE CARTAGO
+                                                        LIMITADA</option>
+                                                    <option value="900261353">900261353-FUNDACION HOSPITAL SAN VICENTE
+                                                        DE PAUL RIONEGRO</option>
+                                                    <option value="900269029">900269029-FUNDACION CENTRO COLOMBIANO DE
+                                                        EPILEPSIA Y ENFERMEDADES NEUROLOGICAS</option>
+                                                    <option value="900277187">900277187-ASISTENCIA MEDICA IPS S A S.
+                                                    </option>
+                                                    <option value="900337462">900337462-SUMI-INTEGRAL L.S EU.</option>
+                                                    <option value="900346567">900346567-SUMINISTROS INTEGRALES DE
+                                                        EQUIPOS BIOMEDICOS MEDICAMENTOS E INSUMOS HOSPITALARIOS
+                                                        SUMINTEGRALES S.A.S.</option>
+                                                    <option value="900373755">900373755-SOLUCIONES INTEGRALES Z.P.F.
+                                                        S.A.S.</option>
+                                                    <option value="900377997">900377997-UNIDAD MEDICA MOVIL LA
+                                                        CANDELARIA LTDA</option>
+                                                    <option value="900437964">900437964-CENTRO RADIOLOGICA ELISA
+                                                    </option>
+                                                    <option value="900441355">900441355-OSTEOBIOMED S.A.S.</option>
+                                                    <option value="900472731">900472731-SALUD INTEGRAL VITAL VIDA SAS
+                                                        AGENCIA CARTAGO VALLE</option>
+                                                    <option value="900496673">900496673-CODIGO AZUL SAS</option>
+                                                    <option value="900517932">900517932-MEDIVALLE SF SAS</option>
+                                                    <option value="900520293">900520293-FUNDACION UNIONVIDA QUIBDO
+                                                    </option>
+                                                    <option value="900602320">900602320-CLINICA LA MISERICORDIA</option>
+                                                    <option value="900613550">900613550-CLINICA SAN FRANCISCO DE ASIS
+                                                        SAS</option>
+                                                    <option value="900665934">900665934-DOMEDICAL IPS S.A.S</option>
+                                                    <option value="900699317">900699317-MEDICAL HEALTH CARE IPS S.A.S.
+                                                    </option>
+                                                    <option value="900743259">900743259-OFTALMOLOGIA DE ALTA TECNOLOGIA
+                                                        S.A.S</option>
+                                                    <option value="900744042">900744042-MEDICPLUS SAS</option>
+                                                    <option value="900843971">900843971-MEDICAVITAL S.A.S.</option>
+                                                    <option value="900862597">900862597-CIES NEUROREHABILITACION
+                                                        INTEGRAL S.A.S.</option>
+                                                    <option value="900870339">900870339-UNIVERSO DE SOLUCIONES SAS
+                                                    </option>
+                                                    <option value="900873848">900873848-FUNDACIÓN FUSA PYP</option>
+                                                    <option value="900998064">900998064-UNIMEDICAL PACIFIC S.A.S.
+                                                    </option>
+                                                    <option value="901121329">901121329-DROGUERIA FARMA-ENTREGA DEL
+                                                        VALLE SF S.AS</option>
+                                                    <option value="901139193">901139193-MIRED BARRANQUILLA IPS S.A.S.
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="CodMunEnt" class="col-md-12 control-label">CodMunEnt</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="CodMunEnt" value=""
-                                                    placeholder="" class="form-control">
+                                                <input disabled="disabled" type="text" id="CodMunEnt" name="CodMunEnt"
+                                                    value="" placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
 
@@ -140,8 +311,8 @@
                                         <div class="form-group">
                                             <label for="FecMaxEnt" class="col-md-12 control-label">FecMaxEnt</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" name="FecMaxEnt" value=""
-                                                    placeholder="" class="form-control">
+                                                <input type="date" id="FecMaxEnt" name="FecMaxEnt" value=""
+                                                    placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
 
@@ -149,16 +320,18 @@
                                             <label for="CantTotAEntregar"
                                                 class="col-md-12 control-label">CantTotAEntregar</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="number" name="CantTotAEntregar"
-                                                    value="" placeholder="" class="form-control">
+                                                <input type="number" id="CantTotAEntregar" name="CantTotAEntregar"
+                                                    value="" placeholder="Ingresar CantTotAEntregar"
+                                                    class="form-control limpiar">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="DirPaciente" class="col-md-12 control-label">DirPaciente</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" name="DirPaciente" value=""
-                                                    placeholder="" class="form-control">
+                                                <input disabled="disabled" type="text" id="DirPaciente"
+                                                    name="DirPaciente" value="" placeholder=""
+                                                    class="form-control limpiar">
                                             </div>
                                         </div>
 
@@ -167,8 +340,9 @@
                                             <label for="CodSerTecAEntregar"
                                                 class="col-md-12 control-label">CodSerTecAEntregar</label>
                                             <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" name="CodSerTecAEntregar"
-                                                    value="" placeholder="" class="form-control">
+                                                <input type="text" id="CodSerTecAEntregar" name="CodSerTecAEntregar"
+                                                    value="" placeholder="Ingresar CodSerTecAEntregar"
+                                                    class="form-control limpiar">
                                             </div>
                                         </div>
 
@@ -209,12 +383,19 @@
 
 
                             <div class="card-footer">
-                                <center>
-                                    <button type="button" class="btn btn-primary">Consultar Datos</button>
-                                    <button type="button" class="btn btn-primary">Limpiar Formulario</button>
-                                    <button type="submit" class="btn btn-success"
-                                        disabled="disabled">Direccionar</button>
-                                </center>
+                                <div class="row">
+                                    <div class="col-sm-10"> </div>
+                                    <div class="col-sm-2">
+                                        <!-- <button type="button" class="btn btn-primary">Consultar Datos</button>
+                                    <button type="button" class="btn btn-primary">Limpiar Formulario</button>-->
+
+                                        <center><button type="button" onclick="eviar_direc();" class="btn btn-success"
+                                                data-toggle="modal" data-target="#modal-default">Direccionar</button>
+                                        </center>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -225,3 +406,95 @@
             <!-- /.row -->
         </div><!-- /.container-fluid -->
     </section>
+
+
+
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <center>
+                        <h4 class="modal-title">Confirmar Direccionamiento</h4>
+                    </center>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!--<div class="modal-body">
+              <p>One fine body&hellip;</p>
+            </div>-->
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default swalDefaultError"
+                        data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary swalDefaultSuccess"
+                        data-dismiss="modal">Confirmar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+
+<!--Script de la pagina /pages/UI/modals.html-->
+    <script type="text/javascript">
+        $(function () {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            $('.swalDefaultSuccess').click(function () {
+                Toast.fire({
+                    type: 'success',
+                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            });
+            $('.swalDefaultInfo').click(function () {
+                Toast.fire({
+                    type: 'info',
+                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            });
+            $('.swalDefaultError').click(function () {
+                Toast.fire({
+                    type: 'error',
+                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            });
+            $('.swalDefaultWarning').click(function () {
+                Toast.fire({
+                    type: 'warning',
+                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            });
+            $('.swalDefaultQuestion').click(function () {
+                Toast.fire({
+                    type: 'question',
+                    title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
+                })
+            });
+
+        });
+
+    </script>
+
+
+
+<!--Script de la pagina /pages/forms/advanced.html-->
+<script>
+    $(function () {
+      //Initialize Select2 Elements
+      $('.select2').select2()
+  
+      //Initialize Select2 Elements
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+    })
+  </script>
+  
