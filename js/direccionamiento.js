@@ -115,7 +115,8 @@ function cargar_datos_pres() {
                 sub_json = json[key];
                 for (var sub_key in sub_json) {
 
-                    $("#TipoIDProv").val('NI');
+                    $("#TipoIDProv").val('NI');//El tipo de proveedor tambien se sacar de la tabla prescriociones en el campo tipoidips
+                    //el numero de la ips tambien se optiene de la prescripcion
                     $("#NoSubEntrega").val(0);
                     if (sub_key == 'TIPOIDPACIENTE') {
                         $("#TipoIDPaciente").val(sub_json[sub_key]);
