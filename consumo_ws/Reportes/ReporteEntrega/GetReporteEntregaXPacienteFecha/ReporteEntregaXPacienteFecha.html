@@ -5,7 +5,7 @@
           <div class="container-fluid">
               <div class="row mb-2">
                   <div class="col-sm-6">
-                      <h1 class="m-0 text-dark">Prescripción</h1><br>
+                      <h1 class="m-0 text-dark">Reporte de entrega</h1><br>
                   </div><!-- /.col -->
               </div><!-- /.row -->
           </div><!-- /.container-fluid -->
@@ -21,11 +21,11 @@
                       <!-- general form elements -->
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">Prescripción por paciente</h3>
+                              <h3 class="card-title">Reporte de entrega por paciente y por fecha</h3>
                           </div>
                           <!-- /.card-header -->
                           <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/Prescripcion/GetPrescripcionPaciente/ReporteDiaActual.php">
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXPacienteFecha/ReporteDiaActual.php">
                               <div class="card-body">
 
                                   <div class="form-group">
@@ -41,7 +41,7 @@
                                   <div class="form-group">
                                       <label for="fecha" class="col-sm-5 control-label">Fecha</label>
                                       <div class="col-sm-10">
-                                          <input type="date" name="fecha" value="2019-09-13" placeholder="YYYY-MM-DD" class="form-control">
+                                          <input type="date" name="fecha" value="2019-10-01" placeholder="YYYY-MM-DD" class="form-control">
                                       </div>
                                   </div>
 
@@ -62,7 +62,7 @@
                                   <div class="form-group">
                                       <label for="Numero_documento" class="col-sm-5 control-label">Numero de documento</label>
                                       <div class="col-sm-10">
-                                          <input type="number" requiered name="Numero_documento" value="1005549981" placeholder="Ingresar número" class="form-control">
+                                          <input type="number" requiered name="Numero_documento" value="1050840979" placeholder="Ingresar número" class="form-control">
                                       </div>
                                   </div>
 
@@ -78,7 +78,6 @@
                   </div>
 
                   <div class="col-md-4"></div>
-
               </div>
               <!-- /.row -->
           </div><!-- /.container-fluid -->

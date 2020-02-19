@@ -5,7 +5,7 @@
           <div class="container-fluid">
               <div class="row mb-2">
                   <div class="col-sm-6">
-                      <h1 class="m-0 text-dark">Junta profesional</h1><br><br>
+                      <h1 class="m-0 text-dark">Reporte de entrega</h1><br><br>
                   </div><!-- /.col -->
               </div><!-- /.row -->
           </div><!-- /.container-fluid -->
@@ -21,15 +21,16 @@
                       <!-- general form elements -->
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title"> Junta profesional por periodos</h3>
+                              <h3 class="card-title">Reporte de entrega por periodos</h3>
                           </div>
                           <!-- /.card-header -->
                           <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/Juntaprofesionales/GetJuntaProfesional/ReportePorPeriodos.php">
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXFecha/ReportePorPeriodos.php">
                               <div class="card-body">
+
                                   <div class="form-group">
                                       <label for="tipo" class="col-sm-5 control-label">Tipo</label>
-                                      <div class="col-sm-10">
+                                      <div class="col-sm-12">
                                           <select name="tipo" class="form-control">
                                               <option value="1">Contributivo</option>
                                               <option value="2">Subsidiado</option>
@@ -39,14 +40,14 @@
 
                                   <div class="form-group">
                                       <label for="Periodo Inicial" class="col-sm-5 control-label">Periodo Inicial</label>
-                                      <div class="col-sm-10">
+                                      <div class="col-sm-12">
                                           <input type="date" name="periodo_inicial" value="" placeholder="YYYY-MM-DD" class="form-control">
                                       </div>
                                   </div>
 
                                   <div class="form-group">
                                       <label for="Periodo Final" class="col-sm-5 control-label">Periodo Final</label>
-                                      <div class="col-sm-10">
+                                      <div class="col-sm-12">
                                           <input type="date" name="periodo_final" value="" placeholder="YYYY-MM-DD" class="form-control">
                                       </div>
                                   </div>
@@ -67,16 +68,16 @@
                       <!-- general form elements -->
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">Junta profesional día actual</h3>
+                              <h3 class="card-title">Reporte de entrega día actual</h3>
                           </div>
                           <!-- /.card-header -->
                           <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/Juntaprofesionales/GetJuntaProfesional/ReporteDiaActual.php">
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXFecha/ReporteDiaActual.php">
                               <div class="card-body">
                                   <div class="form-group">
                                       <label for="tipo" class="col-sm-5 control-label">Tipo</label>
                                       <div class="col-sm-10">
-                                          <select name="tipo" class="form-control" disabled="disabled">
+                                          <select name="tipo" class="form-control">
                                               <option value="1">Contributivo</option>
                                               <option value="2">Subsidiado</option>
                                           </select>
@@ -86,7 +87,7 @@
                               <!-- /.card-body -->
 
                               <div class="card-footer">
-                                  <center><button type="submit" class="btn btn-primary" disabled="disabled">Generar Reporte</button> </center>
+                                  <center><button type="submit" class="btn btn-primary">Generar Reporte</button> </center>
                               </div>
                           </form>
                       </div>

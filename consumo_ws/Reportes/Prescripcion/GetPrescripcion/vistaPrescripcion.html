@@ -5,7 +5,7 @@
           <div class="container-fluid">
               <div class="row mb-2">
                   <div class="col-sm-6">
-                      <h1 class="m-0 text-dark">Reporte de entrega</h1><br>
+                      <h1 class="m-0 text-dark">Prescripción</h1><br><br>
                   </div><!-- /.col -->
               </div><!-- /.row -->
           </div><!-- /.container-fluid -->
@@ -15,19 +15,18 @@
           <div class="container-fluid">
               <div class="row">
 
-                  <div class="col-md-4"></div>
+                  <div class="col-md-1"></div>
                   <!-- left column -->
                   <div class="col-md-4">
                       <!-- general form elements -->
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">Reporte de entrega por paciente y por fecha</h3>
+                              <h3 class="card-title"> Prescripción por periodos</h3>
                           </div>
                           <!-- /.card-header -->
                           <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/ReporteEntrega/GetReporteEntregaXPacienteFecha/ReporteDiaActual.php">
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/Prescripcion/GetPrescripcion/ReportePorPeriodos.php">
                               <div class="card-body">
-
                                   <div class="form-group">
                                       <label for="tipo" class="col-sm-5 control-label">Tipo</label>
                                       <div class="col-sm-10">
@@ -39,33 +38,18 @@
                                   </div>
 
                                   <div class="form-group">
-                                      <label for="fecha" class="col-sm-5 control-label">Fecha</label>
+                                      <label for="Periodo Inicial" class="col-sm-5 control-label">Periodo Inicial</label>
                                       <div class="col-sm-10">
-                                          <input type="date" name="fecha" value="2019-10-01" placeholder="YYYY-MM-DD" class="form-control">
+                                          <input type="date" name="periodo_inicial" value="" placeholder="YYYY-MM-DD" class="form-control">
                                       </div>
                                   </div>
 
                                   <div class="form-group">
-                                      <label for="tipo_documento" class="col-sm-5 control-label">Tipo de documento</label>
+                                      <label for="Periodo Final" class="col-sm-5 control-label">Periodo Final</label>
                                       <div class="col-sm-10">
-                                          <select name="tipo_documento" class="form-control">
-                                              <option value="CC">CC</option>
-                                              <option value="CE">CE</option>
-                                              <option value="CN">CN</option>
-                                              <option value="NV">NV</option>
-                                              <option value="CR">CR</option>
-                                              <option value="TI">TI</option>
-                                          </select>
+                                          <input type="date" name="periodo_final" value="" placeholder="YYYY-MM-DD" class="form-control">
                                       </div>
                                   </div>
-
-                                  <div class="form-group">
-                                      <label for="Numero_documento" class="col-sm-5 control-label">Numero de documento</label>
-                                      <div class="col-sm-10">
-                                          <input type="number" requiered name="Numero_documento" value="1050840979" placeholder="Ingresar número" class="form-control">
-                                      </div>
-                                  </div>
-
                               </div>
                               <!-- /.card-body -->
 
@@ -77,7 +61,37 @@
                       <!-- /.card -->
                   </div>
 
-                  <div class="col-md-4"></div>
+                  <div class="col-md-1"></div>
+                  <!-- left column -->
+                  <div class="col-md-4">
+                      <!-- general form elements -->
+                      <div class="card card-primary">
+                          <div class="card-header">
+                              <h3 class="card-title">Prescripción día actual</h3>
+                          </div>
+                          <!-- /.card-header -->
+                          <!-- form start -->
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/Prescripcion/GetPrescripcion/ReporteDiaActual.php">
+                              <div class="card-body">
+                                  <div class="form-group">
+                                      <label for="tipo" class="col-sm-5 control-label">Tipo</label>
+                                      <div class="col-sm-10">
+                                          <select name="tipo" class="form-control" disabled="disabled">
+                                              <option value="1">Contributivo</option>
+                                              <option value="2">Subsidiado</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- /.card-body -->
+
+                              <div class="card-footer">
+                                  <center><button type="submit" class="btn btn-primary" disabled="disabled">Generar Reporte</button> </center>
+                              </div>
+                          </form>
+                      </div>
+                      <!-- /.card -->
+                  </div>
               </div>
               <!-- /.row -->
           </div><!-- /.container-fluid -->

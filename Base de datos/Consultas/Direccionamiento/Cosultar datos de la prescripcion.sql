@@ -17,15 +17,26 @@ and TIPOTEC='P';
 select 
 NOPRESCRIPCION,
 TIPOTEC,
+CONORDEN,
 TIPOIDPACIENTE,
 NROIDPACIENTE,
-CodMunEnt,
-DirPaciente
-,max(conorden) CANTIDAD_TIPOTEC
+CODMUNENT,
+DIRPACIENTE,
+REGIMEN,
+decode(CODAMBATE,null,'NO EXISTE',CODAMBATE)CODAMBATE,
+decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE)DESC_CODAMBATE,
+decode(CODAMBATE,11,to_date(sysdate+15, 'YYYY-MM-DD'),12,to_date(sysdate+30, 'YYYY-MM-DD'),21,to_date(sysdate+30, 'YYYY-MM-DD'),'11-11-1111') FECHA_MAXIMA_DE_ENTREGA,
+decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
+decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR
 from view_webserv_pres_info_direc
-where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P'
-GROUP BY NOPRESCRIPCION,TIPOIDPACIENTE,NROIDPACIENTE,TIPOTEC,CodMunEnt,DirPaciente;
+where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
 
+
+/*
+Ambulatorio priorizado: 15 dias  11
+Ambulatorio No priorizado: 30 dias 12 
+Hospitalario domiciliario 30 dias 21
+*/
 
 
 /* 
@@ -48,11 +59,6 @@ from(
 group by NOPRESCRIPCION
 order by count(*) desc,cantidad_registros desc;
 --having count(*)>1
-
-
-
-
-
 
 
 

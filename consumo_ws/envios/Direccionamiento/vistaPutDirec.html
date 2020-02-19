@@ -16,8 +16,6 @@
             <div class="row">
 
                 <!-- left column -->
-
-
                 <div class="col-md-12">
                     <!-- general form elements -->
                     <div class="card card-primary">
@@ -27,11 +25,12 @@
                         <!-- /.card-header -->
                         <!-- form start -->
                         <form role="form" name="formulario" method="post" target="_blank"
-                            action="put/Direccionamiento/envio_put.php">
+                            action="consumo_ws/envios/Direccionamiento/envio_put.php">
                             <div class="card-body">
                                 <div class="row">
 
                                     <div class="col-md-4">
+
                                         <div class="form-group">
                                             <label for="NoPrescripcion" class="col-md-12 control-label">Número de
                                                 prescripción</label>
@@ -48,7 +47,7 @@
                                                 tecnología</label>
                                             <div class="col-sm-12">
                                                 <div id="div_TipoTec">
-                                                    <select onchange="cargar_datos_con_tec(); cargar_datos_pres();"
+                                                    <select onchange="cargar_datos_con_tec();"
                                                         id="TipoTec" name="TipoTec" disabled="disabled"
                                                         class="form-control">
                                                     </select>
@@ -57,15 +56,26 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="ConTec" class="col-md-12 control-label">ConTec</label>
+                                            <label for="ConTec" class="col-md-12 control-label">Numero de tecnología</label>
                                             <div class="col-sm-12">
                                                 <div id="div_ConTec">
-                                                    <select disabled="disabled" id="ConTec" name="ConTec"
+                                                    <select disabled="disabled" onchange="cargar_datos_pres();" id="ConTec" name="ConTec"
                                                         class="form-control">
 
                                                     </select>
                                                 </div>
 
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tipo" class="col-md-12 control-label">Régimen</label>
+                                            <div class="col-sm-12">
+                                                <select disabled="disabled" id="tipo" name="tipo" class="form-control">
+                                                    <option value=""></option>
+                                                    <option value="1">Contributivo</option>
+                                                    <option value="2">Subsidiado</option>
+                                                </select>
                                             </div>
                                         </div>
 
@@ -78,6 +88,8 @@
                                             </div>
                                         </div>
 
+                                    </div><!-- /col-md-4 -->
+                                    <div class="col-md-4">
 
                                         <div class="form-group">
                                             <label for="NoIDPaciente" class="col-md-12 control-label">Número de
@@ -87,14 +99,12 @@
                                                     name="NoIDPaciente" placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
-                                    </div><!-- /col-md-4 -->
-                                    <div class="col-md-4">
 
                                         <div class="form-group">
                                             <label for="NoEntrega" class="col-md-12 control-label">Número de
                                                 Entrega</label>
                                             <div class="col-sm-12">
-                                                <select id="NoEntrega" name="NoEntrega" class="form-control select2">
+                                                <select id="NoEntrega" name="NoEntrega" class="form-control">
                                                     <option value="">Seleccionar opción</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -131,7 +141,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="NoIDProv" class="col-md-12 control-label">NoIDProv</label>
+                                            <label for="NoIDProv" class="col-md-12 control-label">Numero ID proveedor</label>
                                             <div class="col-sm-12">
                                                 <select id="NoIDProv" name="NoIDProv" class="form-control select2">
                                                     <option value="">Seleccionar opción</option>
@@ -295,39 +305,41 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="CodMunEnt" class="col-md-12 control-label">CodMunEnt</label>
-                                            <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" id="CodMunEnt" name="CodMunEnt"
-                                                    value="" placeholder="" class="form-control limpiar">
-                                            </div>
-                                        </div>
 
                                     </div><!-- /col-md-4 -->
 
 
                                     <div class="col-md-4">
 
+
                                         <div class="form-group">
-                                            <label for="FecMaxEnt" class="col-md-12 control-label">FecMaxEnt</label>
+                                            <label for="CodMunEnt" class="col-md-12 control-label">Código municipio entrega</label>
                                             <div class="col-sm-12">
-                                                <input type="date" id="FecMaxEnt" name="FecMaxEnt" value=""
+                                                <input disabled="disabled" type="text" id="CodMunEnt" name="CodMunEnt"
+                                                    value="" placeholder="" class="form-control limpiar">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="FecMaxEnt" class="col-md-12 control-label">Fecha máxima de entrega</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" id="FecMaxEnt" disabled="disabled" name="FecMaxEnt" value=""
                                                     placeholder="" class="form-control limpiar">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="CantTotAEntregar"
-                                                class="col-md-12 control-label">CantTotAEntregar</label>
+                                                class="col-md-12 control-label">Cantidad total a entregar</label>
                                             <div class="col-sm-12">
                                                 <input type="number" id="CantTotAEntregar" name="CantTotAEntregar"
-                                                    value="" placeholder="Ingresar CantTotAEntregar"
+                                                    value="" placeholder="Ingresar Cantidad"
                                                     class="form-control limpiar">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="DirPaciente" class="col-md-12 control-label">DirPaciente</label>
+                                            <label for="DirPaciente" class="col-md-12 control-label">Dirección paciente</label>
                                             <div class="col-sm-12">
                                                 <input disabled="disabled" type="text" id="DirPaciente"
                                                     name="DirPaciente" value="" placeholder=""
@@ -338,14 +350,14 @@
 
                                         <div class="form-group">
                                             <label for="CodSerTecAEntregar"
-                                                class="col-md-12 control-label">CodSerTecAEntregar</label>
+                                                class="col-md-12 control-label">Código del servicio tecnológico a entregar </label>
                                             <div class="col-sm-12">
-                                                <input type="text" id="CodSerTecAEntregar" name="CodSerTecAEntregar"
-                                                    value="" placeholder="Ingresar CodSerTecAEntregar"
+                                                <input type="text" id="CodSerTecAEntregar" disabled="disabled" name="CodSerTecAEntregar"
+                                                    value="" placeholder=""
                                                     class="form-control limpiar">
+                                                    <textarea disabled="disabled" name="textarea" id="desc_CodSerTecAEntregar" rows="2" cols="10" class="form-control limpiar"></textarea>
                                             </div>
                                         </div>
-
 
 
 
@@ -389,8 +401,8 @@
                                         <!-- <button type="button" class="btn btn-primary">Consultar Datos</button>
                                     <button type="button" class="btn btn-primary">Limpiar Formulario</button>-->
 
-                                        <center><button type="button" onclick="eviar_direc();" class="btn btn-success"
-                                                data-toggle="modal" data-target="#modal-default">Direccionar</button>
+                                        <center><button type="button" class="btn btn-success" data-toggle="modal"
+                                                data-target="#modal-default">Direccionar</button>
                                         </center>
                                     </div>
 
@@ -398,6 +410,7 @@
 
                             </div>
                         </form>
+                       <!-- <textarea name="textarea" id="textarea" rows="10" cols="50"></textarea>-->
                     </div>
                     <!-- /.card -->
                 </div>
@@ -426,7 +439,7 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default swalDefaultError"
                         data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary swalDefaultSuccess"
+                    <button type="button" onclick="eviar_direc();" class="btn btn-primary swalDefaultSuccess"
                         data-dismiss="modal">Confirmar</button>
                 </div>
             </div>
@@ -438,7 +451,7 @@
 
 
 
-<!--Script de la pagina /pages/UI/modals.html-->
+    <!--Script de la pagina /pages/UI/modals.html-->
     <script type="text/javascript">
         $(function () {
             const Toast = Swal.mixin({
@@ -485,16 +498,15 @@
 
 
 
-<!--Script de la pagina /pages/forms/advanced.html-->
-<script>
-    $(function () {
-      //Initialize Select2 Elements
-      $('.select2').select2()
-  
-      //Initialize Select2 Elements
-      $('.select2bs4').select2({
-        theme: 'bootstrap4'
-      })
-    })
-  </script>
-  
+    <!--Script de la pagina /pages/forms/advanced.html-->
+    <script>
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        })
+    </script>

@@ -5,7 +5,7 @@
           <div class="container-fluid">
               <div class="row mb-2">
                   <div class="col-sm-6">
-                      <h1 class="m-0 text-dark">Reporte de entrega</h1><br><br>
+                      <h1 class="m-0 text-dark">Prescripción</h1><br><br>
                   </div><!-- /.col -->
               </div><!-- /.row -->
           </div><!-- /.container-fluid -->
@@ -21,12 +21,13 @@
                       <!-- general form elements -->
                       <div class="card card-primary">
                           <div class="card-header">
-                              <h3 class="card-title">Reporte de entrega por número de prescripción</h3>
+                              <h3 class="card-title">prescripción por número</h3>
                           </div>
                           <!-- /.card-header -->
                           <!-- form start -->
-                          <form role="form" name="formulario" method="post" target="_blank" action="Reportes/ReporteEntrega/GetReporteEntregaXNoPrescripcion/ReporteDiaActual.php">
+                          <form role="form" name="formulario" method="post" target="_blank" action="consumo_ws/reportes/Prescripcion/GetPrescripcion/ReportePorPeriodos.php">
                               <div class="card-body">
+
                                   <div class="form-group">
                                       <label for="tipo" class="col-sm-5 control-label">Tipo</label>
                                       <div class="col-sm-10">
@@ -40,7 +41,7 @@
                                   <div class="form-group">
                                       <label for="Periodo Final" class="col-sm-5 control-label">Numero de prescripcion</label>
                                       <div class="col-sm-10">
-                                          <input type="number" requiered name="numero_prescripcion" value="20190527175012217051" placeholder="Ingresar número" class="form-control">
+                                          <input type="number" requiered name="numero_prescripcion" value="20190914183014380264" placeholder="Ingresar número" class="form-control">
                                       </div>
                                   </div>
                               </div>
@@ -53,6 +54,7 @@
                       </div>
                       <!-- /.card -->
                   </div>
+
                   <div class="col-md-4"></div>
               </div>
               <!-- /.row -->
