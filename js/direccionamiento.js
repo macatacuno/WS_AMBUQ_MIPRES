@@ -91,6 +91,7 @@ function cargar_datos_con_tec() {
             lista = lista + '</select>';
             $("#div_ConTec").html(lista);
             cargar_datos_pres();
+            cargar_datos_proveedores();
         })
         .fail(function (data) {
             alert("error:" + data);
@@ -98,6 +99,55 @@ function cargar_datos_con_tec() {
 
 
 }
+
+
+function cargar_datos_proveedores() {
+    // val_NoPrescripcion = $('#NoPrescripcion').val();
+    // val_TipoTec = $('#TipoTec').val();
+
+    $.ajax({
+        url: './consumo_ws/envios/Direccionamiento/obtener_datos_proveedores.php',
+        type: "POST",
+        data: {
+            /* NoPrescripcion: val_NoPrescripcion,
+             TipoTec: val_TipoTec*/
+        }
+    })
+        .done(function (data) {
+            json = jQuery.parseJSON(data);
+            sw = 0;
+            lista = '';
+            $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
+            for (var key in json) {
+                sw = 1;
+                //document.write("<br>" + key + " - " + json[key]);
+                sub_json = json[key];
+                for (var sub_key in sub_json) {
+                    if (sub_key == 'NOIDPROV') {
+                        lista = lista + "<option value='" + sub_json[sub_key] + "'>" + sub_json[sub_key] + '-';
+                    } else if (sub_key == 'NOMBRE') {
+                        lista = lista + sub_json[sub_key] + '</option>';
+                    }
+
+                }
+            }
+            if (sw == 0) {
+                lista = '';
+            } else {
+                myVar = setTimeout(habilitar_NoIDProv, 200);
+            };
+            //lista = lista + '</select>';
+            // $('#NoIDProv').removeAttr('disabled');
+            $('#NoIDProv').append(lista);
+            //  $("#div_proveedores").html(lista);
+        })
+        .fail(function (data) {
+            alert("error:" + data);
+        });
+
+
+}
+
 
 
 function cargar_datos_pres() {
@@ -124,7 +174,6 @@ function cargar_datos_pres() {
 
 
                 for (var sub_key in sub_json) {
-
                     $("#TipoIDProv").val('NI');//El tipo de proveedor tambien se sacar de la tabla prescriociones en el campo tipoidips
                     //el numero de la ips tambien se optiene de la prescripcion
                     $("#NoSubEntrega").val(0);
@@ -213,15 +262,19 @@ function eviar_direc() {
 
 }
 
-function habilitar_ConTec() {
-    $('#ConTec').removeAttr('disabled');
-}
-
 
 function habilitar_TipoTec() {
     $('#TipoTec').removeAttr('disabled');
 }
 
+function habilitar_ConTec() {
+    $('#ConTec').removeAttr('disabled');
+}
+
+
+function habilitar_NoIDProv() {
+    $('#NoIDProv').removeAttr('disabled');
+}
 
 
 function limpiar() {
@@ -243,4 +296,11 @@ function limpiar() {
     $("#NoIDProv option[value=" + val_NoIDProv + "]").attr("selected", false);
     $("#NoIDProv option[value='']").attr("selected", true);
 
+    //Limpiar lista de proveedores
+    $("#NoIDProv").empty();
+    $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
+
+    //Limpiar lista de NoEntrega
+    $("#NoEntrega").empty();
+    $('#NoEntrega').append('<option value="">Seleccionar opción</option><option value="1">1</option><option value="2">2</option>    <option value="3">3</option>    <option value="4">4</option>    <option value="5">5</option>    <option value="6">6</option>    <option value="7">7</option>    <option value="8">8</option>    <option value="9">9</option>    <option value="10">10</option>    <option value="11">11</option><option value="12">12</option>');
 }
