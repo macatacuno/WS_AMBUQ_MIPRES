@@ -7,7 +7,7 @@ $conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
 //$TipoTec = $_POST['TipoTec'];
 
 /////obtener los parametros la url(inicio)
-$query = "SELECT NOIDPROV, NOMBRE FROM WEBSERV_PRES_PROVEEDORES";
+$query = "SELECT NOIDPROV, NOMBRE FROM WEBSERV_PRES_LIST_PROV";
 $st = oci_parse($conn_oracle, $query);
 oci_execute($st, OCI_DEFAULT);
 

@@ -24,6 +24,7 @@ $DirPaciente = $_POST['DirPaciente'];
 $CodSerTecAEntregar = $_POST['CodSerTecAEntregar'];
 
 
+
 $servicio_id = 10; // Servicio de direccionamiento
 
 //Parametros de la api
@@ -110,26 +111,26 @@ echo $json_direc;
 				"DirPaciente": "BARRANQUILLA",
 				"CodSerTecAEntregar": "RSiA16I178915"
 			  }');*/
-$id_direc=11;
-$id=11;
+$id_direc = 11;
+$id = 11;
 
-if($TipoTec=='M'){
-	$nombre_tabla='WEBSERV_PRES_MEDI';
-}else if($TipoTec=='P'){
-	$nombre_tabla='WEBSERV_PRES_PROC';
-}else if($TipoTec=='N'){
-	$nombre_tabla='WEBSERV_PRES_PROD_NUTR';
-}else if($TipoTec=='S'){
-	$nombre_tabla='WEBSERV_PRES_SERV_COMP';
-}else if($TipoTec=='D'){
-	$nombre_tabla='WEBSERV_PRES_DISP';
+if ($TipoTec == 'M') {
+	$nombre_tabla = 'WEBSERV_PRES_MEDI';
+} else if ($TipoTec == 'P') {
+	$nombre_tabla = 'WEBSERV_PRES_PROC';
+} else if ($TipoTec == 'N') {
+	$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
+} else if ($TipoTec == 'S') {
+	$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
+} else if ($TipoTec == 'D') {
+	$nombre_tabla = 'WEBSERV_PRES_DISP';
 }
 
 ////Actualizar tabla con el token temporal (Inicio)
-$sql_exc = "UPDATE ".$nombre_tabla." 
- SET  DIR_IDDIRECCIONAMIENTO = ".$id_direc.", DIR_ID = ".$id."
-WHERE  CONORDEN = ".$ConTec." 
-AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='".$NoPrescripcion."')";
+$sql_exc = "UPDATE " . $nombre_tabla . " 
+ SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id . "
+WHERE  CONORDEN = " . $ConTec . " 
+AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='" . $NoPrescripcion . "')";
 $st_direc = oci_parse($conn_oracle, $sql_exc);
 $result = oci_execute($st_direc);
 oci_free_statement($st_direc);

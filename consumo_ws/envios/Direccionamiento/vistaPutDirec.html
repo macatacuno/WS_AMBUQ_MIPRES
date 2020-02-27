@@ -36,11 +36,35 @@
                                                 prescripción</label>
                                             <div class="col-sm-12">
                                                 <input type="text" onkeydown="cargar_tipotec_pres();"
-                                                    onkeyup="cargar_tipotec();" id="NoPrescripcion"
+                                                    onkeyup="cargar_tipotec(); " id="NoPrescripcion"
                                                     name="NoPrescripcion" value="" placeholder="Ingresar número"
                                                     class="form-control">
                                             </div>
                                         </div>
+
+                                        <!--<div class="form-group">
+                                            <label class="col-form-label" for="inputError"><i
+                                                    class="far fa-times-circle"></i> Input with
+                                                error</label>
+                                            <input type="text" class="form-control is-warning" id=""
+                                                placeholder="Enter ...">
+                                            <input type="text" class="form-control is-valid" id=""
+                                                placeholder="Enter ...">
+                                            <input type="text" class="form-control is-invalid" id=""
+                                                placeholder="Enter ...">
+                                        </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
 
                                         <div class="form-group">
                                             <label for="TipoTec" class="col-md-12 control-label">Tipo de
@@ -145,7 +169,7 @@
                                                 proveedor</label>
                                             <div class="col-sm-12">
                                                 <select id="NoIDProv" name="NoIDProv" class="form-control select2">
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
@@ -195,11 +219,15 @@
                                             </div>
                                         </div>
 
-
                                         <div class="form-group">
                                             <label for="CodSerTecAEntregar" class="col-md-12 control-label">Código del
                                                 servicio tecnológico a entregar </label>
                                             <div class="col-sm-12">
+                                                <div id="div_list_medi">
+                                                    <select id="CodSerTecAEntregar_medi" name="CodSerTecAEntregar_medi"
+                                                        class="form-control select2">
+                                                    </select>
+                                                </div>
                                                 <input type="text" id="CodSerTecAEntregar" disabled="disabled"
                                                     name="CodSerTecAEntregar" value="" placeholder=""
                                                     class="form-control limpiar">
@@ -251,7 +279,7 @@
                                         <!-- <button type="button" class="btn btn-primary">Consultar Datos</button>
                                     <button type="button" class="btn btn-primary">Limpiar Formulario</button>-->
 
-                                        <center><button type="button" class="btn btn-success" data-toggle="modal"
+                                        <center><button type="button" onclick="validar_datos_direc();" id="btn_confirm_direc" class="btn btn-success" data-toggle="modal"
                                                 data-target="#modal-default">Direccionar</button>
                                         </center>
                                     </div>
@@ -260,7 +288,7 @@
 
                             </div>
                         </form>
-                        <!-- <textarea name="textarea" id="textarea" rows="10" cols="50"></textarea>-->
+                        <textarea name="textarea" id="textarea" rows="10" cols="50"></textarea>
                     </div>
                     <!-- /.card -->
                 </div>
