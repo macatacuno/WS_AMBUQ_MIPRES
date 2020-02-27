@@ -71,7 +71,8 @@ function cargarNumDirecXPacienteFecha() {
 
 
 function EnviarDireccionamiento() {
-      $('#contenido_principal').load('./consumo_ws/envios/Direccionamiento/vistaPutDirec.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/envios/Direccionamiento/vistaPutDirec.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
 
@@ -157,7 +158,8 @@ function cargarEntregaXFecha() {
 }
 
 function cargarEntregaXNoPrescripcion() {
-      $('#contenido_principal').load('./consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXNoPrescripcion/ReporteEntregaXNoPrescripcion.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXNoPrescripcion/ReporteEntregaXNoPrescripcion.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
@@ -172,7 +174,8 @@ function cargarEntregaXNoPrescripcion() {
 }
 
 function cargarEntregaXPacienteFecha() {
-      $('#contenido_principal').load('./consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXPacienteFecha/ReporteEntregaXPacienteFecha.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXPacienteFecha/ReporteEntregaXPacienteFecha.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
@@ -254,6 +257,7 @@ function cargarJuntProfPorfecha() {
 
 //////////////////////////////////Prescripción///////////////////////////////////////////////////////////
 function cargarPrescripcionPorFecha() {
+     // $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
       $('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetPrescripcion/vistaPrescripcion.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
@@ -269,7 +273,8 @@ function cargarPrescripcionPorFecha() {
 }
 
 function cargarPrescripcionPorPaciente() {
-      $('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetPrescripcionPaciente/PrescripcionPaciente.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetPrescripcionPaciente/PrescripcionPaciente.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
@@ -285,7 +290,8 @@ function cargarPrescripcionPorPaciente() {
 
 
 function cargarPrescripcionXNumero() {
-      $('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetPrescripcionXNumero/PrescripcionXNumero.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetPrescripcionXNumero/PrescripcionXNumero.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
@@ -300,7 +306,8 @@ function cargarPrescripcionXNumero() {
 }
 
 function cargarNovedadesPrescripcion() {
-      $('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetNovedadesPrescripcion/vistaNovedadesPrescripcion.html');
+      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      //$('#contenido_principal').load('./consumo_ws/reportes/Prescripcion/GetNovedadesPrescripcion/vistaNovedadesPrescripcion.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
