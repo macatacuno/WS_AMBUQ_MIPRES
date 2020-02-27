@@ -1,5 +1,5 @@
 <?php
-//include("../../../conexion.php");//Se comenta este codigo porque presenta errores al momento de ser llamado desde el .bat
+//include("../../../../conexion.php");//Se comenta este codigo porque presenta errores al momento de ser llamado desde el .bat
 
 set_time_limit(9999999);
 $servername = "localhost";

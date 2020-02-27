@@ -1,5 +1,5 @@
 <?php
-include("../../../conexion.php");
+include("../../../../conexion.php");
 
 
 ///////Declaracion de Variables Generales(Inicio)/////////
@@ -119,7 +119,7 @@ if($Json_final==""){
 }else{
   
 /** Incluir la libreria PHPExcel */
-require_once '../../../plugins/PHPExcel/Classes/PHPExcel.php';
+require_once '../../../../plugins/PHPExcel/Classes/PHPExcel.php';
 // Crea un nuevo objeto PHPExcel
 $objPHPExcel = new PHPExcel();
 // Establecer propiedades

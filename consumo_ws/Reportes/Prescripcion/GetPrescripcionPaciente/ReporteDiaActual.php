@@ -1,5 +1,5 @@
 <?php
-include("../../../conexion.php");
+include("../../../../conexion.php");
 
 
 ///////Declaracion de Variables Generales(Inicio)/////////

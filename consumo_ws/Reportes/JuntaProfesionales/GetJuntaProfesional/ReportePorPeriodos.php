@@ -36,7 +36,7 @@ if ($periodo_final < $periodo_inicial) {
 
 
   // Incluir la libreria PHPExcel 
-  require_once '../../../plugins/PHPExcel/Classes/PHPExcel.php';
+  require_once '../../../../plugins/PHPExcel/Classes/PHPExcel.php';
   // Crea un nuevo objeto PHPExcel
   //$objPHPExcel = new PHPExcel();
 
