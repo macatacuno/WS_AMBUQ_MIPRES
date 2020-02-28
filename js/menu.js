@@ -71,8 +71,8 @@ function cargarNumDirecXPacienteFecha() {
 
 
 function EnviarDireccionamiento() {
-      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
-      //$('#contenido_principal').load('./consumo_ws/envios/Direccionamiento/vistaPutDirec.html');
+      //$('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      $('#contenido_principal').load('./consumo_ws/envios/Direccionamiento/vistaPutDirec.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
 

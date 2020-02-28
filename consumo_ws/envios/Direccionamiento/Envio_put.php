@@ -93,8 +93,7 @@ $json_direc = '{
 	"DirPaciente": "' . $DirPaciente . '",
 	"CodSerTecAEntregar": "' . $CodSerTecAEntregar . '"
   }';
-echo $json_direc;
-//$response = direccionar_put($url,$json_direc ); 
+$response = direccionar_put($url, $json_direc);
 /*$response = direccionar_put($url, '{
 				"NoPrescripcion": "20200117143016858113",
 				"TipoTec": "N",
@@ -111,35 +110,43 @@ echo $json_direc;
 				"DirPaciente": "BARRANQUILLA",
 				"CodSerTecAEntregar": "RSiA16I178915"
 			  }');*/
+echo "Response: " . $response;
+echo "<br>" . $json_direc;
 $id_direc = 11;
 $id = 11;
 
-if ($TipoTec == 'M') {
-	$nombre_tabla = 'WEBSERV_PRES_MEDI';
-} else if ($TipoTec == 'P') {
-	$nombre_tabla = 'WEBSERV_PRES_PROC';
-} else if ($TipoTec == 'N') {
-	$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
-} else if ($TipoTec == 'S') {
-	$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
-} else if ($TipoTec == 'D') {
-	$nombre_tabla = 'WEBSERV_PRES_DISP';
-}
+if (strpos($response, 'Message') !== false) {
+	
+} else {
 
-////Actualizar tabla con el token temporal (Inicio)
-$sql_exc = "UPDATE " . $nombre_tabla . " 
+	if ($TipoTec == 'M') {
+		$nombre_tabla = 'WEBSERV_PRES_MEDI';
+	} else if ($TipoTec == 'P') {
+		$nombre_tabla = 'WEBSERV_PRES_PROC';
+	} else if ($TipoTec == 'N') {
+		$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
+	} else if ($TipoTec == 'S') {
+		$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
+	} else if ($TipoTec == 'D') {
+		$nombre_tabla = 'WEBSERV_PRES_DISP';
+	}
+
+	////Actualizar tabla con el token temporal (Inicio)
+	$sql_exc = "UPDATE " . $nombre_tabla . " 
  SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id . "
 WHERE  CONORDEN = " . $ConTec . " 
 AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='" . $NoPrescripcion . "')";
-$st_direc = oci_parse($conn_oracle, $sql_exc);
-$result = oci_execute($st_direc);
-oci_free_statement($st_direc);
-if ($result) {
-	//echo  "<br>Actualización Correcta ";
-} else {
-	//echo  "<br>Actualización Incorrecta ";
-}
-/////Actualizar tabla con el token temporal  (Fin)
+	$st_direc = oci_parse($conn_oracle, $sql_exc);
+	$result = oci_execute($st_direc);
+	oci_free_statement($st_direc);
+	if ($result) {
+		//echo  "<br>Actualización Correcta ";
+	} else {
+		//echo  "<br>Actualización Incorrecta ";
+	}
+	/////Actualizar tabla con el token temporal  (Fin)
 
+
+}
 
 oci_close($conn_oracle);

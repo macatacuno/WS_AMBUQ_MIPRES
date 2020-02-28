@@ -109,6 +109,7 @@ $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 
 
+
 //$periodo_final =   (string)date('y-m-d');
 
 
@@ -151,9 +152,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
 
-      /*
-
-
+  /*
+  
   $consulta = "SELECT repo_periodo, repo_json FROM reportesws  where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  repo_periodo = '20" . $periodo_conteo . "'";
   //echo "<br>Consulta json: ".$consulta."<br>";
   if ($resultado = $conn->query($consulta)) { //se valida que la consulta se ejecute correctamente

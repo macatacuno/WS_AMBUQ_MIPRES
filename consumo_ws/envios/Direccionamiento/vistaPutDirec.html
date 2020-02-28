@@ -56,16 +56,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
                                         <div class="form-group">
                                             <label for="TipoTec" class="col-md-12 control-label">Tipo de
                                                 tecnología</label>
@@ -73,6 +63,7 @@
                                                 <div id="div_TipoTec">
                                                     <select onchange="cargar_datos_con_tec();" id="TipoTec"
                                                         name="TipoTec" disabled="disabled" class="form-control">
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
 
@@ -85,7 +76,7 @@
                                                 <div id="div_ConTec">
                                                     <select disabled="disabled" onchange="cargar_datos_pres();"
                                                         id="ConTec" name="ConTec" class="form-control">
-
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
 
@@ -279,8 +270,8 @@
                                         <!-- <button type="button" class="btn btn-primary">Consultar Datos</button>
                                     <button type="button" class="btn btn-primary">Limpiar Formulario</button>-->
 
-                                        <center><button type="button" onclick="validar_datos_direc();" id="btn_confirm_direc" class="btn btn-success" data-toggle="modal"
-                                                data-target="#modal-default">Direccionar</button>
+                                        <center><button type="button" id="btn_confirm_direc" class="btn btn-success"
+                                                data-toggle="modal" data-target="#modal-default">Direccionar</button>
                                         </center>
                                     </div>
 
@@ -317,7 +308,7 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default swalDefaultError"
                         data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="eviar_direc();" class="btn btn-primary swalDefaultSuccess"
+                    <button type="button" onclick="eviar_direc();" class="btn btn-primary"
                         data-dismiss="modal">Confirmar</button>
                 </div>
             </div>
@@ -331,7 +322,7 @@
 
     <!--Script de la pagina /pages/UI/modals.html-->
     <script type="text/javascript">
-        $(function () {
+       /* $(function () {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -371,7 +362,7 @@
             });
 
         });
-
+*/
     </script>
 
 
