@@ -111,7 +111,7 @@ $response = direccionar_put($url, $json_direc);
 				"CodSerTecAEntregar": "RSiA16I178915"
 			  }');*/
 echo "Response: " . $response;
-echo "<br>" . $json_direc;
+echo " <br> " . $json_direc;
 $id_direc = 11;
 $id = 11;
 

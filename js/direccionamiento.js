@@ -358,9 +358,9 @@ function eviar_direc() {
 
     if (val_NoIDProv == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
-        $("#NoIDProv").addClass("is-invalid");
+        $("#div_NoIDProv").addClass("is-invalid");
     } else {
-        $("#NoIDProv").removeClass("is-invalid");
+        $("#div_NoIDProv").removeClass("is-invalid");
     };
 
     if (val_CodMunEnt == '') {

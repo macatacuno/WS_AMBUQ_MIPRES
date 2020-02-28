@@ -29,7 +29,8 @@ decode(CODAMBATE,11,to_date(sysdate+15, 'YYYY-MM-DD'),12,to_date(sysdate+30, 'YY
 decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
 decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR
 from view_webserv_pres_info_direc
-where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
+where  NOPRESCRIPCION='20190105133009827192' and TIPOTEC='M' and conorden=1;
+--where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
 
 
 /*
@@ -64,6 +65,7 @@ order by count(*) desc,cantidad_registros desc;
 
 
 /*
+
 
 --Buscar las prescripciones que estan en el modulo de autorizaciones(EAUT)
 select *
