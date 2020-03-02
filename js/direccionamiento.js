@@ -241,7 +241,17 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'DESC_CODSERTECAENTREGAR') {
                         $("#desc_CodSerTecAEntregar").val(sub_json[sub_key]);
 
-                    };
+                    } else if (sub_key == 'DIR_ID') {
+                        $("#dir_id").text("Id: " + sub_json[sub_key]);
+
+                    } else if (sub_key == 'DIR_IDDIRECCIONAMIENTO') {
+                        $("#dir_id_direccionamiento").text("Id Direccionamiento: " + sub_json[sub_key]);
+                        if (sub_json[sub_key] != 0) {
+                            $("#btn_confirm_direc").attr("disabled", true);
+                        }else{
+                            $("#btn_confirm_direc").attr("disabled", false);
+                        }
+                    } ;
                 }
             }
         })
@@ -410,12 +420,15 @@ function eviar_direc() {
 
 
     if (count_valid_incumpl > 0) {
+        
         Toast.fire({
             type: 'error',
             title: 'hay ' + count_valid_incumpl + ' campo(s) que no se han llenado'
         });
     } else if (val_FecMaxEnt == '2011-11-11') {
         $("#FecMaxEnt").addClass("is-invalid");
+
+
         Toast.fire({
             type: 'error',
             title: 'Fecha Invalida: Puede que el ámbito de atención de la prescripción no tenga un tiempo de entrega definido'
@@ -447,21 +460,25 @@ function eviar_direc() {
                 if (data.includes('Message')) {
                     Toast.fire({
                         type: 'error',
-                        title: 'error al direccionar'
+                        title: 'Error al direccionar'
                     });
+                    alertify.alert('Error al Direccionar',data, function () {
+                        //alertify.message('');
+                    });
+
                 } else {
                     Toast.fire({
                         type: 'success',
                         title: 'Direccionamiento enviado correctamente'
                     });
-
                     cargar_datos_con_tec();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
 
                 };
-                $('#textarea').text(data);
+               
+                //$('#textarea').text(data);
             })
             .fail(function (data) {
-                alert("error:" + data);
+                alert("Error sin identificar:" + data);
             });
     }
 
@@ -490,16 +507,22 @@ function limpiar() {
     val_NoIDProv = $('#NoIDProv').val();
 
     //Limpiar lista tipo(regimen)
-    $("#tipo option[value=" + val_tipo + "]").attr("selected", false);
-    $("#tipo option[value='']").attr("selected", true);
+    if (val_tipo != null && val_tipo != '') {
+        $("#tipo option[value=" + val_tipo + "]").attr("selected", false);
+        $("#tipo option[value='']").attr("selected", true);
+    }
 
     //Limpiar lista NoEntrega
-    $("#NoEntrega option[value=" + val_NoEntrega + "]").attr("selected", false);
-    $("#NoEntrega option[value='']").attr("selected", true);
+    if (val_NoEntrega != null && val_NoEntrega != '') {
+        $("#NoEntrega option[value=" + val_NoEntrega + "]").attr("selected", false);
+        $("#NoEntrega option[value='']").attr("selected", true);
+    }
 
     //Limpiar lista NoIDProv
-    $("#NoIDProv option[value=" + val_NoIDProv + "]").attr("selected", false);
-    $("#NoIDProv option[value='']").attr("selected", true);
+    if (val_NoIDProv != null && val_NoIDProv != '') {
+        $("#NoIDProv option[value=" + val_NoIDProv + "]").attr("selected", false);
+        $("#NoIDProv option[value='']").attr("selected", true);
+    }
 
     //Limpiar lista de proveedores
     $("#NoIDProv").empty();
@@ -515,6 +538,13 @@ function limpiar() {
   */
     $("#CodSerTecAEntregar_medi").empty();
     $('#CodSerTecAEntregar_medi').append('<option value="">Seleccionar opción</option>');
+
+    //Limpiar codigos de direccionamiento
+    $("#dir_id").text("Id: 0");
+    $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
+
+    $("#btn_confirm_direc").attr("disabled", false);
+
 }
 
 

@@ -214,7 +214,7 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     $objSheet->setCellValue('E' . $i, '="' . $row["CODHABIPS"] . '"');
     $objSheet->setCellValue('F' . $i, $row["TIPOIDIPS"]);
     $objSheet->setCellValue('G' . $i, $row["NROIDIPS"]);
-    $objSheet->setCellValue('H' . $i, $row["CODDANEMUNIPS"]);
+    $objSheet->setCellValue('H' . $i, '="' . $row["CODDANEMUNIPS"] . '"');
     $objSheet->setCellValue('I' . $i, $row["DIRSEDEIPS"]);
     $objSheet->setCellValue('J' . $i, $row["TELSEDEIPS"]);
     $objSheet->setCellValue('K' . $i, $row["TIPOIDPROF"]);
@@ -569,8 +569,8 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     $DESC_TIPOMED = utf8_encode($row["DESC_TIPOMED"]);
     $objSheet->setCellValue('D' . $i, $DESC_TIPOMED);
 
-    
-   // $objSheet->setCellValue('E' . $i, $row["TIPOPREST"]);
+
+    // $objSheet->setCellValue('E' . $i, $row["TIPOPREST"]);
 
     $DESC_TIPOPREST = utf8_encode($row["DESC_TIPOPREST"]);
     $objSheet->setCellValue('E' . $i, $DESC_TIPOPREST);
@@ -1374,7 +1374,7 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     $objSheet->setCellValue('U' . $i, $row["DESCPRODNUTR"]);
     $DESC_DESCPRODNUTR = utf8_encode($row["DESC_DESCPRODNUTR"]);
     $objSheet->setCellValue('V' . $i, $DESC_DESCPRODNUTR);
-    
+
     $DESCR_GRUPO_NIVEL_1 = utf8_encode($row["DESCR_GRUPO_NIVEL_1"]);
     $objSheet->setCellValue('W' . $i, $DESCR_GRUPO_NIVEL_1);
     $PRESENTACION_COMERCIAL = utf8_encode($row["PRESENTACION_COMERCIAL"]);
@@ -1577,7 +1577,7 @@ DECODE(SC.NOMBALB,NULL,'NO EXISTE',SC.NOMBALB)NOMBALB,
 DECODE(SC.CODMUNORIALB,NULL,'NO EXISTE',SC.CODMUNORIALB)CODMUNORIALB,
 DECODE(SC.CODMUNDESALB,NULL,'NO EXISTE',SC.CODMUNDESALB)CODMUNDESALB,
 DECODE(SC.JUSTNOPBS,NULL,'NO EXISTE',SC.JUSTNOPBS)JUSTNOPBS,
-DECODE(SC.INDREC,NULL,'NO EXISTE',SC.INDREC)INDREC,
+DECODE(SC.INDREC,NULL,'NO EXISTE',SC.INDREC)INDREC, 
 
 DECODE(SC.ESTJM,NULL,'NO EXISTE',SC.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
 DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM

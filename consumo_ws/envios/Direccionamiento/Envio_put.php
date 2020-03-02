@@ -23,7 +23,11 @@ $CantTotAEntregar = $_POST['CantTotAEntregar'];
 $DirPaciente = $_POST['DirPaciente'];
 $CodSerTecAEntregar = $_POST['CodSerTecAEntregar'];
 
-
+//agregar los 0 faltantes del codigo DANE(Inicio)
+if (strlen($CodMunEnt) == 4) {
+	$CodMunEnt = '0' . $CodMunEnt;
+}
+//agregar los 0 faltantes del codigo DANE(Fin)
 
 $servicio_id = 10; // Servicio de direccionamiento
 
@@ -111,13 +115,32 @@ $response = direccionar_put($url, $json_direc);
 				"CodSerTecAEntregar": "RSiA16I178915"
 			  }');*/
 echo "Response: " . $response;
-echo " <br> " . $json_direc;
-$id_direc = 11;
-$id = 11;
+//echo " <br> " . $json_direc;
 
+
+$id = '';
+$id_direc = '';
 if (strpos($response, 'Message') !== false) {
-	
 } else {
+	//'[{"Id":21589220,"IdDireccionamiento":20898467}] '
+	$Id_busc_ini = '"Id":'; //Parametro inicial de nusqueda
+	$Id_busc_fin = ',"IdDireccionamiento"'; //parametro final de busqueda
+	$cadena_Id = $response; // Cadena completa
+	$posPresInicial = strpos($cadena_Id, $Id_busc_ini) + strlen($Id_busc_ini); //numero de pocicion inicial
+	$posPresFinal = strpos($cadena_Id, $Id_busc_fin); //numero de pocicion final
+	$Id = substr($cadena_Id, $posPresInicial, $posPresFinal - $posPresInicial); //Dato extaido de la cadena completa
+	//$Id = str_replace('"', "'", $Id);
+
+	$IdDireccionamiento_busc_ini = '"IdDireccionamiento":'; //Parametro inicial de nusqueda
+	$IdDireccionamiento_busc_fin = '}]'; //parametro final de busqueda
+	$cadena_IdDireccionamiento = $response; // Cadena completa
+	$posPresInicial = strpos($cadena_IdDireccionamiento, $IdDireccionamiento_busc_ini) + strlen($IdDireccionamiento_busc_ini); //numero de pocicion inicial
+	$posPresFinal = strpos($cadena_IdDireccionamiento, $IdDireccionamiento_busc_fin); //numero de pocicion final
+	$IdDireccionamiento = substr($cadena_IdDireccionamiento, $posPresInicial, $posPresFinal - $posPresInicial); //Dato extaido de la cadena completa
+	//$IdDireccionamiento = str_replace('"', "'", $IdDireccionamiento);
+	$id = $Id;
+	$id_direc = $IdDireccionamiento;
+
 
 	if ($TipoTec == 'M') {
 		$nombre_tabla = 'WEBSERV_PRES_MEDI';
@@ -131,11 +154,15 @@ if (strpos($response, 'Message') !== false) {
 		$nombre_tabla = 'WEBSERV_PRES_DISP';
 	}
 
+
+
 	////Actualizar tabla con el token temporal (Inicio)
 	$sql_exc = "UPDATE " . $nombre_tabla . " 
- SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id . "
-WHERE  CONORDEN = " . $ConTec . " 
-AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='" . $NoPrescripcion . "')";
+ SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
+		. " WHERE  CONORDEN = " . $ConTec
+		. " AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='"
+		. $NoPrescripcion . "')";
+
 	$st_direc = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st_direc);
 	oci_free_statement($st_direc);
@@ -145,8 +172,7 @@ AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='" .
 		//echo  "<br>Actualización Incorrecta ";
 	}
 	/////Actualizar tabla con el token temporal  (Fin)
-
-
 }
+
 
 oci_close($conn_oracle);

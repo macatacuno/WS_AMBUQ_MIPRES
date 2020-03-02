@@ -22,7 +22,9 @@ decode(CODAMBATE,null,'NO EXISTE',CODAMBATE)CODAMBATE,
 decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE)DESC_CODAMBATE,
 decode(CODAMBATE,11,to_date(sysdate+15, 'YYYY-MM-DD'),12,to_date(sysdate+30, 'YYYY-MM-DD'),21,to_date(sysdate+30, 'YYYY-MM-DD'),'11-11-1111') FECHA_MAXIMA_DE_ENTREGA,
 decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
-decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR
+decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR,
+DECODE(DIR_IDDIRECCIONAMIENTO,NULL,0,DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
+DECODE(DIR_ID,NULL,0,DIR_ID)DIR_ID
 from view_webserv_pres_info_direc
 where  NOPRESCRIPCION='" . $NoPrescripcion . "'
  and TIPOTEC='" . $TipoTec . "' 
@@ -30,28 +32,37 @@ where  NOPRESCRIPCION='" . $NoPrescripcion . "'
 
 
 
- 
 
- $st_serv = oci_parse($conn_oracle, $query);
+
+$st_serv = oci_parse($conn_oracle, $query);
 oci_execute($st_serv, OCI_DEFAULT);
 
 $tipos_tecnologia_json = '[';
 while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
-    
-    $fecha_maxima_de_entrega="20".$row['FECHA_MAXIMA_DE_ENTREGA'];
-    $fecha_maxima_de_entrega=str_replace("/", "-",$fecha_maxima_de_entrega);
+
+    $fecha_maxima_de_entrega = "20" . $row['FECHA_MAXIMA_DE_ENTREGA'];
+    $fecha_maxima_de_entrega = str_replace("/", "-", $fecha_maxima_de_entrega);
+
+    //agregar los 0 faltantes del codigo DANE(Inicio)
+    $CodMunEnt = $row['CODMUNENT'];
+    if (strlen($CodMunEnt) == 4) {
+        $CodMunEnt = '0' . $CodMunEnt;
+    }
+    //agregar los 0 faltantes del codigo DANE(Fin)
 
     $tipos_tecnologia_json = $tipos_tecnologia_json
         . '{"TIPOIDPACIENTE":"' . $row['TIPOIDPACIENTE']
         . '","NROIDPACIENTE":"' . $row['NROIDPACIENTE']
-        . '","CODMUNENT":"' . $row['CODMUNENT']
-        . '","DIRPACIENTE":"' . utf8_encode($row['DIRPACIENTE']) 
-        . '","REGIMEN":"' . $row['REGIMEN'] 
-        . '","CODAMBATE":"' . $row['CODAMBATE'] 
-        . '","DESC_CODAMBATE":"' . $row['DESC_CODAMBATE'] 
+        . '","CODMUNENT":"' . $CodMunEnt
+        . '","DIRPACIENTE":"' . utf8_encode($row['DIRPACIENTE'])
+        . '","REGIMEN":"' . $row['REGIMEN']
+        . '","CODAMBATE":"' . $row['CODAMBATE']
+        . '","DESC_CODAMBATE":"' . $row['DESC_CODAMBATE']
         . '","FECHA_MAXIMA_DE_ENTREGA":"' . $fecha_maxima_de_entrega
-        . '","CODSERTECAENTREGAR":"' . $row['CODSERTECAENTREGAR'] 
-        . '","DESC_CODSERTECAENTREGAR":"' .  utf8_encode($row['DESC_CODSERTECAENTREGAR']) . '"},';
+        . '","CODSERTECAENTREGAR":"' . $row['CODSERTECAENTREGAR']
+        . '","DESC_CODSERTECAENTREGAR":"' .  utf8_encode($row['DESC_CODSERTECAENTREGAR'])
+        . '","DIR_ID":"' .  $row['DIR_ID']
+        . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO'] . '"},';
 }
 if ($tipos_tecnologia_json != '[') {
     $tipos_tecnologia_json = substr($tipos_tecnologia_json, 0, -1);
