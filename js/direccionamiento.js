@@ -471,7 +471,7 @@ function eviar_direc() {
                         type: 'success',
                         title: 'Direccionamiento enviado correctamente'
                     });
-                    cargar_datos_con_tec();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
+                    cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
 
                 };
                
