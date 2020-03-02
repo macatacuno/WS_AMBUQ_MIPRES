@@ -144,7 +144,8 @@ function cargar_datos_proveedores() {
             json = jQuery.parseJSON(data);
             sw = 0;
             lista = '';
-            $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
+           // $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
+            $('#NoIDProv').append('');
             for (var key in json) {
                 sw = 1;
                 //document.write("<br>" + key + " - " + json[key]);
@@ -204,6 +205,8 @@ function cargar_datos_pres() {
     })
         .done(function (data) {
             json = jQuery.parseJSON(data);
+            limpiar();
+            cargar_datos_proveedores();
             for (var key in json) {
                 sw = 1;
                 //document.write("<br>" + key + " - " + json[key]);
@@ -248,10 +251,10 @@ function cargar_datos_pres() {
                         $("#dir_id_direccionamiento").text("Id Direccionamiento: " + sub_json[sub_key]);
                         if (sub_json[sub_key] != 0) {
                             $("#btn_confirm_direc").attr("disabled", true);
-                        }else{
+                        } else {
                             $("#btn_confirm_direc").attr("disabled", false);
                         }
-                    } ;
+                    };
                 }
             }
         })
@@ -420,7 +423,7 @@ function eviar_direc() {
 
 
     if (count_valid_incumpl > 0) {
-        
+
         Toast.fire({
             type: 'error',
             title: 'hay ' + count_valid_incumpl + ' campo(s) que no se han llenado'
@@ -462,7 +465,7 @@ function eviar_direc() {
                         type: 'error',
                         title: 'Error al direccionar'
                     });
-                    alertify.alert('Error al Direccionar',data, function () {
+                    alertify.alert('Error al Direccionar', data, function () {
                         //alertify.message('');
                     });
 
@@ -472,9 +475,8 @@ function eviar_direc() {
                         title: 'Direccionamiento enviado correctamente'
                     });
                     cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
-
                 };
-               
+
                 //$('#textarea').text(data);
             })
             .fail(function (data) {
