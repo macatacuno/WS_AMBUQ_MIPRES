@@ -247,7 +247,6 @@ function cargar_datos_pres() {
                         if (sub_json[sub_key] == 'NO EXISTE') {
                             $("#CodSerTecAEntregar").val('');
                             $("#CodSerTecAEntregar").removeAttr('disabled');
-                            //document.getElementsByName('link')[0].placeholder='Type here to search';
                             $("#CodSerTecAEntregar").attr("placeholder", "Ingresar código CUMS con guion #####-#");
                         } else {
                             $("#CodSerTecAEntregar").val(sub_json[sub_key]);
@@ -477,6 +476,9 @@ function limpiar() {
         $("#CodSerTecAEntregar_medi").empty();
         $('#CodSerTecAEntregar_medi').append('<option value="">Seleccionar opción</option>');
     */
+   //Limpiar campo de medicamentos
+   $("#CodSerTecAEntregar").attr("disabled", true);
+   $("#CodSerTecAEntregar").attr("placeholder", "");
     //Limpiar codigos de direccionamiento
     $("#dir_id").text("Id: 0");
     $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
