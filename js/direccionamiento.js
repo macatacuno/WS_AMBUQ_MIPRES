@@ -305,132 +305,9 @@ function eviar_direc() {
     } else {
         val_CodSerTecAEntregar = $('#CodSerTecAEntregar').val();
     }
-    count_valid_incumpl = 0;
-
-    /*
-      is-warning
-      is-valid
-      is-invalid
-    */
-
-    if (val_NoPrescripcion == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#NoPrescripcion").addClass("is-invalid");
-    } else {
-        $("#NoPrescripcion").removeClass("is-invalid");
-    };
 
 
-    if (val_TipoTec == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#TipoTec").addClass("is-invalid");
-    } else {
-        $("#TipoTec").removeClass("is-invalid");
-    };
-
-
-    if (val_ConTec == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#ConTec").addClass("is-invalid");
-    } else {
-        $("#ConTec").removeClass("is-invalid");
-    };
-
-
-    if (val_tipo == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#tipo").addClass("is-invalid");
-    } else {
-        $("#tipo").removeClass("is-invalid");
-    };
-
-
-    if (val_TipoIDPaciente == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#TipoIDPaciente").addClass("is-invalid");
-    } else {
-        $("#TipoIDPaciente").removeClass("is-invalid");
-    };
-
-    if (val_NoIDPaciente == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#NoIDPaciente").addClass("is-invalid");
-    } else {
-        $("#NoIDPaciente").removeClass("is-invalid");
-    };
-
-    if (val_NoEntrega == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#NoEntrega").addClass("is-invalid");
-    } else {
-        $("#NoEntrega").removeClass("is-invalid");
-    };
-
-    if (val_NoSubEntrega == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#NoSubEntrega").addClass("is-invalid");
-    } else {
-        $("#NoSubEntrega").removeClass("is-invalid");
-    };
-
-    if (val_TipoIDProv == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#TipoIDProv").addClass("is-invalid");
-    } else {
-        $("#TipoIDProv").removeClass("is-invalid");
-    };
-
-    if (val_NoIDProv == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#text_NoIDProv").css({ 'color': 'red' });
-    } else {
-        $("#text_NoIDProv").css({ 'color': 'black' });
-    };
-
-    if (val_CodMunEnt == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#CodMunEnt").addClass("is-invalid");
-    } else {
-        $("#CodMunEnt").removeClass("is-invalid");
-    };
-
-    if (val_FecMaxEnt == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#FecMaxEnt").addClass("is-invalid");
-    } else {
-        $("#FecMaxEnt").removeClass("is-invalid");
-    };
-
-    if (val_CantTotAEntregar == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#CantTotAEntregar").addClass("is-invalid");
-    } else {
-        $("#CantTotAEntregar").removeClass("is-invalid");
-    };
-
-    if (val_DirPaciente == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#DirPaciente").addClass("is-invalid");
-    } else {
-        $("#DirPaciente").removeClass("is-invalid");
-    };
-
-
-    if (val_CodSerTecAEntregar == '') {
-        count_valid_incumpl = count_valid_incumpl + 1;
-        $("#text_CodSerTecAEntregar").css({ 'color': 'red' });
-    } else {
-        $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
-    };
-
-    /*
-        if (val_CodSerTecAEntregar == '') {
-            count_valid_incumpl = count_valid_incumpl + 1;
-            $("#CodSerTecAEntregar_medi").addClass("is-invalid");
-        } else {
-            $("#CodSerTecAEntregar_medi").removeClass("is-invalid");
-        };
-    */
+    count_valid_incumpl = validar_campos();
 
 
     if (count_valid_incumpl > 0) {
@@ -609,9 +486,149 @@ function limpiar() {
     $("#btn_confirm_direc").show();
     $("#btn_anular_direc").hide();
     /*Recragar la informacion del formulario (Fin)*/
-
+    quitar_color_de_campos();
 }
 
 
 
+function quitar_color_de_campos() {
+    $("#NoPrescripcion").removeClass("is-invalid");
+    $("#TipoTec").removeClass("is-invalid");
+    $("#ConTec").removeClass("is-invalid");
+    $("#tipo").removeClass("is-invalid");
+    $("#TipoIDPaciente").removeClass("is-invalid");
+    $("#NoIDPaciente").removeClass("is-invalid");
+    $("#NoEntrega").removeClass("is-invalid");
+    $("#NoSubEntrega").removeClass("is-invalid");
+    $("#TipoIDProv").removeClass("is-invalid");
+    $("#text_NoIDProv").css({ 'color': 'black' });
+    $("#CodMunEnt").removeClass("is-invalid");
+    $("#FecMaxEnt").removeClass("is-invalid");
+    $("#CantTotAEntregar").removeClass("is-invalid");
+    $("#DirPaciente").removeClass("is-invalid");
+    //$(".is-invalid").removeClass("is-invalid");
+    $("#text_NoIDProv").css({ 'color': 'black' });
+    $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
+}
+function validar_campos() {
+    count_valid_incumpl = 0;
+
+    /*
+      is-warning
+      is-valid
+      is-invalid
+    */
+
+    if (val_NoPrescripcion == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#NoPrescripcion").addClass("is-invalid");
+    } else {
+        $("#NoPrescripcion").removeClass("is-invalid");
+    };
+
+
+    if (val_TipoTec == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#TipoTec").addClass("is-invalid");
+    } else {
+        $("#TipoTec").removeClass("is-invalid");
+    };
+
+
+    if (val_ConTec == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#ConTec").addClass("is-invalid");
+    } else {
+        $("#ConTec").removeClass("is-invalid");
+    };
+
+
+    if (val_tipo == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#tipo").addClass("is-invalid");
+    } else {
+        $("#tipo").removeClass("is-invalid");
+    };
+
+
+    if (val_TipoIDPaciente == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#TipoIDPaciente").addClass("is-invalid");
+    } else {
+        $("#TipoIDPaciente").removeClass("is-invalid");
+    };
+
+    if (val_NoIDPaciente == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#NoIDPaciente").addClass("is-invalid");
+    } else {
+        $("#NoIDPaciente").removeClass("is-invalid");
+    };
+
+    if (val_NoEntrega == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#NoEntrega").addClass("is-invalid");
+    } else {
+        $("#NoEntrega").removeClass("is-invalid");
+    };
+
+    if (val_NoSubEntrega == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#NoSubEntrega").addClass("is-invalid");
+    } else {
+        $("#NoSubEntrega").removeClass("is-invalid");
+    };
+
+    if (val_TipoIDProv == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#TipoIDProv").addClass("is-invalid");
+    } else {
+        $("#TipoIDProv").removeClass("is-invalid");
+    };
+
+    if (val_NoIDProv == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#text_NoIDProv").css({ 'color': 'red' });
+    } else {
+        $("#text_NoIDProv").css({ 'color': 'black' });
+    };
+
+    if (val_CodMunEnt == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#CodMunEnt").addClass("is-invalid");
+    } else {
+        $("#CodMunEnt").removeClass("is-invalid");
+    };
+
+    if (val_FecMaxEnt == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#FecMaxEnt").addClass("is-invalid");
+    } else {
+        $("#FecMaxEnt").removeClass("is-invalid");
+    };
+
+    if (val_CantTotAEntregar == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#CantTotAEntregar").addClass("is-invalid");
+    } else {
+        $("#CantTotAEntregar").removeClass("is-invalid");
+    };
+
+    if (val_DirPaciente == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#DirPaciente").addClass("is-invalid");
+    } else {
+        $("#DirPaciente").removeClass("is-invalid");
+    };
+
+
+    if (val_CodSerTecAEntregar == '') {
+        count_valid_incumpl = count_valid_incumpl + 1;
+        $("#text_CodSerTecAEntregar").css({ 'color': 'red' });
+    } else {
+        $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
+    };
+
+    return count_valid_incumpl;
+}
 
