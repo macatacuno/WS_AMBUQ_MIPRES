@@ -1,4 +1,11 @@
 
+//Activar las animaciones de las notificaciones
+const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 5000
+});
 var val_NoPrescripcion_antes = "";
 /*
 $(document).ready(function() {  
@@ -40,7 +47,7 @@ function cargar_tipotec() {
                     }
                 }
                 if (sw == 0) {
-                    lista = '<select disabled="disabled" onchange="cargar_datos_con_tec();" id="TipoTec" name="TipoTec" class="form-control">';
+                    lista = '<select disabled="disabled" onchange="cargar_datos_con_tec();" id="TipoTec" name="TipoTec" class="form-control"><option value=""></option>';
                 } else {
                     myVar = setTimeout(habilitar_TipoTec, 200);
                 };
@@ -144,7 +151,7 @@ function cargar_datos_proveedores() {
             json = jQuery.parseJSON(data);
             sw = 0;
             lista = '';
-           // $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
+            // $('#NoIDProv').append('<option value="">Seleccionar opción</option>');
             $('#NoIDProv').append('');
             for (var key in json) {
                 sw = 1;
@@ -205,8 +212,14 @@ function cargar_datos_pres() {
     })
         .done(function (data) {
             json = jQuery.parseJSON(data);
+
+
+            /*Recragar la informacion del formulario (Inicio)*/
             limpiar();
+            cargar_lista_medicamentos();
             cargar_datos_proveedores();
+
+
             for (var key in json) {
                 sw = 1;
                 //document.write("<br>" + key + " - " + json[key]);
@@ -250,9 +263,13 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'DIR_IDDIRECCIONAMIENTO') {
                         $("#dir_id_direccionamiento").text("Id Direccionamiento: " + sub_json[sub_key]);
                         if (sub_json[sub_key] != 0) {
-                            $("#btn_confirm_direc").attr("disabled", true);
+                            //$("#btn_confirm_direc").attr("disabled", true);
+                            $("#btn_confirm_direc").hide();
+                            $("#btn_anular_direc").show();
                         } else {
-                            $("#btn_confirm_direc").attr("disabled", false);
+                            $("#btn_confirm_direc").show();
+                            $("#btn_anular_direc").hide();
+                            //$("#btn_confirm_direc").attr("disabled", false);
                         }
                     };
                 }
@@ -266,13 +283,7 @@ function cargar_datos_pres() {
 
 
 function eviar_direc() {
-    //Activar las animaciones de las notificaciones
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 5000
-    });
+
 
     val_NoPrescripcion = $('#NoPrescripcion').val();
     val_TipoTec = $('#TipoTec').val();
@@ -371,9 +382,9 @@ function eviar_direc() {
 
     if (val_NoIDProv == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
-        $("#div_NoIDProv").addClass("is-invalid");
+        $("#text_NoIDProv").css({ 'color': 'red' });
     } else {
-        $("#div_NoIDProv").removeClass("is-invalid");
+        $("#text_NoIDProv").css({ 'color': 'black' });
     };
 
     if (val_CodMunEnt == '') {
@@ -407,9 +418,9 @@ function eviar_direc() {
 
     if (val_CodSerTecAEntregar == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
-        $("#CodSerTecAEntregar").addClass("is-invalid");
+        $("#text_CodSerTecAEntregar").css({ 'color': 'red' });
     } else {
-        $("#CodSerTecAEntregar").removeClass("is-invalid");
+        $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
     };
 
     /*
@@ -488,6 +499,54 @@ function eviar_direc() {
 }
 
 
+function anular_direc() {
+    dir_id = $("#dir_id").text();
+    dir_id = dir_id.substr(4, dir_id.length);//Se extrae solamente el id de la cadena
+    //alert(dir_id);
+    dir_id_direccionamiento = $("#dir_id_direccionamiento").text();
+    dir_id_direccionamiento = dir_id_direccionamiento.substr(21, dir_id_direccionamiento.length);//Se extrae solamente el id de la cadena
+    //alert(dir_id_direccionamiento)
+    val_tipo = $('#tipo').val();
+    val_TipoTec = $('#TipoTec').val();
+    $.ajax({
+        url: './consumo_ws/envios/Direccionamiento/Anulacion_put.php',
+        type: "POST",
+        data: {
+            dir_id_direccionamiento: dir_id_direccionamiento,
+            dir_id: dir_id,
+            tipo: val_tipo,
+            TipoTec: val_TipoTec
+        }
+    })
+        .done(function (data) {
+            if (data.includes('Exitosa')) {
+
+                Toast.fire({
+                    type: 'success',
+                    title: 'Direccionamiento anulado correctamente'
+                });
+
+                cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
+            } else {
+
+                Toast.fire({
+                    type: 'error',
+                    title: 'Error al anular'
+                });
+                alertify.alert('Error al Anular', data, function () {
+                    //alertify.message('');
+                });
+
+
+            };
+
+            //$('#textarea').text(data);
+        })
+        .fail(function (data) {
+            alert("Error sin identificar:" + data);
+        });
+}
+
 function habilitar_TipoTec() {
     $('#TipoTec').removeAttr('disabled');
 }
@@ -545,7 +604,11 @@ function limpiar() {
     $("#dir_id").text("Id: 0");
     $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
 
-    $("#btn_confirm_direc").attr("disabled", false);
+    //Mostar el boton de direccionamiento
+    //$("#btn_confirm_direc").attr("disabled", false);
+    $("#btn_confirm_direc").show();
+    $("#btn_anular_direc").hide();
+    /*Recragar la informacion del formulario (Fin)*/
 
 }
 

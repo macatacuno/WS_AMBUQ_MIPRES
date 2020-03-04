@@ -63,7 +63,7 @@
                                                 <div id="div_TipoTec">
                                                     <select onchange="cargar_datos_con_tec();" id="TipoTec"
                                                         name="TipoTec" disabled="disabled" class="form-control">
-                                                        <option value=""></option>
+                                                        <option value=''></option>
                                                     </select>
                                                 </div>
 
@@ -105,7 +105,8 @@
 
                                         <div class="form-group">
                                             <label id="dir_id" for="" class="col-md-12 control-label">Id: 0</label>
-                                            <label id="dir_id_direccionamiento"for="" class="col-md-12 control-label">Id Direccionamiento: 0</label>
+                                            <label id="dir_id_direccionamiento" for=""
+                                                class="col-md-12 control-label">Id Direccionamiento: 0</label>
                                             <div class="col-sm-12">
                                             </div>
                                         </div>
@@ -163,11 +164,12 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="NoIDProv" class="col-md-12 control-label">Numero ID
+                                            <label for="NoIDProv" id="text_NoIDProv" class="col-md-12 control-label">Numero ID
                                                 proveedor</label>
                                             <div class="col-sm-12">
-                                                <div id="div_NoIDProv"class="">
+                                                <div id="div_NoIDProv" class="">
                                                     <select id="NoIDProv" name="NoIDProv" class="form-control select2">
+                                                        <option value=""></option>
                                                     </select>
                                                 </div>
 
@@ -220,7 +222,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="CodSerTecAEntregar" class="col-md-12 control-label">Código del
+                                            <label for="CodSerTecAEntregar" id="text_CodSerTecAEntregar" class="col-md-12 control-label">Código del
                                                 servicio tecnológico a entregar </label>
                                             <div class="col-sm-12">
                                                 <div id="div_list_medi">
@@ -230,10 +232,10 @@
                                                 </div>
                                                 <input type="text" id="CodSerTecAEntregar" disabled="disabled"
                                                     name="CodSerTecAEntregar" value="" placeholder=""
-                                                    class="form-control limpiar">
+                                                    class="form-control limpiar" style="display: none;">
                                                 <textarea disabled="disabled" name="textarea"
                                                     id="desc_CodSerTecAEntregar" rows="2" cols="10"
-                                                    class="form-control limpiar"></textarea>
+                                                    class="form-control limpiar" style="display: none;"></textarea>
                                             </div>
                                         </div>
 
@@ -278,12 +280,15 @@
                                     <div class="col-sm-2">
                                         <!-- <button type="button" class="btn btn-primary">Consultar Datos</button>
                                     <button type="button" class="btn btn-primary">Limpiar Formulario</button>-->
+                                        <center>
+                                            <button type="button" id="btn_anular_direc" class="btn btn-danger"
+                                                data-toggle="modal" data-target="#modal-anular" style="display: none;">Anular</button>
 
-                                        <center><button type="button" id="btn_confirm_direc" class="btn btn-success"
-                                                data-toggle="modal" data-target="#modal-default">Direccionar</button>
+                                            <button type="button" id="btn_confirm_direc" class="btn btn-success"
+                                                data-toggle="modal"
+                                                data-target="#modal-direccionar">Direccionar</button>
                                         </center>
                                     </div>
-
                                 </div>
 
                             </div>
@@ -299,8 +304,8 @@
     </section>
 
 
-
-    <div class="modal fade" id="modal-default">
+    <!--Modal de confirmacion dirrecionamiento-->
+    <div class="modal fade" id="modal-direccionar">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -312,12 +317,41 @@
                     </button>
                 </div>
                 <!--<div class="modal-body">
-              <p>One fine body&hellip;</p>
-            </div>-->
+          <p>One fine body&hellip;</p>
+        </div>-->
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default swalDefaultError"
                         data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="eviar_direc();" class="btn btn-primary"
+                    <button type="button" onclick="eviar_direc();" class="btn btn-success"
+                        data-dismiss="modal">Confirmar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <!--Modal de confirmacion dirrecionamiento-->
+    <div class="modal fade" id="modal-anular">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <center>
+                        <h4 class="modal-title">Anular Direccionamiento</h4>
+                    </center>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!--<div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>-->
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default swalDefaultError"
+                        data-dismiss="modal">Cancelar</button>
+                    <button type="button" onclick="anular_direc();" class="btn btn-danger"
                         data-dismiss="modal">Confirmar</button>
                 </div>
             </div>
@@ -338,7 +372,7 @@
                  showConfirmButton: false,
                  timer: 3000
              });
- 
+
              $('.swalDefaultSuccess').click(function () {
                  Toast.fire({
                      type: 'success',
@@ -369,7 +403,7 @@
                      title: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
                  })
              });
- 
+
          });
  */
     </script>

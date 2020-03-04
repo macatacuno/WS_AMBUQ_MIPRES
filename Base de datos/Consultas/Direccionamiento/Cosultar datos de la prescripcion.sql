@@ -57,6 +57,7 @@ max(cantidad_registros)cantidad_registros
 from(
      select NOPRESCRIPCION,tipotec, count(*) cantidad_registros 
      from view_webserv_pres_info_direc
+     where NOPRESCRIPCION like '201901%'--Los primeros numeros de las prescriciones son la fecha de la prescripcion 
      group by NOPRESCRIPCION,tipotec
     ) tb 
 group by NOPRESCRIPCION

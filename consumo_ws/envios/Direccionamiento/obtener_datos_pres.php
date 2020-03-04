@@ -57,7 +57,7 @@ while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
         . '","DIRPACIENTE":"' . utf8_encode($row['DIRPACIENTE'])
         . '","REGIMEN":"' . $row['REGIMEN']
         . '","CODAMBATE":"' . $row['CODAMBATE']
-        . '","DESC_CODAMBATE":"' . $row['DESC_CODAMBATE']
+        . '","DESC_CODAMBATE":"' . utf8_encode($row['DESC_CODAMBATE'])
         . '","FECHA_MAXIMA_DE_ENTREGA":"' . $fecha_maxima_de_entrega
         . '","CODSERTECAENTREGAR":"' . $row['CODSERTECAENTREGAR']
         . '","DESC_CODSERTECAENTREGAR":"' .  utf8_encode($row['DESC_CODSERTECAENTREGAR'])

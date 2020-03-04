@@ -75,9 +75,6 @@ function EnviarDireccionamiento() {
       $('#contenido_principal').load('./consumo_ws/envios/Direccionamiento/vistaPutDirec.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
-
-            $('#CodSerTecAEntregar').hide();
-            $('#desc_CodSerTecAEntregar').hide();
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
 
             $("#li_open_sumi").addClass("menu-open");//agrega la clase active al item seleccionado
