@@ -247,9 +247,12 @@ function cargar_datos_pres() {
                         if (sub_json[sub_key] == 'NO EXISTE') {
                             $("#CodSerTecAEntregar").val('');
                             $("#CodSerTecAEntregar").removeAttr('disabled');
+                            //document.getElementsByName('link')[0].placeholder='Type here to search';
+                            $("#CodSerTecAEntregar").attr("placeholder", "Ingresar código CUMS con guion #####-#");
                         } else {
                             $("#CodSerTecAEntregar").val(sub_json[sub_key]);
                             $("#CodSerTecAEntregar").attr("disabled", true);
+                            $("#CodSerTecAEntregar").attr("placeholder", "");
                         }
 
                     } else if (sub_key == 'DESC_CODSERTECAENTREGAR') {
@@ -489,20 +492,20 @@ function limpiar() {
 
 
 function quitar_color_de_campos() {
-   /* $("#NoPrescripcion").removeClass("is-invalid");
-    $("#TipoTec").removeClass("is-invalid");
-    $("#ConTec").removeClass("is-invalid");
-    $("#tipo").removeClass("is-invalid");
-    $("#TipoIDPaciente").removeClass("is-invalid");
-    $("#NoIDPaciente").removeClass("is-invalid");
-    $("#NoEntrega").removeClass("is-invalid");
-    $("#NoSubEntrega").removeClass("is-invalid");
-    $("#TipoIDProv").removeClass("is-invalid");
-   // $("#text_NoIDProv").css({ 'color': 'black' });
-    $("#CodMunEnt").removeClass("is-invalid");
-    $("#FecMaxEnt").removeClass("is-invalid");
-    $("#CantTotAEntregar").removeClass("is-invalid");
-    $("#DirPaciente").removeClass("is-invalid");*/
+    /* $("#NoPrescripcion").removeClass("is-invalid");
+     $("#TipoTec").removeClass("is-invalid");
+     $("#ConTec").removeClass("is-invalid");
+     $("#tipo").removeClass("is-invalid");
+     $("#TipoIDPaciente").removeClass("is-invalid");
+     $("#NoIDPaciente").removeClass("is-invalid");
+     $("#NoEntrega").removeClass("is-invalid");
+     $("#NoSubEntrega").removeClass("is-invalid");
+     $("#TipoIDProv").removeClass("is-invalid");
+    // $("#text_NoIDProv").css({ 'color': 'black' });
+     $("#CodMunEnt").removeClass("is-invalid");
+     $("#FecMaxEnt").removeClass("is-invalid");
+     $("#CantTotAEntregar").removeClass("is-invalid");
+     $("#DirPaciente").removeClass("is-invalid");*/
     $(".is-invalid").removeClass("is-invalid");
     $("#text_NoIDProv").css({ 'color': 'black' });
     //$("#text_CodSerTecAEntregar").css({ 'color': 'black' });
