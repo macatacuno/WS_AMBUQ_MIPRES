@@ -108,24 +108,24 @@ function cargar_datos_con_tec() {
             cargar_datos_pres();
             cargar_datos_proveedores();
 
-
-            if (val_TipoTec == 'M') {
-                $('#CodSerTecAEntregar').hide();
-                $('#desc_CodSerTecAEntregar').hide();
-                cargar_lista_medicamentos();
-                $('#div_list_medi').show();
-
-            } else if (val_TipoTec == '') {
-                $('#CodSerTecAEntregar').hide();
-                $('#desc_CodSerTecAEntregar').hide();
-                $('#div_list_medi').show();
-
-            } else {
-                // limpiar_lista_medicamentos();
-                $('#div_list_medi').hide();
-                $('#CodSerTecAEntregar').show();
-                $('#desc_CodSerTecAEntregar').show();
-            }
+            /*
+                        if (val_TipoTec == 'M') {
+                            $('#CodSerTecAEntregar').hide();
+                            $('#desc_CodSerTecAEntregar').hide();
+                            cargar_lista_medicamentos();
+                            $('#div_list_medi').show();
+            
+                        } else if (val_TipoTec == '') {
+                            $('#CodSerTecAEntregar').hide();
+                            $('#desc_CodSerTecAEntregar').hide();
+                            $('#div_list_medi').show();
+            
+                        } else {
+                            // limpiar_lista_medicamentos();
+                            $('#div_list_medi').hide();
+                            $('#CodSerTecAEntregar').show();
+                            $('#desc_CodSerTecAEntregar').show();
+                        }*/
         })
         .fail(function (data) {
             alert("error:" + data);
@@ -183,19 +183,11 @@ function cargar_datos_proveedores() {
 
 }
 
-
+/*
 function cargar_lista_medicamentos() {
     $("#CodSerTecAEntregar_medi").load('./consumo_ws/envios/Direccionamiento/Lista_medi_cums.html');
 }
-/*
-function limpiar_lista_medicamentos() {
-    // val_NoPrescripcion = $('#NoPrescripcion').val();
-    // val_TipoTec = $('#TipoTec').val();
-    $("#div_list_medi").html('');
-}
-
 */
-
 function cargar_datos_pres() {
     val_NoPrescripcion = $('#NoPrescripcion').val();
     val_TipoTec = $('#TipoTec').val();
@@ -216,7 +208,7 @@ function cargar_datos_pres() {
 
             /*Recragar la informacion del formulario (Inicio)*/
             limpiar();
-            cargar_lista_medicamentos();
+            // cargar_lista_medicamentos();
             cargar_datos_proveedores();
 
 
@@ -252,7 +244,13 @@ function cargar_datos_pres() {
                         $("#FecMaxEnt").val(sub_json[sub_key]);
 
                     } else if (sub_key == 'CODSERTECAENTREGAR') {
-                        $("#CodSerTecAEntregar").val(sub_json[sub_key]);
+                        if (sub_json[sub_key] == 'NO EXISTE') {
+                            $("#CodSerTecAEntregar").val('');
+                            $("#CodSerTecAEntregar").removeAttr('disabled');
+                        } else {
+                            $("#CodSerTecAEntregar").val(sub_json[sub_key]);
+                            $("#CodSerTecAEntregar").attr("disabled", true);
+                        }
 
                     } else if (sub_key == 'DESC_CODSERTECAENTREGAR') {
                         $("#desc_CodSerTecAEntregar").val(sub_json[sub_key]);
@@ -300,13 +298,15 @@ function eviar_direc() {
     val_CantTotAEntregar = $('#CantTotAEntregar').val();
     val_DirPaciente = $('#DirPaciente').val();
     val_CodSerTecAEntregar = '';
-    if (val_TipoTec == 'M') {
-        val_CodSerTecAEntregar = $('#CodSerTecAEntregar_medi').val();
-    } else {
-        val_CodSerTecAEntregar = $('#CodSerTecAEntregar').val();
-    }
-
-
+    val_CodSerTecAEntregar = $('#CodSerTecAEntregar').val();
+    /*
+        if (val_TipoTec == 'M') {
+            val_CodSerTecAEntregar = $('#CodSerTecAEntregar_medi').val();
+        } else {
+            val_CodSerTecAEntregar = $('#CodSerTecAEntregar').val();
+        }
+    
+    */
     count_valid_incumpl = validar_campos();
 
 
@@ -470,13 +470,10 @@ function limpiar() {
     $("#NoEntrega").empty();
     $('#NoEntrega').append('<option value="">Seleccionar opción</option><option value="1">1</option><option value="2">2</option>    <option value="3">3</option>    <option value="4">4</option>    <option value="5">5</option>    <option value="6">6</option>    <option value="7">7</option>    <option value="8">8</option>    <option value="9">9</option>    <option value="10">10</option>    <option value="11">11</option><option value="12">12</option>');
 
-    //Limpiar lista de medicamentos 
-    /*  $("#CodSerTecAEntregar_medi option[value=" + $('#CodSerTecAEntregar_medi').val() + "]").attr("selected", false);
-      $("#CodSerTecAEntregar_medi option[value='']").attr("selected", true);
-  */
-    $("#CodSerTecAEntregar_medi").empty();
-    $('#CodSerTecAEntregar_medi').append('<option value="">Seleccionar opción</option>');
-
+    /*
+        $("#CodSerTecAEntregar_medi").empty();
+        $('#CodSerTecAEntregar_medi').append('<option value="">Seleccionar opción</option>');
+    */
     //Limpiar codigos de direccionamiento
     $("#dir_id").text("Id: 0");
     $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
@@ -492,7 +489,7 @@ function limpiar() {
 
 
 function quitar_color_de_campos() {
-    $("#NoPrescripcion").removeClass("is-invalid");
+   /* $("#NoPrescripcion").removeClass("is-invalid");
     $("#TipoTec").removeClass("is-invalid");
     $("#ConTec").removeClass("is-invalid");
     $("#tipo").removeClass("is-invalid");
@@ -501,14 +498,14 @@ function quitar_color_de_campos() {
     $("#NoEntrega").removeClass("is-invalid");
     $("#NoSubEntrega").removeClass("is-invalid");
     $("#TipoIDProv").removeClass("is-invalid");
-    $("#text_NoIDProv").css({ 'color': 'black' });
+   // $("#text_NoIDProv").css({ 'color': 'black' });
     $("#CodMunEnt").removeClass("is-invalid");
     $("#FecMaxEnt").removeClass("is-invalid");
     $("#CantTotAEntregar").removeClass("is-invalid");
-    $("#DirPaciente").removeClass("is-invalid");
-    //$(".is-invalid").removeClass("is-invalid");
+    $("#DirPaciente").removeClass("is-invalid");*/
+    $(".is-invalid").removeClass("is-invalid");
     $("#text_NoIDProv").css({ 'color': 'black' });
-    $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
+    //$("#text_CodSerTecAEntregar").css({ 'color': 'black' });
 }
 function validar_campos() {
     count_valid_incumpl = 0;
@@ -624,9 +621,9 @@ function validar_campos() {
 
     if (val_CodSerTecAEntregar == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
-        $("#text_CodSerTecAEntregar").css({ 'color': 'red' });
+        $("#CodSerTecAEntregar").addClass("is-invalid");
     } else {
-        $("#text_CodSerTecAEntregar").css({ 'color': 'black' });
+        $("#CodSerTecAEntregar").removeClass("is-invalid");
     };
 
     return count_valid_incumpl;
