@@ -5,7 +5,7 @@
 // Validar si es necesario actualizar el token(Inicio).
 // cuando la variable $horas_de_diferencia es -1 significa que no hay una fecha definida.
 
-if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10) {
+if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal='vacio' ) {
 
 	//Generar token temporal(inicio)
 	$query = "SELECT URL FROM WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";

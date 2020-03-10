@@ -243,6 +243,9 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'FECHA_MAXIMA_DE_ENTREGA') {
                         $("#FecMaxEnt").val(sub_json[sub_key]);
 
+                    }else if (sub_key == 'DESC_CODAMBATE') {
+                        $("#desc_codambate").val(sub_json[sub_key]);
+
                     } else if (sub_key == 'CODSERTECAENTREGAR') {
                         if (sub_json[sub_key] == 'NO EXISTE') {
                             $("#CodSerTecAEntregar").val('');
@@ -324,7 +327,10 @@ function eviar_direc() {
 
         Toast.fire({
             type: 'error',
-            title: 'Fecha Invalida: Puede que el ámbito de atención de la prescripción no tenga un tiempo de entrega definido'
+            title: 'Error al direccionar'
+        });
+        alertify.alert('Error al direccionar', 'Fecha Invalida: Puede que el ámbito de atención de la prescripción no tenga un tiempo de entrega definido', function () {
+            //alertify.message('');
         });
     } else {
 
@@ -362,7 +368,7 @@ function eviar_direc() {
                 } else {
                     Toast.fire({
                         type: 'success',
-                        title: 'Direccionamiento enviado correctamente'
+                        title: 'Direccionamiento enviado correctamente: '
                     });
                     cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
                 };
@@ -494,7 +500,7 @@ function limpiar() {
 
 
 function quitar_color_de_campos() {
-    /* $("#NoPrescripcion").removeClass("is-invalid");
+    $("#NoPrescripcion").removeClass("is-invalid");
      $("#TipoTec").removeClass("is-invalid");
      $("#ConTec").removeClass("is-invalid");
      $("#tipo").removeClass("is-invalid");
@@ -507,8 +513,9 @@ function quitar_color_de_campos() {
      $("#CodMunEnt").removeClass("is-invalid");
      $("#FecMaxEnt").removeClass("is-invalid");
      $("#CantTotAEntregar").removeClass("is-invalid");
-     $("#DirPaciente").removeClass("is-invalid");*/
-    $(".is-invalid").removeClass("is-invalid");
+     $("#DirPaciente").removeClass("is-invalid");
+     $("#CodSerTecAEntregar").removeClass("is-invalid");
+    //$(".is-invalid").removeClass("is-invalid");
     $("#text_NoIDProv").css({ 'color': 'black' });
     //$("#text_CodSerTecAEntregar").css({ 'color': 'black' });
 }

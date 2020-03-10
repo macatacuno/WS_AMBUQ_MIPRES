@@ -33,7 +33,7 @@
 
                                         <div class="form-group">
                                             <label for="NoPrescripcion" class="col-md-12 control-label">Número de
-                                                prescripción</label>
+                                                prescripción(NoPrescripcion)</label>
                                             <div class="col-sm-12">
                                                 <input type="text" onkeydown="cargar_tipotec_pres();"
                                                     onkeyup="cargar_tipotec(); " id="NoPrescripcion"
@@ -58,7 +58,7 @@
 
                                         <div class="form-group">
                                             <label for="TipoTec" class="col-md-12 control-label">Tipo de
-                                                tecnología</label>
+                                                tecnología(TipoTec)</label>
                                             <div class="col-sm-12">
                                                 <div id="div_TipoTec">
                                                     <select onchange="cargar_datos_con_tec();" id="TipoTec"
@@ -70,8 +70,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="ConTec" class="col-md-12 control-label">Numero de
-                                                tecnología</label>
+                                            <label for="ConTec" class="col-md-12 control-label">Conteo de
+                                                tecnología(ConTec)</label>
                                             <div class="col-sm-12">
                                                 <div id="div_ConTec">
                                                     <select disabled="disabled" onchange="cargar_datos_pres();"
@@ -84,48 +84,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="tipo" class="col-md-12 control-label">Régimen</label>
-                                            <div class="col-sm-12">
-                                                <select disabled="disabled" id="tipo" name="tipo" class="form-control">
-                                                    <option value=""></option>
-                                                    <option value="1">Contributivo</option>
-                                                    <option value="2">Subsidiado</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="TipoIDPaciente" class="col-md-12 control-label">Tipo de
-                                                documento</label>
-                                            <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" id="TipoIDPaciente"
-                                                    name="TipoIDPaciente" placeholder="" class="form-control limpiar">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label id="dir_id" for="" class="col-md-12 control-label">Id: 0</label>
-                                            <label id="dir_id_direccionamiento" for=""
-                                                class="col-md-12 control-label">Id Direccionamiento: 0</label>
-                                            <div class="col-sm-12">
-                                            </div>
-                                        </div>
-
-                                    </div><!-- /col-md-4 -->
-                                    <div class="col-md-4">
-
-                                        <div class="form-group">
-                                            <label for="NoIDPaciente" class="col-md-12 control-label">Número de
-                                                Documento</label>
-                                            <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" id="NoIDPaciente"
-                                                    name="NoIDPaciente" placeholder="" class="form-control limpiar">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
                                             <label for="NoEntrega" class="col-md-12 control-label">Número de
-                                                Entrega</label>
+                                                Entrega(NoEntrega)</label>
                                             <div class="col-sm-12">
                                                 <select id="NoEntrega" name="NoEntrega" class="form-control">
                                                     <option value="">Seleccionar opción</option>
@@ -146,8 +106,50 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="tipo" class="col-md-12 control-label">Régimen</label>
+                                            <div class="col-sm-12">
+                                                <select disabled="disabled" id="tipo" name="tipo" class="form-control">
+                                                    <option value=""></option>
+                                                    <option value="1">Contributivo</option>
+                                                    <option value="2">Subsidiado</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label id="dir_id" for="" class="col-md-12 control-label">Id: 0</label>
+                                            <label id="dir_id_direccionamiento" for=""
+                                                class="col-md-12 control-label">Id Direccionamiento: 0</label>
+                                            <div class="col-sm-12">
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /col-md-4 -->
+                                    <div class="col-md-4">
+
+                                        <div class="form-group">
+                                            <label for="TipoIDPaciente" class="col-md-12 control-label">Tipo de
+                                                documento(TipoIDPaciente)</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" id="TipoIDPaciente"
+                                                    name="TipoIDPaciente" placeholder="" class="form-control limpiar">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="NoIDPaciente" class="col-md-12 control-label">Número de
+                                                Documento(NoIDPaciente)</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" id="NoIDPaciente"
+                                                    name="NoIDPaciente" placeholder="" class="form-control limpiar">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
                                             <label for="NoSubEntrega" class="col-md-12 control-label">Número de
-                                                SubEntrega</label>
+                                                SubEntrega(NoSubEntrega)</label>
                                             <div class="col-sm-12">
                                                 <input disabled="disabled" type="number" id="NoSubEntrega"
                                                     name="NoSubEntrega" value="" placeholder=""
@@ -156,7 +158,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="TipoIDProv" class="col-md-12 control-label">TipoIDProv</label>
+                                            <label for="TipoIDProv" class="col-md-12 control-label">Tipo de
+                                                Proveedor(TipoIDProv)</label>
                                             <div class="col-sm-12">
                                                 <input disabled="disabled" type="text" id="TipoIDProv" name="TipoIDProv"
                                                     value="" placeholder="" class="form-control limpiar">
@@ -164,9 +167,46 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="FecMaxEnt" class="col-md-12 control-label">Fecha máxima de
+                                                entrega(FecMaxEnt)</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" id="FecMaxEnt" disabled="disabled" name="FecMaxEnt"
+                                                    value="" placeholder="" class="form-control limpiar">
+                                                    <input disabled="disabled" type="text" id="desc_codambate"
+                                                    name="desc_codambate" value="" placeholder=""
+                                                    class="form-control limpiar">
+                                            </div>
+                                        </div>
+
+                                        <!--<div class="form-group">
+                                            <label for="desc_codambate" class="col-md-12 control-label">Ámbito de
+                                                atención</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" id="desc_codambate"
+                                                    name="desc_codambate" value="" placeholder=""
+                                                    class="form-control limpiar">
+                                            </div>
+                                        </div>-->
+
+                                    </div><!-- /col-md-4 -->
+
+
+                                    <div class="col-md-4">
+
+
+                                        <div class="form-group">
+                                            <label for="CodMunEnt" class="col-md-12 control-label">Código municipio
+                                                entrega(CodMunEnt)</label>
+                                            <div class="col-sm-12">
+                                                <input disabled="disabled" type="text" id="CodMunEnt" name="CodMunEnt"
+                                                    value="" placeholder="" class="form-control limpiar">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="NoIDProv" id="text_NoIDProv"
                                                 class="col-md-12 control-label">Numero ID
-                                                proveedor</label>
+                                                proveedor(NoIDProv)</label>
                                             <div class="col-sm-12">
                                                 <div id="div_NoIDProv" class="">
                                                     <select id="NoIDProv" name="NoIDProv" class="form-control select2">
@@ -177,34 +217,9 @@
                                             </div>
                                         </div>
 
-
-                                    </div><!-- /col-md-4 -->
-
-
-                                    <div class="col-md-4">
-
-
-                                        <div class="form-group">
-                                            <label for="CodMunEnt" class="col-md-12 control-label">Código municipio
-                                                entrega</label>
-                                            <div class="col-sm-12">
-                                                <input disabled="disabled" type="text" id="CodMunEnt" name="CodMunEnt"
-                                                    value="" placeholder="" class="form-control limpiar">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="FecMaxEnt" class="col-md-12 control-label">Fecha máxima de
-                                                entrega</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" id="FecMaxEnt" disabled="disabled" name="FecMaxEnt"
-                                                    value="" placeholder="" class="form-control limpiar">
-                                            </div>
-                                        </div>
-
                                         <div class="form-group">
                                             <label for="CantTotAEntregar" class="col-md-12 control-label">Cantidad total
-                                                a entregar</label>
+                                                a entregar(CantTotAEntregar)</label>
                                             <div class="col-sm-12">
                                                 <input type="number" id="CantTotAEntregar" name="CantTotAEntregar"
                                                     value="" placeholder="Ingresar Cantidad"
@@ -214,7 +229,7 @@
 
                                         <div class="form-group">
                                             <label for="DirPaciente" class="col-md-12 control-label">Dirección
-                                                paciente</label>
+                                                paciente(DirPaciente)</label>
                                             <div class="col-sm-12">
                                                 <input disabled="disabled" type="text" id="DirPaciente"
                                                     name="DirPaciente" value="" placeholder=""
