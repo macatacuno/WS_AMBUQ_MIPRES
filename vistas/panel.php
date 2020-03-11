@@ -21,8 +21,8 @@
             <!-- small box -->
             <div class="small-box bg-olive">
               <div class="inner">
-                <h5>SUMINISTROS</h5>
-                <p>Reporte Entrega Por Fecha</p>
+                <h5>REPORTE ENTREGA</h5>
+                <p>Consultar Por fecha</p>
               </div>
               <div class="icon">
                 <i class="ion ion-calendar"></i>
@@ -37,7 +37,7 @@
               <div class="inner">
                 <h5>PRESCRIPCIÓN</h5>
 
-                <p>Prescripción Por Fecha</p>
+                <p>Consultar Por fecha</p>
               </div>
               <div class="icon">
                 <i class="ion ion-calendar"></i>
@@ -50,8 +50,8 @@
             <!-- small box -->
             <div class="small-box bg-olive">
               <div class="inner">
-                <h5>WSPRESCRIPCION</h5>
-                <p>Junta profesional por fecha</p>
+                <h5>JUNTA PROFESIONAL</h5>
+                <p>Consultar Por fecha</p>
               </div>
               <div class="icon">
                 <i class="ion ion-calendar"></i>
@@ -64,14 +64,14 @@
             <!-- small box -->
             <div class="small-box bg-secondary">
               <div class="inner">
-                <h5>WEBSERVICE</h5>
+                <h5>DIRECCIONAMIENTO</h5>
 
-                <p>Reporte 4</p>
+                <p>Enviar direccionamiento</p>
               </div>
               <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-android-send"></i>
               </div>
-              <a href="#" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" onclick="EnviarDireccionamiento();" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

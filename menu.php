@@ -94,11 +94,11 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                 <!-- <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_x_fecha" class="nav-link" onclick="cargarNumDirecXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por Fecha 
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -106,7 +106,7 @@
                     <a href="#" id="a_active_sumi_numero_direc_x_numero_presc" class="nav-link" onclick="cargarNumDirecXNoPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -114,10 +114,10 @@
                     <a href="#" id="a_active_sumi_numero_direc_x_pacientefecha" class="nav-link" onclick="cargarNumDirecXPacienteFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por paciente por fecha
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
-                  </li>
+                  </li>-->
                   <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_envio" class="nav-link" onclick="EnviarDireccionamiento();">
                       <i class="far fa-dot-circle nav-icon"></i>
@@ -128,12 +128,12 @@
                   </li>
                 </ul>
               </li>
-              <li id="li_open_sumi_numero_no_direc" class="nav-item has-treeview">
+             <!-- <li id="li_open_sumi_numero_no_direc" class="nav-item has-treeview">
                 <a href="#" id="a_active_sumi_numero_no_direc" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     No Direccionamiento
-                    <!--Nivel 2-->
+                    
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
@@ -142,7 +142,7 @@
                     <a href="#" id="a_active_sumi_numero_no_direc_x_fecha" class="nav-link"  onclick="cargarNumNoDirecXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por Fecha
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -150,7 +150,7 @@
                     <a href="#" id="a_active_sumi_numero_no_direc_x_numero_presc" class="nav-link" onclick="cargarNumNoDirecXNoPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -158,17 +158,17 @@
                     <a href="#" id="a_active_sumi_numero_no_direc_x_pacientefecha" class="nav-link" onclick="cargarNumNoDirecXPacienteFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por paciente por fecha
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li>-->
 
               <li id="li_open_sumi_entrega" class="nav-item has-treeview">
                 <a href="#" id="a_active_sumi_entrega" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p style="color:#3AA946";>
+                  <p >
                     Reporte Entrega
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
@@ -178,16 +178,16 @@
                   <li class="nav-item">
                     <a href="#" id="a_active_sumi_entrega_x_fecha" class="nav-link" onclick="cargarEntregaXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p style="color:#3AA946";>Por Fecha
+                      <p >Consultar
                         <!--Nivel 3-->
                       </p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!--<li class="nav-item">
                     <a href="#" id="a_active_sumi_entrega_x_numero_presc" class="nav-link" onclick="cargarEntregaXNoPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por # de Prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -195,10 +195,10 @@
                     <a href="#" id="a_active_sumi_entrega_x_pacientefecha" class="nav-link" onclick="cargarEntregaXPacienteFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por paciente fecha
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
-                  </li>
+                  </li>-->
                 </ul>
               </li>
             </ul>
@@ -214,12 +214,12 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li  id="li_open_pres_anula"  class="nav-item has-treeview">
+             <!-- <li  id="li_open_pres_anula"  class="nav-item has-treeview">
                 <a href="#" id="a_active_pres_anula"  class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
                     Anulaciones
-                    <!--Nivel 2-->
+                    
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
@@ -228,27 +228,27 @@
                     <a href="#" id="a_active_pres_anula_x_presc" class="nav-link" onclick="cargarAnulacionPorPresc();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li>-->
               <li id="li_open_pres_junta_profe" class="nav-item has-treeview">
                 <a href="#" id="a_active_pres_junta_profe"  class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p style="color:#3AA946";>
+                  <p >
                     Junta profesional
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <!--<li class="nav-item">
                     <a href="#" id="a_active_pres_junta_profe_x_junta_prefe" class="nav-link" onclick="cargarJuntProfPorJP();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Junta profesional
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -256,14 +256,14 @@
                     <a href="#" id="a_active_pres_junta_profe_x_paciente"  class="nav-link" onclick="cargarJuntProfPorpaciente();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por Paciente
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
-                  </li>
+                  </li>-->
                   <li class="nav-item">
                     <a href="#" id="a_active_pres_junta_profe_x_fecha" class="nav-link" onclick="cargarJuntProfPorfecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p style="color:#3AA946";>Por Fecha
+                      <p >Consultar
                         <!--Nivel 3-->
                       </p>
                     </a>
@@ -273,7 +273,7 @@
               <li id="li_open_pres_presc" class="nav-item has-treeview">
                 <a href="#" id="a_active_pres_presc" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p  style="color:#3AA946";>
+                  <p  >
                     prescripción
                     <!--Nivel 2-->
                     <i class="right fas fa-angle-left"></i>
@@ -283,16 +283,16 @@
                   <li class="nav-item">
                     <a href="#" class="nav-link" id="a_active_pres_presc_x_fecha" onclick="cargarPrescripcionPorFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p style="color:#3AA946";>Por Fecha
+                      <p >Consultar
                         <!--Nivel 3-->
                       </p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!--<li class="nav-item">
                     <a href="#" class="nav-link" id="a_active_pres_presc_x_paciente" onclick="cargarPrescripcionPorPaciente();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por Paciente
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
@@ -300,19 +300,19 @@
                     <a href="#" class="nav-link" id="a_active_pres_presc_x_numero" onclick="cargarPrescripcionXNumero();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p># de prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <!--href="javascript:void(0);" -->
+                  
                     <a href="#" class="nav-link" id="a_active_pres_presc_x_novedades_prescripcion" onclick="cargarNovedadesPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Novedades prescripción
-                        <!--Nivel 3-->
+                        
                       </p>
                     </a>
-                  </li>
+                  </li>-->
                 </ul>
               </li>
             </ul>
