@@ -87,7 +87,9 @@
                                             <label for="NoEntrega" class="col-md-12 control-label">Número de
                                                 Entrega(NoEntrega)</label>
                                             <div class="col-sm-12">
-                                                <select id="NoEntrega" name="NoEntrega" class="form-control">
+                                                <input type="numbar" id="NoEntrega" onkeyup="cargar_datos_direc();"
+                                                name="NoEntrega" placeholder="Ingresar Número de Entrega" class="form-control limpiar">
+                                                <!--<select id="NoEntrega" name="NoEntrega" class="form-control">
                                                     <option value="">Seleccionar opción</option>
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
@@ -101,7 +103,7 @@
                                                     <option value="10">10</option>
                                                     <option value="11">11</option>
                                                     <option value="12">12</option>
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
 
@@ -340,7 +342,7 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default swalDefaultError"
                         data-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="eviar_direc();" class="btn btn-success"
+                    <button type="button" onclick="enviar_direc();" class="btn btn-success"
                         data-dismiss="modal">Confirmar</button>
                 </div>
             </div>

@@ -114,6 +114,31 @@ if (strpos($response, 'Exitosa') !== false) {
 		//echo  "<br>Actualización Incorrecta ";
 	}
 	/////Actualizar tabla con el token temporal  (Fin)
+
+	
+
+	////Eliminar el direccionamiento (Inicio)
+	$sql_exc = "UPDATE " . $nombre_tabla . " 
+        SET  DIR_IDDIRECCIONAMIENTO = '', DIR_ID = '' WHERE  DIR_IDDIRECCIONAMIENTO = " .
+		$dir_id_direccionamiento . " and DIR_ID = " . $dir_id;
+
+
+		$sql_exc = "DELETE
+		FROM WEBSERV_PRES_DIRECCIONADOS
+		WHERE DIR_ID                = $dir_id
+		AND DIR_IDDIRECCIONAMIENTO = $dir_id_direccionamiento";
+
+	$st_direc = oci_parse($conn_oracle, $sql_exc);
+	$result = oci_execute($st_direc);
+	oci_free_statement($st_direc);
+	if ($result) {
+		//echo  "<br>Actualización Correcta ";
+	} else {
+		//echo  "<br>Actualización Incorrecta ";
+	}
+	/////Eliminar el direccionamiento  (Fin)
+
+
 };
 
 oci_close($conn_oracle);

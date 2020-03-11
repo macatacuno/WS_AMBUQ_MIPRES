@@ -8,7 +8,12 @@
   <link rel="shortcut icon" href="http://www.ambuq.org.co/wp-content/themes/wordpress-bootstrap-master/images/logito.png">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <!--Borrar Cache(Inicio)-->
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+  <!--<link rel="stylesheet" href="css/master.css?n=1">-->
+  <!--Borrar Cache(Fin)-->
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
   <!--*******************Sección para cargar los archivos css de la plantilla (Inicio)**********************-->
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -19,7 +24,7 @@
   <!-- SweetAlert2 -->
   <link rel="stylesheet" href="plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
-  
+
   <!-- Toastr -->
   <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
   <!-- alertifyjs -->
@@ -27,11 +32,11 @@
 
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
- 
+
   <!-- Select2 -->
- <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
   <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
- 
+
   <!-- iCheck -->
   <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
@@ -82,7 +87,7 @@
     $.widget.bridge('uibutton', $.ui.button)
   </script>
   <!-- Select2 -->
-<script src="plugins/select2/js/select2.full.min.js"></script>
+  <script src="plugins/select2/js/select2.full.min.js"></script>
   <!-- Bootstrap 4 -->
   <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- SweetAlert2 -->

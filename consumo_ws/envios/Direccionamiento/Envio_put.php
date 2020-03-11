@@ -172,6 +172,38 @@ if (strpos($response, 'Message') !== false) {
 		//echo  "<br>Actualización Incorrecta ";
 	}
 	/////Actualizar tabla con el token temporal  (Fin)
+
+
+	
+	////Actualizar tabla con el token temporal (Inicio)
+$sql_exc = 	"INSERT
+		INTO WEBSERV_PRES_DIRECCIONADOS
+		  (
+			NOPRESCRIPCION,
+			TIPOTEC,
+			NOENTREGA,
+			DIR_ID,
+			DIR_IDDIRECCIONAMIENTO
+		  )
+		  VALUES
+		  (
+			'$NoPrescripcion',
+			'$TipoTec',
+			$NoEntrega,
+			$id,
+			$id_direc
+		  )";
+		  
+	$st_direc2 = oci_parse($conn_oracle, $sql_exc);
+	$result = oci_execute($st_direc2);
+	oci_free_statement($st_direc2);
+	if ($result) {
+		//echo  "<br>Actualización Correcta ";
+	} else {
+		//echo  "<br>Actualización Incorrecta ";
+	}
+	/////Actualizar tabla con el token temporal  (Fin)
+
 }
 
 

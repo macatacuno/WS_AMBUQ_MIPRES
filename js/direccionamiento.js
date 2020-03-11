@@ -243,14 +243,14 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'FECHA_MAXIMA_DE_ENTREGA') {
                         $("#FecMaxEnt").val(sub_json[sub_key]);
 
-                    }else if (sub_key == 'DESC_CODAMBATE') {
+                    } else if (sub_key == 'DESC_CODAMBATE') {
                         $("#desc_codambate").val(sub_json[sub_key]);
 
                     } else if (sub_key == 'CODSERTECAENTREGAR') {
                         if (sub_json[sub_key] == 'NO EXISTE') {
                             $("#CodSerTecAEntregar").val('');
                             $("#CodSerTecAEntregar").removeAttr('disabled');
-                            $("#CodSerTecAEntregar").attr("placeholder", "Ingresar código CUMS con guion #####-#");
+                            $("#CodSerTecAEntregar").attr("placeholder", "Ingresa código CUMS con guion #####-#");
                         } else {
                             $("#CodSerTecAEntregar").val(sub_json[sub_key]);
                             $("#CodSerTecAEntregar").attr("disabled", true);
@@ -260,20 +260,6 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'DESC_CODSERTECAENTREGAR') {
                         $("#desc_CodSerTecAEntregar").val(sub_json[sub_key]);
 
-                    } else if (sub_key == 'DIR_ID') {
-                        $("#dir_id").text("Id: " + sub_json[sub_key]);
-
-                    } else if (sub_key == 'DIR_IDDIRECCIONAMIENTO') {
-                        $("#dir_id_direccionamiento").text("Id Direccionamiento: " + sub_json[sub_key]);
-                        if (sub_json[sub_key] != 0) {
-                            //$("#btn_confirm_direc").attr("disabled", true);
-                            $("#btn_confirm_direc").hide();
-                            $("#btn_anular_direc").show();
-                        } else {
-                            $("#btn_confirm_direc").show();
-                            $("#btn_anular_direc").hide();
-                            //$("#btn_confirm_direc").attr("disabled", false);
-                        }
                     };
                 }
             }
@@ -283,9 +269,73 @@ function cargar_datos_pres() {
         });
 }
 
+function cargar_datos_direc() {
+    quitar_color_de_campos();
+    val_NoPrescripcion = $('#NoPrescripcion').val();
+    val_TipoTec = $('#TipoTec').val();
+    val_ConTec = $('#ConTec').val();
+    val_NoEntrega = $('#NoEntrega').val();
+    if (val_NoEntrega != '') {
+        $.ajax({
+            url: './consumo_ws/envios/Direccionamiento/obtener_datos_direc.php',
+            type: "POST",
+            data: {
+                NoPrescripcion: val_NoPrescripcion,
+                TipoTec: val_TipoTec,
+                ConTec: val_ConTec,
+                NoEntrega: val_NoEntrega
+            }
+        })
+            .done(function (data) {
+                if (data != '[]') {
+                    json = jQuery.parseJSON(data);
+
+                    for (var key in json) {
+                        sw = 1;
+                        //document.write("<br>" + key + " - " + json[key]);
+                        sub_json = json[key];
+
+                        for (var sub_key in sub_json) {
+
+                            if (sub_key == 'DIR_ID') {
+                                $("#dir_id").text("Id: " + sub_json[sub_key]);
+
+                            } else if (sub_key == 'DIR_IDDIRECCIONAMIENTO') {
+                                $("#dir_id_direccionamiento").text("Id Direccionamiento: " + sub_json[sub_key]);
+                                if (sub_json[sub_key] != 0) {
+                                    //$("#btn_confirm_direc").attr("disabled", true);
+                                    $("#btn_confirm_direc").hide();
+                                    $("#btn_anular_direc").show();
+                                } else {
+                                    $("#btn_confirm_direc").show();
+                                    $("#btn_anular_direc").hide();
+                                    //$("#btn_confirm_direc").attr("disabled", false);
+                                }
+                            };
+                        }
+                    }
+                } else {
+                    $("#btn_confirm_direc").show();
+                    $("#btn_anular_direc").hide();
+                    $("#dir_id").text("Id: 0");
+                    $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
+                }
+
+            })
+            .fail(function (data) {
+                alert("error:" + data);
+            });
+    } else {
+        $("#btn_confirm_direc").show();
+        $("#btn_anular_direc").hide();
+        $("#dir_id").text("Id: 0");
+        $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
+    }
+
+}
 
 
-function eviar_direc() {
+function enviar_direc() {
 
 
     val_NoPrescripcion = $('#NoPrescripcion').val();
@@ -482,9 +532,9 @@ function limpiar() {
         $("#CodSerTecAEntregar_medi").empty();
         $('#CodSerTecAEntregar_medi').append('<option value="">Seleccionar opción</option>');
     */
-   //Limpiar campo de medicamentos
-   $("#CodSerTecAEntregar").attr("disabled", true);
-   $("#CodSerTecAEntregar").attr("placeholder", "");
+    //Limpiar campo de medicamentos
+    $("#CodSerTecAEntregar").attr("disabled", true);
+    $("#CodSerTecAEntregar").attr("placeholder", "");
     //Limpiar codigos de direccionamiento
     $("#dir_id").text("Id: 0");
     $("#dir_id_direccionamiento").text("Id Direccionamiento: 0");
@@ -501,20 +551,20 @@ function limpiar() {
 
 function quitar_color_de_campos() {
     $("#NoPrescripcion").removeClass("is-invalid");
-     $("#TipoTec").removeClass("is-invalid");
-     $("#ConTec").removeClass("is-invalid");
-     $("#tipo").removeClass("is-invalid");
-     $("#TipoIDPaciente").removeClass("is-invalid");
-     $("#NoIDPaciente").removeClass("is-invalid");
-     $("#NoEntrega").removeClass("is-invalid");
-     $("#NoSubEntrega").removeClass("is-invalid");
-     $("#TipoIDProv").removeClass("is-invalid");
+    $("#TipoTec").removeClass("is-invalid");
+    $("#ConTec").removeClass("is-invalid");
+    $("#tipo").removeClass("is-invalid");
+    $("#TipoIDPaciente").removeClass("is-invalid");
+    $("#NoIDPaciente").removeClass("is-invalid");
+    $("#NoEntrega").removeClass("is-invalid");
+    $("#NoSubEntrega").removeClass("is-invalid");
+    $("#TipoIDProv").removeClass("is-invalid");
     // $("#text_NoIDProv").css({ 'color': 'black' });
-     $("#CodMunEnt").removeClass("is-invalid");
-     $("#FecMaxEnt").removeClass("is-invalid");
-     $("#CantTotAEntregar").removeClass("is-invalid");
-     $("#DirPaciente").removeClass("is-invalid");
-     $("#CodSerTecAEntregar").removeClass("is-invalid");
+    $("#CodMunEnt").removeClass("is-invalid");
+    $("#FecMaxEnt").removeClass("is-invalid");
+    $("#CantTotAEntregar").removeClass("is-invalid");
+    $("#DirPaciente").removeClass("is-invalid");
+    $("#CodSerTecAEntregar").removeClass("is-invalid");
     //$(".is-invalid").removeClass("is-invalid");
     $("#text_NoIDProv").css({ 'color': 'black' });
     //$("#text_CodSerTecAEntregar").css({ 'color': 'black' });
