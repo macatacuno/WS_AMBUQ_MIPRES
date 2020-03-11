@@ -183,7 +183,9 @@ $sql_exc = 	"INSERT
 			TIPOTEC,
 			NOENTREGA,
 			DIR_ID,
-			DIR_IDDIRECCIONAMIENTO
+			DIR_IDDIRECCIONAMIENTO,
+			CONORDEN
+
 		  )
 		  VALUES
 		  (
@@ -191,7 +193,8 @@ $sql_exc = 	"INSERT
 			'$TipoTec',
 			$NoEntrega,
 			$id,
-			$id_direc
+			$id_direc,
+			$ConTec
 		  )";
 		  
 	$st_direc2 = oci_parse($conn_oracle, $sql_exc);
