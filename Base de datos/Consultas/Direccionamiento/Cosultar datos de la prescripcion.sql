@@ -25,13 +25,23 @@ DIRPACIENTE,
 REGIMEN,
 decode(CODAMBATE,null,'NO EXISTE',CODAMBATE)CODAMBATE,
 decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE)DESC_CODAMBATE,
-decode(TIPOTEC,'P',to_date(sysdate+90, 'YYYY-MM-DD'),decode(CODAMBATE,11,to_date(sysdate+15, 'YYYY-MM-DD'),12,to_date(sysdate+30, 'YYYY-MM-DD'),21,to_date(sysdate+30, 'YYYY-MM-DD'),'11-11-1111')) FECHA_MAXIMA_DE_ENTREGA,
+decode(TIPOTEC,'P',to_date(sysdate+90, 'YYYY-MM-DD'),
+decode(CODAMBATE,11,decode((select 
+                            count(1) cantidad_entregas
+                            from  WEBSERV_PRES_DIRECCIONADOS pd 
+                            where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
+                            and pd.TIPOTEC=pi.TIPOTEC
+                            and pd.CONORDEN=pi.CONORDEN),0,to_date(sysdate+15, 'YYYY-MM-DD'),
+                              to_date(sysdate+30, 'YYYY-MM-DD')),
+                 12,to_date(sysdate+30, 'YYYY-MM-DD'),
+                 21,to_date(sysdate+30, 'YYYY-MM-DD'),
+                   '11-11-1111')) FECHA_MAXIMA_DE_ENTREGA,
 decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
 decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR,
 DECODE(DIR_IDDIRECCIONAMIENTO,NULL,0,DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
 DECODE(DIR_ID,NULL,0,DIR_ID)DIR_ID
-from view_webserv_pres_info_direc
-where  NOPRESCRIPCION='20190105133009827192' and TIPOTEC='M' and conorden=1;
+from view_webserv_pres_info_direc pi
+where  NOPRESCRIPCION='20190104182009821673' and TIPOTEC='M' and conorden=1;
 --where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
 
 
@@ -47,20 +57,19 @@ DECODE(pd.DIR_IDDIRECCIONAMIENTO,NULL,0,pd.DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIO
 DECODE(pd.DIR_ID,NULL,0,pd.DIR_ID)DIR_ID
 from view_webserv_pres_info_direc pi
 left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
-where  pd.NOPRESCRIPCION='20190118184010019347' and pd.TIPOTEC='P' and pd.CONORDEN=1 and pd.NOENTREGA=6;
---where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
+where  pd.NOPRESCRIPCION='20190118184010019347' and pd.TIPOTEC='P' and pd.CONORDEN=1 and pd.NOENTREGA=1;
 
-/*
-UPDATE WEBSERV_PRES_DIRECCIONADOS
-SET conorden                     =1
-WHERE NOPRESCRIPCION       = :v0
-AND TIPOTEC                = :v1
-AND NOENTREGA              = :v2
-AND DIR_ID                 = :v3
-AND DIR_IDDIRECCIONAMIENTO = :v4
-AND CONORDEN               = :v5;
-*/--NOPRESCIPCION
-select * from WEBSERV_PRES_DIRECCIONADOS
+
+--3. Consulta para cargar los datos de las prescripciones direccionadas
+select 
+count(1) cantidad_entregas
+from  WEBSERV_PRES_DIRECCIONADOS pd 
+where  pd.NOPRESCRIPCION='20190104182009821673' 
+ and pd.TIPOTEC='M' 
+ and pd.CONORDEN=1;
+
+--NOPRESCIPCION
+select * from WEBSERV_PRES_DIRECCIONADOS;
 select 
 pi.NOPRESCRIPCION,
 pi.TIPOTEC,
