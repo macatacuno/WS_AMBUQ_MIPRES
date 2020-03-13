@@ -2,7 +2,7 @@
 include('../../../conexcion_php_oracle.php');
 $conn_oracle = conectar_oracle(); //funcion para abir la conexion con QAS
 
-include('funciones_generales.php');
+include('../../funciones_generales.php');
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 

@@ -298,7 +298,7 @@ function cargar_datos_direc() {
                         for (var sub_key in sub_json) {
 
                             if (sub_key == 'FECMAXENT') {
-                                $("#FecMaxEnt").val(sub_json[sub_key]);
+                               // $("#FecMaxEnt").val(sub_json[sub_key]);
                             } else if (sub_key == 'DIR_ID') {
                                 $("#dir_id").text("Id: " + sub_json[sub_key]);
 

@@ -120,7 +120,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
       $url = $url_bd . "/" . $nit . '/' . $token . '/' . "20" . $periodo_conteo;
-      $json = (string) file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = (string) file_get_contents($url);
       $json = str_replace("\\\"", "", $json);
       $json = str_replace("'", "", $json);
       $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"

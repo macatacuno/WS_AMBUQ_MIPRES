@@ -102,7 +102,8 @@ if($periodo_final<$periodo_inicial){
       //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
       $url =$url_bd."/".$nit.'/'.$token.'/'."20".$periodo_conteo;
       //echo $url;
-      $json = file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = file_get_contents($url);
       if ($json == "") {
         $peri_error= $peri_error."20".$periodo_conteo."<br>";
       }else{

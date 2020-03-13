@@ -51,7 +51,8 @@ if ($resultado = $conn->query($consulta)) {
 //Generar token para contributivo(fin)
 
       $url =$url_bd."/".$nit.'/'.$token.'/'.$numero_prescripcion;
-      $json = file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = file_get_contents($url);
 
 if($json==""){
   echo "<script>alert('Error al conectar con la API, favor volver a intentar.');</script>";
