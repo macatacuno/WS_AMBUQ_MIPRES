@@ -15,7 +15,7 @@ pi.NOPRESCRIPCION,
 pi.TIPOTEC,
 pi.CONORDEN,
 pd.NOENTREGA,
-pd.FECMAXENT,
+to_date(pd.FECMAXENT, 'YYYY-MM-DD') FECMAXENT,
 DECODE(pd.DIR_IDDIRECCIONAMIENTO,NULL,0,pd.DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
 DECODE(pd.DIR_ID,NULL,0,pd.DIR_ID)DIR_ID
 from view_webserv_pres_info_direc pi
@@ -34,12 +34,15 @@ oci_execute($st_serv, OCI_DEFAULT);
 $datos_direc_json = '[';
 while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
 
+    $fecha_maxima_de_entrega = "20" . $row['FECMAXENT'];
+    $fecha_maxima_de_entrega = str_replace("/", "-", $fecha_maxima_de_entrega);
+
     $datos_direc_json = $datos_direc_json
         . '{"NOPRESCRIPCION":"' . $row['NOPRESCRIPCION']
         . '","TIPOTEC":"' . $row['TIPOTEC']
         . '","CONORDEN":"' . $row['CONORDEN']
         . '","NOENTREGA":"' . $row['NOENTREGA']
-        . '","FECMAXENT":"' . $row['FECMAXENT']
+        . '","FECMAXENT":"' . $fecha_maxima_de_entrega
         . '","DIR_ID":"' .  $row['DIR_ID']
         . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO'] . '"},';
 }

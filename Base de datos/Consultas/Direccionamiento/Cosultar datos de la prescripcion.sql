@@ -26,7 +26,7 @@ REGIMEN,
 decode(CODAMBATE,null,'NO EXISTE',CODAMBATE)CODAMBATE,
 decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE)DESC_CODAMBATE,
 decode(TIPOTEC,'P',to_date(sysdate+90, 'YYYY-MM-DD'),
-decode(CODAMBATE,11,decode((select 
+                decode(CODAMBATE,11,decode((select 
                             count(1) cantidad_entregas
                             from  WEBSERV_PRES_DIRECCIONADOS pd 
                             where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
@@ -51,38 +51,50 @@ pi.NOPRESCRIPCION,
 pi.TIPOTEC,
 pi.CONORDEN,
 pd.NOENTREGA,
-
-
-
-
-decode(CODAMBATE,11,decode((select 
-                            count(1) cantidad_entregas
-                            from  WEBSERV_PRES_DIRECCIONADOS pd 
-                            where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
-                            and pd.TIPOTEC=pi.TIPOTEC
-                            and pd.CONORDEN=pi.CONORDEN),0,to_date(pd.FECMAXENT+15, 'YYYY-MM-DD'),
-                              to_date(pd.FECMAXENT+30, 'YYYY-MM-DD')),
-                 12,to_date(pd.FECMAXENT+30, 'YYYY-MM-DD'),
-                 21,to_date(pd.FECMAXENT+30, 'YYYY-MM-DD'),
-                   '11-11-1111')) FECMAXENT,
-
-
-
-
+to_date(pd.FECMAXENT, 'YYYY-MM-DD') FECMAXENT,
 DECODE(pd.DIR_IDDIRECCIONAMIENTO,NULL,0,pd.DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
 DECODE(pd.DIR_ID,NULL,0,pd.DIR_ID)DIR_ID
 from view_webserv_pres_info_direc pi
 left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
-where  pd.NOPRESCRIPCION='20190118184010019347' and pd.TIPOTEC='P' and pd.CONORDEN=1 and pd.NOENTREGA=1;
+where  pd.NOPRESCRIPCION='20190110146009877111' and pd.TIPOTEC='M' and pd.CONORDEN=1 and pd.NOENTREGA=1;
+
+--4. Calcular la maxima fecha de entrega de los direccionamientos que ya tengas entregas anteriores.
+select
+CANTIDAD_ENTREGAS,
+decode(pi.TIPOTEC,'P',to_date(FECMAXENT_ULTIMA_ENTREGA+90, 'YYYY-MM-DD'),
+                decode(CODAMBATE,11,decode((select 
+                            count(1) cantidad_entregas
+                            from  WEBSERV_PRES_DIRECCIONADOS pd 
+                            where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
+                            and pd.TIPOTEC=pi.TIPOTEC
+                            and pd.CONORDEN=pi.CONORDEN),0,to_date(FECMAXENT_ULTIMA_ENTREGA+15, 'YYYY-MM-DD'),
+                              to_date(FECMAXENT_ULTIMA_ENTREGA+30, 'YYYY-MM-DD')),
+                 12,to_date(FECMAXENT_ULTIMA_ENTREGA+30, 'YYYY-MM-DD'),
+                 21,to_date(FECMAXENT_ULTIMA_ENTREGA+30, 'YYYY-MM-DD'),
+                   '11-11-1111'))  FECMAXENT
+from view_webserv_pres_info_direc pi
+left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
+left join (select pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN, 
+count(NOENTREGA) CANTIDAD_ENTREGAS,
+max(FECMAXENT) FECMAXENT_ULTIMA_ENTREGA
+from WEBSERV_PRES_DIRECCIONADOS pd
+GROUP by pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN) pm on pd.NOPRESCRIPCION=pm.NOPRESCRIPCION and pd.TIPOTEC=pm.TIPOTEC 
+and pd.CONORDEN=pm.CONORDEN
+where  pd.NOPRESCRIPCION='20190110146009877111' and pd.TIPOTEC='M' and pd.CONORDEN=1 and rownum<=1
+order by FECMAXENT desc;
 
 
---3. Consulta para cargar los datos de las prescripciones direccionadas
-select 
-count(1) cantidad_entregas
-from  WEBSERV_PRES_DIRECCIONADOS pd 
-where  pd.NOPRESCRIPCION='20190104182009821673' 
- and pd.TIPOTEC='M' 
- and pd.CONORDEN=1;
+--5. Calcular la maxima fecha de entrega de los direccionamientos que ya tengas entregas anteriores.
+select pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN, 
+count(NOENTREGA) CANTIDAD_ENTREGAS,
+max(FECMAXENT) FECMAXENT_ULTIMA_ENTREGA
+from WEBSERV_PRES_DIRECCIONADOS pd
+where  pd.NOPRESCRIPCION='20190110146009877111' 
+and pd.TIPOTEC='M' 
+and pd.CONORDEN=1
+GROUP by pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN;
+
+
 
 --NOPRESCIPCION
 

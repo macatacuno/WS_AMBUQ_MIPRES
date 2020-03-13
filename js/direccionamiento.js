@@ -269,6 +269,83 @@ function cargar_datos_pres() {
         });
 }
 
+/*
+function cargar_datos_pres_sin_limpiar() {
+    val_NoPrescripcion = $('#NoPrescripcion').val();
+    val_TipoTec = $('#TipoTec').val();
+    val_ConTec = $('#ConTec').val();
+
+    $.ajax({
+        url: './consumo_ws/envios/Direccionamiento/obtener_datos_pres.php',
+        type: "POST",
+        data: {
+            NoPrescripcion: val_NoPrescripcion,
+            TipoTec: val_TipoTec,
+            ConTec: val_ConTec
+        }
+    })
+        .done(function (data) {
+            json = jQuery.parseJSON(data);
+
+            for (var key in json) {
+                sw = 1;
+                //document.write("<br>" + key + " - " + json[key]);
+                sub_json = json[key];
+
+                for (var sub_key in sub_json) {
+                    $("#TipoIDProv").val('NI');//El tipo de proveedor tambien se sacar de la tabla prescriociones en el campo tipoidips
+                    //el numero de la ips tambien se optiene de la prescripcion
+                    $("#NoSubEntrega").val(0);
+                    if (sub_key == 'REGIMEN') {
+                        //alert("Regimen:"+ sub_json[sub_key]);
+                        if (sub_json[sub_key] == 'C') {
+                            $("#tipo option[value=1]").attr("selected", true);
+                        } else if (sub_json[sub_key] == 'S') {
+                            $("#tipo option[value=2]").attr("selected", true);
+                        }
+                    } else if (sub_key == 'TIPOIDPACIENTE') {
+                        $("#TipoIDPaciente").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'NROIDPACIENTE') {
+                        $("#NoIDPaciente").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'CODMUNENT') {
+                        $("#CodMunEnt").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'DIRPACIENTE') {
+                        $("#DirPaciente").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'FECHA_MAXIMA_DE_ENTREGA') {
+                        $("#FecMaxEnt").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'DESC_CODAMBATE') {
+                        $("#desc_codambate").val(sub_json[sub_key]);
+
+                    } else if (sub_key == 'CODSERTECAENTREGAR') {
+                        if (val_TipoTec != 'M') {
+                            if (sub_json[sub_key] == 'NO EXISTE') {
+                                $("#CodSerTecAEntregar").val('');
+                                $("#CodSerTecAEntregar").removeAttr('disabled');
+                                $("#CodSerTecAEntregar").attr("placeholder", "Ingresa código CUMS con guion #####-#");
+                            } else {
+                                $("#CodSerTecAEntregar").val(sub_json[sub_key]);
+                                $("#CodSerTecAEntregar").attr("disabled", true);
+                                $("#CodSerTecAEntregar").attr("placeholder", "");
+                            }
+                        }
+                    } else if (sub_key == 'DESC_CODSERTECAENTREGAR') {
+                        $("#desc_CodSerTecAEntregar").val(sub_json[sub_key]);
+
+                    };
+                }
+            }
+        })
+        .fail(function (data) {
+            alert("error:" + data);
+        });
+}
+*/
+
 function cargar_datos_direc() {
     quitar_color_de_campos();
     val_NoPrescripcion = $('#NoPrescripcion').val();
@@ -298,7 +375,7 @@ function cargar_datos_direc() {
                         for (var sub_key in sub_json) {
 
                             if (sub_key == 'FECMAXENT') {
-                               // $("#FecMaxEnt").val(sub_json[sub_key]);
+                                $("#FecMaxEnt").val(sub_json[sub_key]);
                             } else if (sub_key == 'DIR_ID') {
                                 $("#dir_id").text("Id: " + sub_json[sub_key]);
 
@@ -317,6 +394,47 @@ function cargar_datos_direc() {
                         }
                     }
                 } else {
+                    /*Se consulta en la base de datos si la tecnologia tiene 
+                    entregas direccioandas y si tiene algunas entonces se calcula la fecha maxima de entrega apartir
+                    de la fecha maxima de entrega tomando la fecha mayor de la ultima entrega de del direccionamiento*/
+                    $.ajax({
+                        url: './consumo_ws/envios/Direccionamiento/obtener_FECMAXENT_direc.php',
+                        type: "POST",
+                        data: {
+                            NoPrescripcion: val_NoPrescripcion,
+                            TipoTec: val_TipoTec,
+                            ConTec: val_ConTec
+                        }
+                    })
+                        .done(function (data) {
+                            $fecha_maxima_entrega = '';
+                            $cantidad_entregas = 0;
+                            if (data != '[]') {
+                                json = jQuery.parseJSON(data);
+
+                                for (var key in json) {
+                                    sub_json = json[key];
+
+                                    for (var sub_key in sub_json) {
+                                        if (sub_key == 'FECMAXENT') {
+                                            $fecha_maxima_entrega = sub_json[sub_key];
+                                        } else if (sub_key == 'CANTIDAD_ENTREGAS') {
+                                            $cantidad_entregas = sub_json[sub_key];
+                                        };
+                                    }
+                                }
+                                if ($cantidad_entregas > 0) {
+                                    $("#FecMaxEnt").val($fecha_maxima_entrega);
+                                } else {
+
+                                }
+                            };
+
+                        })
+                        .fail(function (data) {
+                            alert("error:" + data);
+                        });
+
                     $("#btn_confirm_direc").show();
                     $("#btn_anular_direc").hide();
                     $("#dir_id").text("Id: 0");
@@ -328,6 +446,8 @@ function cargar_datos_direc() {
                 alert("error:" + data);
             });
     } else {
+        //cargar_datos_pres_sin_limpiar();
+        //$("#FecMaxEnt").val('');
         $("#btn_confirm_direc").show();
         $("#btn_anular_direc").hide();
         $("#dir_id").text("Id: 0");
@@ -464,8 +584,8 @@ function anular_direc() {
                     title: 'Direccionamiento anulado correctamente'
                 });
 
-               // cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
-               cargar_datos_direc();
+                // cargar_datos_pres();//Cadavez que se deireccione se debera volver a cargar la lista de numero de tecnologia
+                cargar_datos_direc();
             } else {
 
                 Toast.fire({
