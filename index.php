@@ -8,10 +8,15 @@
   <link rel="shortcut icon" href="http://www.ambuq.org.co/wp-content/themes/wordpress-bootstrap-master/images/logito.png">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php
+  header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+  header("Expires: Sat, 1 Jul 2000 05:00:00 GMT"); // Fecha en el pasado
+  ?>
   <!--Borrar Cache(Inicio)-->
-  <meta http-equiv='cache-control' content='no-cache'>
-  <meta http-equiv='expires' content='0'>
-  <meta http-equiv='pragma' content='no-cache'>
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Last-Modified" content="0">
+  <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <!--<link rel="stylesheet" href="css/master.css?n=1">-->
   <!--Borrar Cache(Fin)-->
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
@@ -133,9 +138,9 @@
   <!--*******************Sección para cargar el contenido principal (Inicio)**********************-->
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
-  <script src="js/menu.js"></script>
-  <script src="js/notificaciones.js"></script>
-  <script src="js/direccionamiento.js"></script>
+  <script src="js/menu.js?241"></script>
+  <script src="js/notificaciones.js?321"></script>
+  <script src="js/direccionamiento.js?123"></script>
   <script>
     //Cargar procedieintos iniciales
     cargarPanel();

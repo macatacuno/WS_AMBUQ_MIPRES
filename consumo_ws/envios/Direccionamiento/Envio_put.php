@@ -176,6 +176,8 @@ if (strpos($response, 'Message') !== false) {
 
 	
 	////Actualizar tabla con el token temporal (Inicio)
+
+	$fecha_oracle = date("d/m/Y", strtotime($FecMaxEnt)); //formato originar "y/m/d"
 $sql_exc = 	"INSERT
 		INTO WEBSERV_PRES_DIRECCIONADOS
 		  (
@@ -184,7 +186,8 @@ $sql_exc = 	"INSERT
 			NOENTREGA,
 			DIR_ID,
 			DIR_IDDIRECCIONAMIENTO,
-			CONORDEN
+			CONORDEN,
+			FECMAXENT
 
 		  )
 		  VALUES
@@ -194,9 +197,10 @@ $sql_exc = 	"INSERT
 			$NoEntrega,
 			$id,
 			$id_direc,
-			$ConTec
+			$ConTec,
+			'$fecha_oracle'
 		  )";
-		  
+
 	$st_direc2 = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st_direc2);
 	oci_free_statement($st_direc2);

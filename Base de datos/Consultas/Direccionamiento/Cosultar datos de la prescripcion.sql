@@ -45,14 +45,30 @@ where  NOPRESCRIPCION='20190104182009821673' and TIPOTEC='M' and conorden=1;
 --where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
 
 
-
-
 --3. Consulta para cargar los datos de las prescripciones direccionadas
 select 
 pi.NOPRESCRIPCION,
 pi.TIPOTEC,
 pi.CONORDEN,
 pd.NOENTREGA,
+
+
+
+
+decode(CODAMBATE,11,decode((select 
+                            count(1) cantidad_entregas
+                            from  WEBSERV_PRES_DIRECCIONADOS pd 
+                            where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
+                            and pd.TIPOTEC=pi.TIPOTEC
+                            and pd.CONORDEN=pi.CONORDEN),0,to_date(pd.FECMAXENT+15, 'YYYY-MM-DD'),
+                              to_date(pd.FECMAXENT+30, 'YYYY-MM-DD')),
+                 12,to_date(pd.FECMAXENT+30, 'YYYY-MM-DD'),
+                 21,to_date(pd.FECMAXENT+30, 'YYYY-MM-DD'),
+                   '11-11-1111')) FECMAXENT,
+
+
+
+
 DECODE(pd.DIR_IDDIRECCIONAMIENTO,NULL,0,pd.DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
 DECODE(pd.DIR_ID,NULL,0,pd.DIR_ID)DIR_ID
 from view_webserv_pres_info_direc pi
@@ -69,7 +85,7 @@ where  pd.NOPRESCRIPCION='20190104182009821673'
  and pd.CONORDEN=1;
 
 --NOPRESCIPCION
-select * from WEBSERV_PRES_DIRECCIONADOS;
+
 select 
 pi.NOPRESCRIPCION,
 pi.TIPOTEC,
