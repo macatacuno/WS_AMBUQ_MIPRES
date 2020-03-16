@@ -91,6 +91,7 @@ $periodo_inicial='2019-10-29';
 $periodo_final = $periodo_inicial;
 
 
+
 $date1 = new DateTime($periodo_inicial);
 $date2 = new DateTime($periodo_final);
 $diff = $date1->diff($date2);
