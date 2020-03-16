@@ -13,7 +13,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
+//include('../../funciones_generales.php');
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $peri_error="";
@@ -98,7 +98,8 @@ $consulta = "SELECT repo_periodo, repo_json FROM reportesws  where serv_id=".$se
  
 
   //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
-  $json = (string)file_get_contents($url);
+  $json = Webservice_get($url);
+  //$json = (string)file_get_contents($url);
   if ($json == "") {
 
 

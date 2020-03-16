@@ -1,7 +1,7 @@
 <?php
 include("../../../conexion.php");
 
-
+//include('../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
 $Json_final="";
@@ -66,7 +66,8 @@ if ($resultado = $conn->query($consulta)) {
   }
 
   $url_token =$url_api_generar_token."/".$nit."/".$token;
-  $token = file_get_contents($url_token);
+  $token = Webservice_get($url_token);
+  //$token = file_get_contents($url_token);
   $token = str_replace("\"", '', $token);
 //}
 //Generar token para contributivo(fin)
@@ -102,7 +103,8 @@ if($periodo_final<$periodo_inicial){
       //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
       $url =$url_bd."/".$nit.'/'.$token.'/'."20".$periodo_conteo;
       //echo $url;
-      $json = file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = file_get_contents($url);
       if ($json == "") {
         $peri_error= $peri_error."20".$periodo_conteo."<br>";
       }else{

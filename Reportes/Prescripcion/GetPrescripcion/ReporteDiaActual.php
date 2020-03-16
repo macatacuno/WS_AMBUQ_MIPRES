@@ -1,7 +1,7 @@
 <?php
 include("../../../conexion.php");
 
-
+//include('../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
 $Json_final="";
@@ -91,7 +91,6 @@ $periodo_inicial='2019-10-29';
 $periodo_final = $periodo_inicial;
 
 
-
 $date1 = new DateTime($periodo_inicial);
 $date2 = new DateTime($periodo_final);
 $diff = $date1->diff($date2);
@@ -108,7 +107,8 @@ if($periodo_final<$periodo_inicial){
       //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
       $url =$url_bd."/".$nit.'/'."20".$periodo_conteo.'/'.$token;
       //echo $url;
-      $json = file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = file_get_contents($url);
       
       /*$json = str_replace("\n", "", $json);
       $json = str_replace("\t", "", $json);*/

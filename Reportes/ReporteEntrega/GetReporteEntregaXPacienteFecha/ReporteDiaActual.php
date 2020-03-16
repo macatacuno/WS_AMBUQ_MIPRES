@@ -1,7 +1,7 @@
 <?php
 include("../../../conexion.php");
 
-
+//include('../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
 //pamemetros de entrada
@@ -46,13 +46,15 @@ if ($resultado = $conn->query($consulta)) {
   }
 
   $url_token =$url_api_generar_token."/".$nit."/".$token;
-  $token = file_get_contents($url_token);
+  $token = Webservice_get($url_token);
+  //$token = file_get_contents($url_token);
   $token = str_replace("\"", '', $token);
 
 //Generar token para contributivo(fin)
 
       $url =$url_bd."/".$nit.'/'.$fecha.'/'.$token.'/'.$tipo_documento.'/'.$Numero_documento;
-      $json = file_get_contents($url);
+      $json = Webservice_get($url);
+      //$json = file_get_contents($url);
 
 if($json==""){
   echo "<script>alert('Error al conectar con la API, favor volver a intentar.');</script>";

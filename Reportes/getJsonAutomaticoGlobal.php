@@ -1,4 +1,5 @@
 <?php
+include('funciones_generales.php');
 include("ReporteEntrega\GetReporteEntregaXFecha\getJsonAutomatico_cont.php");
 include("ReporteEntrega\GetReporteEntregaXFecha\getJsonAutomatico_subs.php");
 include("Prescripcion\GetPrescripcion\getJsonAutomatico_cont.php");
