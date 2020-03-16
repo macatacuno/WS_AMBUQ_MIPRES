@@ -18,7 +18,8 @@ if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal='
 	oci_free_statement($st_token_temp);
 
 	$url_token = $url_api_generar_token . "/" . $nit . "/" . $token;
-	$token_temporal = file_get_contents($url_token);
+	$token_temporal = Webservice_get($url_token);
+	//$token_temporal = file_get_contents($url_token);
 	$token_temporal = str_replace("\"", '', $token_temporal);
 
 	//echo "<br>token: " . $token . "<br>";

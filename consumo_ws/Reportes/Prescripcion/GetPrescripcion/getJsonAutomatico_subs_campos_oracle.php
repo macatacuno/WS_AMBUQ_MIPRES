@@ -17,7 +17,7 @@ if (!$conn) {
 }
 
 $conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
-
+include('../../../funciones_generales.php');
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $peri_error = "";

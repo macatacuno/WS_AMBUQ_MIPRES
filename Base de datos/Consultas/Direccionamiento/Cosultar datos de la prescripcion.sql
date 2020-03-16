@@ -44,7 +44,7 @@ from view_webserv_pres_info_direc pi
 where  NOPRESCRIPCION='20190104182009821673' and TIPOTEC='M' and conorden=1;
 --where  NOPRESCRIPCION='20200206186017293511' and TIPOTEC='P' and conorden=3;
 
-
+select * from WEBSERV_PRES_DIRECCIONADOS;
 --3. Consulta para cargar los datos de las prescripciones direccionadas
 select 
 pi.NOPRESCRIPCION,
@@ -110,7 +110,7 @@ left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION a
 where  pd.NOPRESCRIPCION='20190118184010019347' 
 and pd.TIPOTEC='P' 
 and pd.CONORDEN=1 
-and pd.NOENTREGA=6
+and pd.NOENTREGA=6;
 
 /*
 Ambulatorio priorizado: 15 dias  11

@@ -1,7 +1,7 @@
 <?php
 include("../../../../conexion.php");
 
-
+include('../../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
 $json="";
 $Json_final="";

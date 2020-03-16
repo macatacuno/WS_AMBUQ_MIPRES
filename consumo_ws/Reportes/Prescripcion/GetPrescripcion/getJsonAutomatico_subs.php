@@ -14,7 +14,7 @@ if (!$conn) {
 }
 
 
-
+include('../../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
 $peri_error="";
 $peri_error_conteo=0;

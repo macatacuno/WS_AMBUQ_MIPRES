@@ -14,7 +14,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
+include('../../../funciones_generales.php');
 
 ///////Declaracion de Variables Generales(Inicio)/////////
 $peri_error="";
