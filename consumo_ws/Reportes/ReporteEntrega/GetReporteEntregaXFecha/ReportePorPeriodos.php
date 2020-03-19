@@ -1,5 +1,19 @@
 <?php
-include("../../../../conexion.php");
+
+
+set_time_limit(9999999);
+$servername = "localhost";
+$database = "db_app_ambuq";
+$username = "root";
+$password = "";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $database);
+// Check connection
+if (!$conn) {
+  die("Connection failed: " . mysqli_connect_error());
+}
+//include('../../../funciones_generales.php');
 
 //Variable Generales
 $json="";
@@ -27,7 +41,7 @@ if($periodo_final<$periodo_inicial){
 
 
   $consulta = "SELECT repo_periodo, repo_json FROM reportesws where serv_id=".$servicio_id." and tire_id=".$tipo_id." and repo_periodo between '".$periodo_inicial."' and '".$periodo_final."' order by repo_periodo";
-
+ 
 if ($resultado = $conn->query($consulta)) {
 
 
@@ -70,7 +84,7 @@ $objPHPExcel->setActiveSheetIndex(0)
     /* obtener un array asociativo */
     $i=1;
     while ($fila = $resultado->fetch_assoc()) {
-      
+
       $fila["repo_json"] = str_replace("[]", '', $fila["repo_json"]);
       $fila["repo_json"] = str_replace("[", '', $fila["repo_json"]); 
       $fila["repo_json"] = str_replace("]", ',', $fila["repo_json"]);
@@ -88,7 +102,7 @@ $objPHPExcel->setActiveSheetIndex(0)
   $json = str_replace("}", '  }<br>', $json); 
   $json = str_replace(",", ',<br>', $json);  
 */
- 
+
   //$json_array = json_decode($json); 
   $json_array = json_decode($json, true);
 
@@ -133,7 +147,6 @@ $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,
 'Excel2007');
 $objWriter->save('php://output');
 exit;
-
 
 
 
