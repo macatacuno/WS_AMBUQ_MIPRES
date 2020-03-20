@@ -200,7 +200,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       $json = str_replace("\\\"", "", $json);
       $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
 
-      if ($json == "") {
+      if ($json == "" || $json=='{"Message":"Error."}') {
 
 
         $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";

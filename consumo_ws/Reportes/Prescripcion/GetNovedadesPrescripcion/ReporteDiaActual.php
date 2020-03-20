@@ -108,7 +108,7 @@ if($periodo_final<$periodo_inicial){
       //echo $url;
       $json = Webservice_get($url);
       //$json = file_get_contents($url);
-      if ($json == "") {
+      if ($json == "" || $json=='{"Message":"Error."}') {
         $peri_error= $peri_error."20".$periodo_conteo."<br>";
       }else{
     

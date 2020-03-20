@@ -86,4 +86,62 @@ function Webservice_get($url)
 }
 
 
+
+function obtener_datos_url($campo_oracle_alias,$servicio_id,$conn_oracle){
+	$dato_a_retornar="";
+//////obtener los parametros la url(Inicio)
+if($campo_oracle_alias=="URL"){
+	$campo_oracle_exacto="S.URL";
+}else if($campo_oracle_alias=="SERV_NOMBRE"){
+	$campo_oracle_exacto="S.NOMBRE as SERV_NOMBRE";
+}else if($campo_oracle_alias=="WS_ID"){
+	$campo_oracle_exacto="TS.WS_ID";
+}
+
+$query = "select ".$campo_oracle_exacto." from WEBSERV_SERVICIOS S JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
+$st_serv = oci_parse($conn_oracle, $query);
+oci_execute($st_serv, OCI_DEFAULT);
+while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
+  $dato_a_retornar= $row[$campo_oracle_alias];
+}
+oci_free_statement($st_serv);
+return $dato_a_retornar;
+};
+
+
+
+function obtener_datos_token_nit($campo_oracle_alias,$tipo_id,$conn_oracle){
+	$dato_a_retornar="";
+//////obtener los parametros la url(Inicio)
+if($campo_oracle_alias=="NIT"){
+	$campo_oracle_exacto="NIT";
+}else if($campo_oracle_alias=="TOKEN"){
+	$campo_oracle_exacto="TOKEN";
+};
+
+$query = "select ".$campo_oracle_exacto." from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+$st_serv = oci_parse($conn_oracle, $query);
+oci_execute($st_serv, OCI_DEFAULT);
+while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
+  $dato_a_retornar= $row[$campo_oracle_alias];
+}
+oci_free_statement($st_serv);
+return $dato_a_retornar;
+}
+
+
+/*
+$query = "select NIT,TOKEN from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+$st_tire = oci_parse($conn_oracle, $query);
+oci_execute($st_tire, OCI_DEFAULT);
+while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
+  // Usar nombres de columna en mayúsculas para los índices del array asociativo
+  $nit = $row["NIT"];
+  $token = $row["TOKEN"];
+  // $row[1];
+}
+oci_free_statement($st_tire);
+*/
+
+//////obtener el nit y el token(fin)
 ?>
