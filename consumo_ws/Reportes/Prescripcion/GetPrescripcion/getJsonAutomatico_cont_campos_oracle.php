@@ -8,7 +8,7 @@ $servername = "localhost";
 $database = "db_app_ambuq";
 $username = "root";
 $password = "";
-
+/*
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);
 // Check connection
@@ -16,7 +16,7 @@ $conn = mysqli_connect($servername, $username, $password, $database);
 if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
-
+*/
 $conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
 
 
@@ -3240,7 +3240,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
     }
   }
 }
-mysqli_close($conn);
+//mysqli_close($conn);
 echo "<br><br>----------------------------Fin-----------------------";
 /*echo "<h3>Dias cargados</h3> <br> cantidad: ".$periodos_cargados_conteo."<br>".$periodos_cargados."<br>";
 echo "<h3>Dias no cargados</h3> <br>cantidad: ".$peri_error_conteo."<br>".$peri_error;*/

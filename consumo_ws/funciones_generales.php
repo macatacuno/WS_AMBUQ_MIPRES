@@ -1,49 +1,49 @@
 <?php
 //Esta función actualiza el token solo si han pasado más de 20 horas desde la última vez que se actualizó
- function actualizar_token_temporal($horas_de_diferencia,$conn_oracle,$nit,$token,$token_temporal){
+function actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $token, $token_temporal)
+{
 
-// Validar si es necesario actualizar el token(Inicio).
-// cuando la variable $horas_de_diferencia es -1 significa que no hay una fecha definida.
+	// Validar si es necesario actualizar el token(Inicio).
+	// cuando la variable $horas_de_diferencia es -1 significa que no hay una fecha definida.
 
-if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal='vacio' ) {
+	if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal = 'vacio') {
 
-	//Generar token temporal(inicio)
-	$query = "SELECT URL FROM WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";
-	$st_token_temp = oci_parse($conn_oracle, $query);
-	oci_execute($st_token_temp, OCI_DEFAULT);
-	while (($row = oci_fetch_array($st_token_temp, OCI_BOTH)) != false) {
-		$url_api_generar_token = $row["URL"];
-		// $row[1];
-	}
-	oci_free_statement($st_token_temp);
+		//Generar token temporal(inicio)
+		$query = "SELECT URL FROM WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";
+		$st_token_temp = oci_parse($conn_oracle, $query);
+		oci_execute($st_token_temp, OCI_DEFAULT);
+		while (($row = oci_fetch_array($st_token_temp, OCI_BOTH)) != false) {
+			$url_api_generar_token = $row["URL"];
+			// $row[1];
+		}
+		oci_free_statement($st_token_temp);
 
-	$url_token = $url_api_generar_token . "/" . $nit . "/" . $token;
-	$token_temporal = Webservice_get($url_token);
-	//$token_temporal = file_get_contents($url_token);
-	$token_temporal = str_replace("\"", '', $token_temporal);
+		$url_token = $url_api_generar_token . "/" . $nit . "/" . $token;
+		$token_temporal = Webservice_get($url_token);
+		//$token_temporal = file_get_contents($url_token);
+		$token_temporal = str_replace("\"", '', $token_temporal);
 
-	//echo "<br>token: " . $token . "<br>";
-	//echo "<br>token_temporal: " . $token_temporal . "<br>";
-	//Generar token temporal(fin)
+		//echo "<br>token: " . $token . "<br>";
+		//echo "<br>token_temporal: " . $token_temporal . "<br>";
+		//Generar token temporal(fin)
 
-	////Actualizar tabla con el token temporal (Inicio)
-	$sql_exc = "UPDATE WEBSERV_TIPOREPORTES
+		////Actualizar tabla con el token temporal (Inicio)
+		$sql_exc = "UPDATE WEBSERV_TIPOREPORTES
                 SET TOKEN_TEMPORAL    = '" . $token_temporal . "',
                     FECHA_TOKEN_TEMPORAL=sysdate
                 WHERE TOKEN = '" . $token . "'";
-	$st_pr_nu = oci_parse($conn_oracle, $sql_exc);
-	$result = oci_execute($st_pr_nu);
-	oci_free_statement($st_pr_nu);
-	if ($result) {
-		//echo  "<br>Actualización Correcta ";
-	} else {
-		//echo  "<br>Actualización Incorrecta ";
+		$st_pr_nu = oci_parse($conn_oracle, $sql_exc);
+		$result = oci_execute($st_pr_nu);
+		oci_free_statement($st_pr_nu);
+		if ($result) {
+			//echo  "<br>Actualización Correcta ";
+		} else {
+			//echo  "<br>Actualización Incorrecta ";
+		}
+		/////Actualizar tabla con el token temporal  (Fin)
 	}
-	/////Actualizar tabla con el token temporal  (Fin)
-}
-// Validar si es necesario actualizar el token(Fin).
-return  $token_temporal;
-
+	// Validar si es necesario actualizar el token(Fin).
+	return  $token_temporal;
 }
 
 function direccionar_put($url, $parametro)
@@ -87,61 +87,97 @@ function Webservice_get($url)
 
 
 
-function obtener_datos_url($campo_oracle_alias,$servicio_id,$conn_oracle){
-	$dato_a_retornar="";
-//////obtener los parametros la url(Inicio)
-if($campo_oracle_alias=="URL"){
-	$campo_oracle_exacto="S.URL";
-}else if($campo_oracle_alias=="SERV_NOMBRE"){
-	$campo_oracle_exacto="S.NOMBRE as SERV_NOMBRE";
-}else if($campo_oracle_alias=="WS_ID"){
-	$campo_oracle_exacto="TS.WS_ID";
-}
+function obtener_datos_url($campo_oracle_alias, $servicio_id, $conn_oracle)
+{
+	$dato_a_retornar = "";
+	//////obtener los parametros la url(Inicio)
+	if ($campo_oracle_alias == "URL") {
+		$campo_oracle_exacto = "S.URL";
+	} else if ($campo_oracle_alias == "SERV_NOMBRE") {
+		$campo_oracle_exacto = "S.NOMBRE as SERV_NOMBRE";
+	} else if ($campo_oracle_alias == "WS_NOMBRE") {
+		$campo_oracle_exacto = "WS.NOMBRE as WS_NOMBRE";
+	} else if ($campo_oracle_alias == "WS_ID") {
+		$campo_oracle_exacto = "TS.WS_ID";
+	}
 
-$query = "select ".$campo_oracle_exacto." from WEBSERV_SERVICIOS S JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
-$st_serv = oci_parse($conn_oracle, $query);
-oci_execute($st_serv, OCI_DEFAULT);
-while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
-  $dato_a_retornar= $row[$campo_oracle_alias];
-}
-oci_free_statement($st_serv);
-return $dato_a_retornar;
+	$query = "select 
+" . $campo_oracle_exacto . " from WEBSERV_SERVICIOS S 
+JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID 
+JOIN WEBSERV_WEBSERVICES WS ON WS.WS_ID=TS.WS_ID
+WHERE S.SERV_ID=" . $servicio_id;
+	$st_serv = oci_parse($conn_oracle, $query);
+	oci_execute($st_serv, OCI_DEFAULT);
+	while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
+		$dato_a_retornar = $row[$campo_oracle_alias];
+	}
+	oci_free_statement($st_serv);
+	return $dato_a_retornar;
 };
 
 
 
-function obtener_datos_token_nit($campo_oracle_alias,$tipo_id,$conn_oracle){
-	$dato_a_retornar="";
-//////obtener los parametros la url(Inicio)
-if($campo_oracle_alias=="NIT"){
-	$campo_oracle_exacto="NIT";
-}else if($campo_oracle_alias=="TOKEN"){
-	$campo_oracle_exacto="TOKEN";
-};
+function obtener_datos_token_nit($campo_oracle_alias, $tipo_id, $conn_oracle)
+{
+	$dato_a_retornar = "";
+	//////obtener los parametros la url(Inicio)
+	if ($campo_oracle_alias == "NIT") {
+		$campo_oracle_exacto = "NIT";
+	} else if ($campo_oracle_alias == "TOKEN") {
+		$campo_oracle_exacto = "TOKEN";
+	};
 
-$query = "select ".$campo_oracle_exacto." from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
-$st_serv = oci_parse($conn_oracle, $query);
-oci_execute($st_serv, OCI_DEFAULT);
-while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
-  $dato_a_retornar= $row[$campo_oracle_alias];
+	$query = "select " . $campo_oracle_exacto . " from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+	$st_serv = oci_parse($conn_oracle, $query);
+	oci_execute($st_serv, OCI_DEFAULT);
+	while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
+		$dato_a_retornar = $row[$campo_oracle_alias];
+	}
+	oci_free_statement($st_serv);
+	return $dato_a_retornar;
 }
-oci_free_statement($st_serv);
-return $dato_a_retornar;
+
+
+function armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get)
+{
+
+	$date1 = new DateTime($periodo_inicial);
+	$date2 = new DateTime($periodo_final);
+	$diff = $date1->diff($date2);
+	$cant_dias = $diff->days + 1;
+	echo "///////////////////////////Json por periodos////////////////////////////////////////////";
+	echo "<br> Servicio cargado: " . utf8_encode($ws_nombre) . "->$serv_nombre->$tipo_get <br>";
+	echo "dia(s) consultado(s): $cant_dias";
+
+	echo "<br>";
+	echo "Periodo consultado: 20" . $periodo_inicial . " - 20" . $periodo_final;
+	echo "<br>";
+	return $cant_dias;
 }
 
 
-/*
-$query = "select NIT,TOKEN from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
-$st_tire = oci_parse($conn_oracle, $query);
-oci_execute($st_tire, OCI_DEFAULT);
-while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
-  // Usar nombres de columna en mayúsculas para los índices del array asociativo
-  $nit = $row["NIT"];
-  $token = $row["TOKEN"];
-  // $row[1];
-}
-oci_free_statement($st_tire);
-*/
+function validar_que_el_periodo_exista($conn_oracle, $periodo_conteo, $servicio_id, $tipo_id)
+{
+	//Codico para validar si existe el registro antes de insertarlo
+	$periodo_conteo_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
+	$query_exist = "select count(1) CANTIDAD from WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
+	//echo "<br> query_exist: ".$query_exist."<br>";
+	$st_exist = oci_parse($conn_oracle, $query_exist);
+	$periodo_existe = oci_execute($st_exist, OCI_DEFAULT);
 
-//////obtener el nit y el token(fin)
-?>
+	if ($periodo_existe) {
+		$cantidad_registros = 0;
+		while (($row = oci_fetch_array($st_exist, OCI_BOTH)) != false) {
+			$cantidad_registros = $row["CANTIDAD"];
+			// echo "<br> cantidad_registros:".$cantidad_registros."<br>";
+		}
+		oci_free_statement($st_exist);
+		if ($cantidad_registros > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false; //El meos uno significa que el periodo no existe  
+	}
+}
