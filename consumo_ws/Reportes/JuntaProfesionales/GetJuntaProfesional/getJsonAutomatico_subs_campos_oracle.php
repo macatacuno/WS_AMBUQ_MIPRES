@@ -288,7 +288,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           //Obtener cadena general de Junta profesional
           $subCadenaPresGene = $array[$i];
           if ($subCadenaPresGene != '') {
-            echo"<br>----------------------------------Junta #" . ($i + 1) . "-------------------------------------------------------------------------------------";
+          //  echo"<br>----------------------------------Junta #" . ($i + 1) . "-------------------------------------------------------------------------------------";
 
 
             //NoPrescripcion
@@ -502,7 +502,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+             // echo  "<br>Insercion Correcta ";
             } else {
               echo  "<br>Insercion Incorrecta ";
             }

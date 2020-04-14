@@ -181,3 +181,60 @@ function validar_que_el_periodo_exista($conn_oracle, $periodo_conteo, $servicio_
 		return false; //El meos uno significa que el periodo no existe  
 	}
 }
+
+
+function insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo)
+{
+	$sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+	VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al consumir el WebService','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
+	echo $sql_log_err;
+	$st_log_err = oci_parse($conn_oracle, $sql_log_err);
+	$result = oci_execute($st_log_err);
+	oci_free_statement($st_log_err);
+	if ($result) {
+		echo "<br>Se insertó el log de error";
+	}
+}
+
+function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $json,$serv_nombre, $tipo_get, $periodo_conteo)
+{
+	$sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', $json)"; //no se inserta el json porque provoca error al insertar el registro
+	echo $sql_exc;
+	$st = oci_parse($conn_oracle, $sql_exc);
+	$result = oci_execute($st);
+	oci_free_statement($st);
+
+	/////Eliminar el el registro de la tabla del log de errores en caso de que exista
+	if ($result) {
+		$sql_log_err = "delete from webserv_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
+		$st_log_err = oci_parse($conn_oracle, $sql_log_err);
+		$result_log = oci_execute($st_log_err);
+		oci_free_statement($st_log_err);
+		if ($result_log) {
+			return "OK";
+		} else {
+			return "Error al borrar el log";
+		}
+	} else {
+		$sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+		 VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
+		echo $sql_log_err;
+		$st_log_err = oci_parse($conn_oracle, $sql_log_err);
+		$result = oci_execute($st_log_err);
+		oci_free_statement($st_log_err);
+		if ($result) {
+		}
+		return "Error al insertar el json en la tabla webserv_reportes_json";
+	}
+}
+
+function formatear_json_general($json){
+/*Nota 1:Al remplazar los valores se debe hacer con comillas dobles, 
+ya que con commillas simples la funcion str_replace no encuentra los datos buscados*/
+$json = str_replace("\\\"", "", $json);
+$json = str_replace("\n", "", $json); //quitar \n
+$json = str_replace("\t", "", $json); //quitar \t
+return $json;
+}
+
+

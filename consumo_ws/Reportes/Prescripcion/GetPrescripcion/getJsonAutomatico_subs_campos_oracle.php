@@ -101,7 +101,7 @@ $periodo_inicial ="17-01-01";
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 */
 //19-10-29  ---YY/mm/dd
-$periodo_inicial = "20-01-01";
+$periodo_inicial = "19-01-01";
 $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 
@@ -2444,7 +2444,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
             $subcadenaProdNutrBuscadaInicial   = '{"ConOrden"';
             // //echo "<br> sub cadenaProdNutr Buscada Inicial: " . $subcadenaProdNutrBuscadaInicial;
-            $subcadenaProdNutrBuscadaFinal   = '}';
+            $subcadenaProdNutrBuscadaFinal   = '}]';
             ////echo "<br> sub cadenaProdNutr Buscada Final: " . $subcadenaProdNutrBuscadaFinal;
             $posInicial = strpos($cadenaProdNutr, $subcadenaProdNutrBuscadaInicial);
             // //echo "<br> pos Inicial: " . $posInicial;
@@ -2857,7 +2857,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               //echo "<br> NoPrescAso: " . $NoPrescAso;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
-              $EstJM_busc_fin = '}';
+              $EstJM_busc_fin = '}]';
               $cadena_EstJM = $subCadenaPresProdNutr;
               $posPresInicial = strpos($cadena_EstJM, $EstJM_busc_ini) + strlen($EstJM_busc_ini);
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);

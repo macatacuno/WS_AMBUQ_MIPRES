@@ -102,7 +102,7 @@ $periodo_inicial ="17-01-01";
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 */
 //19-10-29  ---YY/mm/dd
-$periodo_inicial = "20-01-01";
+$periodo_inicial = "19-01-01";
 $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 
@@ -200,7 +200,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       $json = str_replace("\\\"", "", $json);
       $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
 
-      if ($json == "" || $json=='{"Message":"Error."}') {
+      if ($json == "" || $json == '{"Message":"Error."}') {
 
 
         $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
@@ -356,7 +356,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $subCadenaBuscadaFinal   = ',{"prescripcion"';
           //echo "<br> sub Cadena Buscada Final: " . $subCadenaBuscadaFinal;
           $cadena = $json;
-
+          echo "<br>$cadena <br>";
           //$posInicial = strpos('cadena completa', 'Subcadena buscada','se especifica si se buscara la primera o la segunda coinsidencia (Este ultimo parametro es mejor no usarlo porque no funciona bien)');
           //$posInicial = strpos($cadena, $subCadenaBuscadaInicial,0);
           $posInicial = strpos($cadena, $subCadenaBuscadaInicial);

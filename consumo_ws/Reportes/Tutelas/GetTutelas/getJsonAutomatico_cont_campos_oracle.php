@@ -28,7 +28,6 @@ $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
 
 
-
 /********************************************************************************************/
 /********************************************************************************************/
 /**********************Validar que el periodo************************************************/
@@ -44,14 +43,26 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
     if ($periodo_existe) {
         //echo "<br>El registro ya exsiste";
     } else {
+        echo "<br>___________________________________________________________________________________________________________________________________________________________________________________________";
+
         $url = $url_bd . "/" . $nit . '/' . "20" . $periodo_conteo . '/' . $token;
         $json = Webservice_get($url); //$json = file_get_contents($url);
-        $json = str_replace("\\\"", "", $json);
-        echo "<br>$url<br>$json<br>___________________________________________________________________________________________________________________________________________________________________________________________";
-        $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato original "y/m/d"
-        
-        if ($json == "" || $json == '{"Message":"Error."}') {
+        $json = formatear_json_general($json);
 
+        $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato original "y/m/d"
+        echo "<br>/////////////////////// Json #" . $i_Principal . " Periodo: 20" . $periodo_conteo . "<br>";
+
+        if ($json == "" || $json == '{"Message":"Error."}') {
+            insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);
+        } else if ($json == "[]") {
+            insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO',$serv_nombre, $tipo_get, $periodo_conteo);
+        } else {
+            /**************************************************************************************************/
+            /************(Inicio)Bloque para Insertar el json consolidado******/
+            /**************************************************************************************************/
+            /////////////////////////////////////////General////////////////////////////////////////////////////
+            insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'SI',$serv_nombre, $tipo_get, $periodo_conteo);
         }
+
     }
 }
