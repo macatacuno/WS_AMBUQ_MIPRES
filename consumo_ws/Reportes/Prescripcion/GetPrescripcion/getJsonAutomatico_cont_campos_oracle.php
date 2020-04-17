@@ -262,7 +262,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           $periodos_cargados_conteo = $periodos_cargados_conteo + 1;
           $sql_log_err = "delete from webserv_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
 
-          // echo $sql_log_err;
+           echo $sql_log_err;
 
           $st_log_err = oci_parse($conn_oracle, $sql_log_err);
 
@@ -356,7 +356,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $subCadenaBuscadaFinal   = ',{"prescripcion"';
           //echo "<br> sub Cadena Buscada Final: " . $subCadenaBuscadaFinal;
           $cadena = $json;
-          echo "<br>$cadena <br>";
+          //echo "<br>$cadena <br>";
           //$posInicial = strpos('cadena completa', 'Subcadena buscada','se especifica si se buscara la primera o la segunda coinsidencia (Este ultimo parametro es mejor no usarlo porque no funciona bien)');
           //$posInicial = strpos($cadena, $subCadenaBuscadaInicial,0);
           $posInicial = strpos($cadena, $subCadenaBuscadaInicial);

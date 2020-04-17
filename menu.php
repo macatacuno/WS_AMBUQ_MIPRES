@@ -94,15 +94,15 @@
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                 <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_x_fecha" class="nav-link" onclick="cargarNumDirecXFecha();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Por Fecha 
+                      <p>Consultar
                         
                       </p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                 <!--   <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_x_numero_presc" class="nav-link" onclick="cargarNumDirecXNoPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>Por prescripción
@@ -121,7 +121,7 @@
                   <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_envio" class="nav-link" onclick="EnviarDireccionamiento();">
                       <i class="far fa-dot-circle nav-icon"></i>
-                      <p>Enviar direccionamiento
+                      <p>Enviar
                         <!--Nivel 3-->
                       </p>
                     </a>

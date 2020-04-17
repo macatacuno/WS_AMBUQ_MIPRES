@@ -24,7 +24,7 @@ function cargarPanel() {
 
 //////////////////////////////////Direccionamiento///////////////////////////////////////////////////////////
 function cargarNumDirecXFecha() {
-      $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      $('#contenido_principal').load('./consumo_ws/Reportes/Direccionamientos/GetDireccionamiento/vistaDireccionamiento.html');
       jQuery.get("./menu.php", function (resul) {
             $("#div_menu").html(resul);
             $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       

@@ -5,8 +5,7 @@ function actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $to
 
 	// Validar si es necesario actualizar el token(Inicio).
 	// cuando la variable $horas_de_diferencia es -1 significa que no hay una fecha definida.
-
-	if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal = 'vacio') {
+	if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal == 'vacio') {
 
 		//Generar token temporal(inicio)
 		$query = "SELECT URL FROM WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";
@@ -125,9 +124,15 @@ function obtener_datos_token_nit($campo_oracle_alias, $tipo_id, $conn_oracle)
 		$campo_oracle_exacto = "NIT";
 	} else if ($campo_oracle_alias == "TOKEN") {
 		$campo_oracle_exacto = "TOKEN";
+	} else if ($campo_oracle_alias == "TOKEN_TEMPORAL") {
+		$campo_oracle_exacto = "decode(TOKEN_TEMPORAL,null,'vacio',TOKEN_TEMPORAL) TOKEN_TEMPORAL";
+	} else if ($campo_oracle_alias == "HORAS_DE_DIFERENCIA") {
+		$campo_oracle_exacto = "decode(round(24 * (sysdate - to_date(to_char(FECHA_TOKEN_TEMPORAL, 'YYYY-MM-DD hh24:mi'), 'YYYY-MM-DD hh24:mi')),2),null,-1,
+		round(24 * (sysdate - to_date(to_char(FECHA_TOKEN_TEMPORAL, 'YYYY-MM-DD hh24:mi'), 'YYYY-MM-DD hh24:mi')),2))as HORAS_DE_DIFERENCIA";
 	};
 
-	$query = "select " . $campo_oracle_exacto . " from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+	//$query = "select " . $campo_oracle_exacto . " from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+	$query = "SELECT $campo_oracle_exacto FROM WEBSERV_TIPOREPORTES WHERE TIRE_ID=$tipo_id";
 	$st_serv = oci_parse($conn_oracle, $query);
 	oci_execute($st_serv, OCI_DEFAULT);
 	while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
@@ -136,6 +141,7 @@ function obtener_datos_token_nit($campo_oracle_alias, $tipo_id, $conn_oracle)
 	oci_free_statement($st_serv);
 	return $dato_a_retornar;
 }
+
 
 
 function armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get)
@@ -196,9 +202,9 @@ function insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 	}
 }
 
-function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $json,$serv_nombre, $tipo_get, $periodo_conteo)
+function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $json, $serv_nombre, $tipo_get, $periodo_conteo)
 {
-	$sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', $json)"; //no se inserta el json porque provoca error al insertar el registro
+	$sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "','$json')"; //no se inserta el json porque provoca error al insertar el registro
 	echo $sql_exc;
 	$st = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st);
@@ -228,13 +234,12 @@ function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 	}
 }
 
-function formatear_json_general($json){
-/*Nota 1:Al remplazar los valores se debe hacer con comillas dobles, 
+function formatear_json_general($json)
+{
+	/*Nota 1:Al remplazar los valores se debe hacer con comillas dobles, 
 ya que con commillas simples la funcion str_replace no encuentra los datos buscados*/
-$json = str_replace("\\\"", "", $json);
-$json = str_replace("\n", "", $json); //quitar \n
-$json = str_replace("\t", "", $json); //quitar \t
-return $json;
+	$json = str_replace("\\\"", "", $json);
+	$json = str_replace("\n", "", $json); //quitar \n
+	$json = str_replace("\t", "", $json); //quitar \t
+	return $json;
 }
-
-
