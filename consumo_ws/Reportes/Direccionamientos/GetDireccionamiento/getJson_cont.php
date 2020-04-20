@@ -27,7 +27,7 @@ $token_temporal = actualizar_token_temporal($horas_de_diferencia, $conn_oracle, 
 
 /**********************Cargar Encabezado**********************************************/
 $periodo_inicial = "20-01-01";
-$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
+//$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
 
 /********************************************************************************************/
@@ -73,7 +73,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                $FecDireccionamiento_oracle = date("d/m/Y H:i:s", strtotime($clave["FecDireccionamiento"])); //formato originar "y/m/d"
                $FecAnulacion_oracle="";
                if($clave["FecAnulacion"]!=''){
-                $FecAnulacion_oracle = date("d/m/Y h:m", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
+                $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
                
                }
                /////Insertar prescripcion (Inicio)
@@ -124,13 +124,13 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $clave["CantTotAEntregar"] . "',
                     '" . $clave["DirPaciente"] . "',
                     '" . $clave["CodSerTecAEntregar"] . "',
-                    " . $clave["NoIDEPS"] . ",
+                    '" . $clave["NoIDEPS"] . "',
                     '" . $clave["CodEPS"] . "',
                     '" . $FecDireccionamiento_oracle . "',
                     " . $clave["EstDireccionamiento"] . ",
                     '" . $FecAnulacion_oracle . "'
                   )";
-                //echo "<br>sql: $sql_exc";
+               // echo "<br>sql: $sql_exc";
                 $st = oci_parse($conn_oracle, $sql_exc);
                 $result = oci_execute($st);
                 oci_free_statement($st);
