@@ -61,7 +61,6 @@ if ($periodo_final < $periodo_inicial) {
   $hoja = 0;
   $query = "
 SELECT 
-to_char(REPO_PERIODO,'DD/MM/YYYY') REPO_PERIODO,
 ID,
 IDDIRECCIONAMIENTO,
 NOPRESCRIPCION,
@@ -77,7 +76,13 @@ DECODE(CODMUNENT, NULL,'NO EXISTE',CODMUNENT) CODMUNENT,
 DECODE(to_char(FECMAXENT,'DD/MM/YYYY'), NULL,'NO EXISTE',to_char(FECMAXENT,'DD/MM/YYYY')) FECMAXENT,
 DECODE(CANTTOTAENTREGAR, NULL,'NO EXISTE',CANTTOTAENTREGAR) CANTTOTAENTREGAR,
 DECODE(DIRPACIENTE, NULL,'NO EXISTE',DIRPACIENTE) DIRPACIENTE,
-DECODE(CODSERTECAENTREGAR, NULL,'NO EXISTE',CODSERTECAENTREGAR) CODSERTECAENTREGAR
+DECODE(CODSERTECAENTREGAR, NULL,'NO EXISTE',CODSERTECAENTREGAR) CODSERTECAENTREGAR,
+DECODE(NOIDEPS, NULL,'NO EXISTE',NOIDEPS) NOIDEPS,
+DECODE(CODEPS, NULL,'NO EXISTE',CODEPS) CODEPS,
+DECODE(to_char(FECDIRECCIONAMIENTO,'DD/MM/YYYY HH24:MI:SS'), NULL,'NO EXISTE',to_char(FECDIRECCIONAMIENTO,'DD/MM/YYYY HH24:MI:SS')) FECDIRECCIONAMIENTO,
+DECODE(ESTDIRECCIONAMIENTO, NULL,'NO EXISTE',ESTDIRECCIONAMIENTO) ESTDIRECCIONAMIENTO,
+DECODE(to_char(FECANULACION,'DD/MM/YYYY HH24:MI:SS'), NULL,'NO EXISTE',to_char(FECANULACION,'DD/MM/YYYY HH24:MI:SS')) FECANULACION,
+to_char(REPO_PERIODO,'DD/MM/YYYY') REPO_PERIODO
 FROM WEBSERV_DIRECCIONAMIENTOS 
 where  REPO_SERV_ID=" . $servicio_id . " and REPO_TIRE_ID=" . $tipo_id . " and REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
@@ -87,26 +92,31 @@ where  REPO_SERV_ID=" . $servicio_id . " and REPO_TIRE_ID=" . $tipo_id . " and R
 
   $objSheet = $objXLS->createSheet();
   $objSheet = $objXLS->setActiveSheetIndex($hoja);
-  $objXLS->getActiveSheet()->setTitle("Junta de Profesionales"); // AQUI AGREGO EL NOMBRE A LA HOJA
+  $objXLS->getActiveSheet()->setTitle("Direccionamientos"); // AQUI AGREGO EL NOMBRE A LA HOJA
   // Agregar Informacion
 
   $objSheet->setCellValue('A1', 'ID');
   $objSheet->setCellValue('B1', 'IDDIRECCIONAMIENTO');
   $objSheet->setCellValue('C1', 'NOPRESCRIPCION');
-  $objSheet->setCellValue('D1', 'PERIODO_CONSULTADO');
-  $objSheet->setCellValue('E1', 'TIPOTEC');
-  $objSheet->setCellValue('F1', 'CONTEC');
-  $objSheet->setCellValue('G1', 'TIPOIDPACIENTE');
-  $objSheet->setCellValue('H1', 'NOIDPACIENTE');
-  $objSheet->setCellValue('I1', 'NOENTREGA');
-  $objSheet->setCellValue('J1', 'NOSUBENTREGA');
-  $objSheet->setCellValue('K1', 'TIPOIDPROV');
-  $objSheet->setCellValue('L1', 'NOIDPROV');
-  $objSheet->setCellValue('M1', 'CODMUNENT');
-  $objSheet->setCellValue('N1', 'FECMAXENT');
-  $objSheet->setCellValue('O1', 'CANTTOTAENTREGAR');
-  $objSheet->setCellValue('P1', 'DIRPACIENTE');
-  $objSheet->setCellValue('Q1', 'CODSERTECAENTREGAR');
+  $objSheet->setCellValue('D1', 'TIPOTEC');
+  $objSheet->setCellValue('E1', 'CONTEC');
+  $objSheet->setCellValue('F1', 'TIPOIDPACIENTE');
+  $objSheet->setCellValue('G1', 'NOIDPACIENTE');
+  $objSheet->setCellValue('H1', 'NOENTREGA');
+  $objSheet->setCellValue('I1', 'NOSUBENTREGA');
+  $objSheet->setCellValue('J1', 'TIPOIDPROV');
+  $objSheet->setCellValue('K1', 'NOIDPROV');
+  $objSheet->setCellValue('L1', 'CODMUNENT');
+  $objSheet->setCellValue('M1', 'FECMAXENT');
+  $objSheet->setCellValue('N1', 'CANTTOTAENTREGAR');
+  $objSheet->setCellValue('O1', 'DIRPACIENTE');
+  $objSheet->setCellValue('P1', 'CODSERTECAENTREGAR');
+  $objSheet->setCellValue('Q1', 'NOIDEPS');
+  $objSheet->setCellValue('R1', 'CODEPS');
+  $objSheet->setCellValue('S1', 'FECDIRECCIONAMIENTO');
+  $objSheet->setCellValue('T1', 'ESTDIRECCIONAMIENTO');
+  $objSheet->setCellValue('U1', 'FECANULACION');
+  $objSheet->setCellValue('V1', 'PERIODO_CONSULTADO');
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -115,22 +125,27 @@ where  REPO_SERV_ID=" . $servicio_id . " and REPO_TIRE_ID=" . $tipo_id . " and R
     $objSheet->setCellValue('A' . $i, $row["ID"]);
     $objSheet->setCellValue('B' . $i, $row["IDDIRECCIONAMIENTO"]);
     $objSheet->setCellValue('C' . $i, ' ' . $row["NOPRESCRIPCION"]);
-    $objSheet->setCellValue('D' . $i, $row["REPO_PERIODO"]);
-    $objSheet->setCellValue('E' . $i, $row["TIPOTEC"]);
-    $objSheet->setCellValue('F' . $i, $row["CONTEC"]);
-    $objSheet->setCellValue('G' . $i, $row["TIPOIDPACIENTE"]);
-    $objSheet->setCellValue('H' . $i, $row["NOIDPACIENTE"]);
-    $objSheet->setCellValue('I' . $i, $row["NOENTREGA"]);
-    $objSheet->setCellValue('J' . $i, $row["NOSUBENTREGA"]);
-    $objSheet->setCellValue('K' . $i, $row["TIPOIDPROV"]);
-    $objSheet->setCellValue('L' . $i, $row["NOIDPROV"]);
-    $objSheet->setCellValue('M' . $i, $row["CODMUNENT"]);
-    $objSheet->setCellValue('N' . $i, $row["FECMAXENT"]);
-    $objSheet->setCellValue('O' . $i, $row["CANTTOTAENTREGAR"]);
+    $objSheet->setCellValue('D' . $i, $row["TIPOTEC"]);
+    $objSheet->setCellValue('E' . $i, $row["CONTEC"]);
+    $objSheet->setCellValue('F' . $i, $row["TIPOIDPACIENTE"]);
+    $objSheet->setCellValue('G' . $i, $row["NOIDPACIENTE"]);
+    $objSheet->setCellValue('H' . $i, $row["NOENTREGA"]);
+    $objSheet->setCellValue('I' . $i, $row["NOSUBENTREGA"]);
+    $objSheet->setCellValue('J' . $i, $row["TIPOIDPROV"]);
+    $objSheet->setCellValue('K' . $i, $row["NOIDPROV"]);
+    $objSheet->setCellValue('L' . $i, $row["CODMUNENT"]);
+    $objSheet->setCellValue('M' . $i, $row["FECMAXENT"]);
+    $objSheet->setCellValue('N' . $i, $row["CANTTOTAENTREGAR"]);
     $DIRPACIENTE = utf8_encode($row["DIRPACIENTE"]);
-    $objSheet->setCellValue('P' . $i, $DIRPACIENTE);
+    $objSheet->setCellValue('O' . $i, $DIRPACIENTE);
     $CODSERTECAENTREGAR = utf8_encode($row["CODSERTECAENTREGAR"]);
-    $objSheet->setCellValue('Q' . $i, $CODSERTECAENTREGAR);
+    $objSheet->setCellValue('P' . $i, $CODSERTECAENTREGAR);
+    $objSheet->setCellValue('Q' . $i, $row["NOIDEPS"]);
+    $objSheet->setCellValue('R' . $i, $row["CODEPS"]);
+    $objSheet->setCellValue('S' . $i, $row["FECDIRECCIONAMIENTO"]);
+    $objSheet->setCellValue('T' . $i, $row["ESTDIRECCIONAMIENTO"]);
+    $objSheet->setCellValue('U' . $i, $row["FECANULACION"]);
+    $objSheet->setCellValue('V' . $i, $row["REPO_PERIODO"]);
     /*
     $DESC_TIPOTRANSC = utf8_encode($row["DESC_TIPOTRANSC"]);
     $objSheet->setCellValue('AU' . $i, $DESC_TIPOTRANSC);

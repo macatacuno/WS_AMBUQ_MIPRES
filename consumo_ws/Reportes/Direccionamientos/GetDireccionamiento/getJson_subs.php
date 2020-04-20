@@ -69,8 +69,14 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $cont_dir = $cont_dir + 1;
                // echo "<br>--------Direccionamiento #$cont_dir ";
 
-                $fecha_FecMaxEnt_oracle = date("d/m/Y", strtotime($clave["FecMaxEnt"])); //formato originar "y/m/d"
-                /////Insertar prescripcion (Inicio)
+               $fecha_FecMaxEnt_oracle = date("d/m/Y", strtotime($clave["FecMaxEnt"])); //formato originar "y/m/d"
+               $FecDireccionamiento_oracle = date("d/m/Y H:i:s", strtotime($clave["FecDireccionamiento"])); //formato originar "y/m/d"
+               $FecAnulacion_oracle="";
+               if($clave["FecAnulacion"]!=''){
+                $FecAnulacion_oracle = date("d/m/Y h:m", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
+               
+               }
+               /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
                     REPO_SERV_ID,
                     REPO_PERIODO,
@@ -90,7 +96,12 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     FECMAXENT,
                     CANTTOTAENTREGAR,
                     DIRPACIENTE,
-                    CODSERTECAENTREGAR
+                    CODSERTECAENTREGAR,
+                    NOIDEPS,
+                    CODEPS,
+                    FECDIRECCIONAMIENTO,
+                    ESTDIRECCIONAMIENTO,
+                    FECANULACION
                   )
                   VALUES
                   (
@@ -112,7 +123,12 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $fecha_FecMaxEnt_oracle . "',
                     '" . $clave["CantTotAEntregar"] . "',
                     '" . $clave["DirPaciente"] . "',
-                    '" . $clave["CodSerTecAEntregar"] . "'
+                    '" . $clave["CodSerTecAEntregar"] . "',
+                    " . $clave["NoIDEPS"] . ",
+                    '" . $clave["CodEPS"] . "',
+                    '" . $FecDireccionamiento_oracle . "',
+                    " . $clave["EstDireccionamiento"] . ",
+                    '" . $FecAnulacion_oracle . "'
                   )";
                 //echo "<br>sql: $sql_exc";
                 $st = oci_parse($conn_oracle, $sql_exc);
