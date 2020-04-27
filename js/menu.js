@@ -38,6 +38,21 @@ function cargarNumDirecXFecha() {
       })
 
 }
+function cargarNumDirecXpaciente() {
+      $('#contenido_principal').load('./consumo_ws/Reportes/Direccionamientos/GetDireccionamientoPorPaciente/vistaDireccionamiento.html');
+      jQuery.get("./menu.php", function (resul) {
+            $("#div_menu").html(resul);
+            $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
+
+            $("#li_open_sumi").addClass("menu-open");//agrega la clase active al item seleccionado
+            $("#li_open_sumi_numero_direc").addClass("menu-open");//agrega la clase active al item seleccionado
+
+            $("#a_active_sumi").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_numero_direc").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_numero_direc_x_paciente").addClass("active");//agrega la clase active al item seleccionado
+      })
+
+}
 
 function cargarNumDirecXNoPrescripcion() {
       $('#contenido_principal').load('./vistas/pagina_en_construccion.html');

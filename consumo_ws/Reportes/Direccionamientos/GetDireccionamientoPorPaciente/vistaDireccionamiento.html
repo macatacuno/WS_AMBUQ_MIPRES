@@ -1,0 +1,212 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Direccionamiento por paciente</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!--------------------------------Estructura del formulario de busqueda----------------------------------------------->
+
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Envío de direccionamiento</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" name="formulario" method="post" target="_blank"
+                            action="consumo_ws/envios/Direccionamiento/envio_put.php">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label for="NoPrescripcion" class="col-md-12 control-label">Número de
+                                                prescripción(NoPrescripcion)</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" id="NoPrescripcion" name="NoPrescripcion" value=""
+                                                    placeholder="Ingresar número" class="form-control">
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /col-md-4 -->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="NoIDPaciente" class="col-md-12 control-label">Número de
+                                                Documento</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" id="NoIDPaciente" name="NoIDPaciente" placeholder=""
+                                                    class="form-control limpiar">
+                                            </div>
+                                        </div>
+                                    </div><!-- /col-md-4 -->
+
+                                </div> <!-- row -->
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-sm-10"> </div>
+                                    <div class="col-sm-2">
+                                        <center>
+                                            <button type="button" id="btn_buscar_direc" onclick="buscar_direc()"
+                                                class="btn btn-success">Buscar</button>
+                                        </center>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                        <!--<textarea name="textarea" id="textarea" rows="10" cols="50"></textarea>-->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+                <!----------------------------Estrutura de la tabla ------------------------------------------------------------------------>
+                <div class="col-md-12">
+
+                    <table  class="table display AllDataTables">
+                        
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>iddireccionamiento</th>
+                                <th>servicio a entregar</th>
+                                <th>Nit del Proveedor</th>
+                                <th>Fecha de Direccionamiento</th>
+                                <th>Estado del Direccionamiento</th>
+                                <th>Fecha de Anulacion</th>
+                                <th>Número de prescripción</th>
+                                <th>Tipo de documento</th>
+                                <th>Número de Documento</th>
+                                <th>Tipo de tecnología</th>
+                                <th>Conteo de tecnología</th>
+                                <th>Número de Entrega</th>
+                                <th>Codigo de la EPS</th>
+                            </tr>
+                        </thead>
+                       
+                        <tbody id="contenido_tabla">
+                           <!--  <tr>
+                                <td>22383405</td>
+                                <td>21661791</td>
+                                <td>[BISOPROLOL FUMARATO] 2,5mg/1U</td>
+                                <td>816001182</td>
+                                <td>12/03/20 03:13:00 PM</td>
+                                <td>Anulado</td>
+                                <td>12/03/20 03:27:00 PM</td>
+                                <td>20190104182009821673</td>
+                                <td>CC</td>
+                                <td>802449</td>
+                                <td>MEDICAMENTO</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>ESS076</td>
+                            </tr>
+
+                            <tr>
+                                <td>22396513</td>
+                                <td>21674427</td>
+                                <td>[BISOPROLOL FUMARATO] 2,5mg/1U</td>
+                                <td>816001182</td>
+                                <td>12/03/20 04:22:00 PM</td>
+                                <td>Anulado</td>
+                                <td>12/03/20 04:23:00 PM</td>
+                                <td>20190104182009821673</td>
+                                <td>CC</td>
+                                <td>802449</td>
+                                <td>MEDICAMENTO</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>ESS076</td>
+                            </tr>
+
+                            <tr>
+                                <td>22394342</td>
+                                <td>21672325</td>
+                                <td>[BISOPROLOL FUMARATO] 2,5mg/1U</td>
+                                <td>816001182</td>
+                                <td>12/03/20 04:08:00 PM</td>
+                                <td>Anulado</td>
+                                <td>12/03/20 04:21:00 PM</td>
+                                <td>20190104182009821673</td>
+                                <td>CC</td>
+                                <td>802449</td>
+                                <td>MEDICAMENTO</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>ESS076</td>
+                            </tr>
+
+                            <tr>
+                                <td>21472343</td>
+                                <td>20785434</td>
+                                <td>[BISOPROLOL FUMARATO] 2,5mg/1U</td>
+                                <td>816001182</td>
+                                <td>28/02/20 11:09:00 AM</td>
+                                <td>Anulado</td>
+                                <td>28/02/20 11:11:00 AM</td>
+                                <td>20190104182009821673</td>
+                                <td>CC</td>
+                                <td>802449</td>
+                                <td>MEDICAMENTO</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>ESS076</td>
+                            </tr>
+ -->
+
+                        </tbody>
+
+                   
+                    </table>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+        <br>
+    </section>
+    <script>
+        $(document).ready(function () {
+            $('.AllDataTables').DataTable({
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+        });
+    </script>

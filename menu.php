@@ -102,6 +102,14 @@
                       </p>
                     </a>
                   </li>
+                <li class="nav-item">
+                    <a href="#" id="a_active_sumi_numero_direc_x_paciente" class="nav-link" onclick="cargarNumDirecXpaciente();">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Consultar por paciente
+                        
+                      </p>
+                    </a>
+                  </li>
                  <!--   <li class="nav-item">
                     <a href="#" id="a_active_sumi_numero_direc_x_numero_presc" class="nav-link" onclick="cargarNumDirecXNoPrescripcion();">
                       <i class="far fa-dot-circle nav-icon"></i>

@@ -46,6 +46,8 @@
   <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
@@ -56,6 +58,10 @@
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+
+
 
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
   <!--*******************Sección para cargar los archivos css de la plantilla (Fin)**********************-->
@@ -122,12 +128,17 @@
   <script src="plugins/summernote/summernote-bs4.min.js"></script>
   <!-- overlayScrollbars -->
   <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <!-- DataTables -->
+  <script src="plugins/datatables/jquery.dataTables.js"></script>
+  <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.js"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="dist/js/pages/dashboard.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="dist/js/demo.js"></script>
+
+
 
   <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
   <!--*******************Sección para cargar los archivos js de la plantilla (Fin)**********************-->
@@ -141,6 +152,7 @@
   <script src="js/menu.js?241"></script>
   <script src="js/notificaciones.js?321"></script>
   <script src="js/direccionamiento.js?123"></script>
+  <script src="js/DireccionamientoXpaciente.js"></script>
   <script>
     //Cargar procedieintos iniciales
     cargarPanel();
