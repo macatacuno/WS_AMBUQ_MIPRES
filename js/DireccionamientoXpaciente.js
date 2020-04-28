@@ -4,7 +4,7 @@ function buscar_direc() {
     //Cargar la informacion           
     val_NoPrescripcion = $('#NoPrescripcion').val();
     val_NoIDPaciente = $('#NoIDPaciente').val();
-
+    $("#btn_buscar_direc").attr("disabled", true);
     $.ajax({
         url: './consumo_ws/Reportes/Direccionamientos/GetDireccionamientoPorPaciente/consultar_direc.php',
         type: "POST",
@@ -15,23 +15,26 @@ function buscar_direc() {
         }
     })
         .done(function (tabla) {
-            if(tabla!=''){
+            if (tabla != '') {
                 $("#contenido_tabla").html(tabla);
                 agregar_paginacion_datatable();
-            }else{
+            } else {
                 alert("Debe llenar alguno de los dos campos de busqueda");
             }
 
+            $("#btn_buscar_direc").removeAttr('disabled');
         })
         .fail(function (tabla) {
+            $("#btn_buscar_direc").removeAttr('disabled');
             alert("error:" + tabla);
+
         });
 
 
 }
 
-function agregar_paginacion_datatable(){
-    
+function agregar_paginacion_datatable() {
+
     $('.AllDataTables').DataTable({
         language: {
             "sProcessing": "Procesando...",
