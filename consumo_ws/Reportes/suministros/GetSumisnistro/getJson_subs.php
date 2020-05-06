@@ -8,9 +8,9 @@ include('../../../../conexcion_php_oracle.php');
 $conn_oracle = conectar_oracle(); //funcion para abir la conexion con QAS
 
 /**********************Variables generales*******************************************/
-$tipo_get = "contributivo";
-$tipo_id = 1; //contributivo
-$servicio_id = 13; // Se asigna el codigo del servicio GetDirecionamiento
+$tipo_get = "subsidiado";
+$tipo_id = 2; //subsidiado
+$servicio_id = 14; // Se asigna el codigo del servicio GetSumisnistro
 
 /**********************Obtener los datos para armar la URL***************************/
 $url_bd = obtener_datos_url("URL", $servicio_id, $conn_oracle);
@@ -26,8 +26,10 @@ $token_temporal = obtener_datos_token_nit("TOKEN_TEMPORAL", $tipo_id, $conn_orac
 $token_temporal = actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $token, $token_temporal);
 
 /**********************Cargar Encabezado**********************************************/
+
 $periodo_inicial = "19-01-01";
 $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
+
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
 
 /********************************************************************************************/
@@ -67,80 +69,88 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $cont_dir = 0;
             foreach ($json_array as $clave) {
                 $cont_dir = $cont_dir + 1;
-               // echo "<br>--------Direccionamiento #$cont_dir ";
+                // echo "<br>--------Direccionamiento #$cont_dir ";
 
-               $fecha_FecMaxEnt_oracle = date("d/m/Y", strtotime($clave["FecMaxEnt"])); //formato originar "y/m/d"
-               $FecDireccionamiento_oracle = date("d/m/Y H:i:s", strtotime($clave["FecDireccionamiento"])); //formato originar "y/m/d"
-               $FecAnulacion_oracle="";
-               if($clave["FecAnulacion"]!=''){
-                $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
-               
-               }
-               /////Insertar prescripcion (Inicio)
-                $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
-                    REPO_SERV_ID,
+                $FecSuministro_oracle = date("d/m/Y", strtotime($clave["FecSuministro"])); //formato originar "y/m/d"
+                $FecAnulacion_oracle = "";
+                if ($clave["FecAnulacion"] != '') {
+                    $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
+
+                }
+                /*$ValorEntregado = $clave["ValorEntregado"];
+                if ($ValorEntregado == '') {
+                    $ValorEntregado = 'null';
+                }*/
+                /*
+                $NoEntrega = $clave["NoEntrega"];
+                if ($NoEntrega == '') {
+                    $NoEntrega = 'null';
+                }*/
+                /////Insertar prescripcion (Inicio)
+                $sql_exc = "INSERT INTO WEBSERV_SUMINISTROS
+                  (
                     REPO_PERIODO,
+                    REPO_SERV_ID,
                     REPO_TIRE_ID,
                     ID,
-                    IDDIRECCIONAMIENTO,
+                    IDSUMINISTRO,
                     NOPRESCRIPCION,
                     TIPOTEC,
                     CONTEC,
                     TIPOIDPACIENTE,
                     NOIDPACIENTE,
                     NOENTREGA,
-                    NOSUBENTREGA,
-                    TIPOIDPROV,
-                    NOIDPROV,
-                    CODMUNENT,
-                    FECMAXENT,
-                    CANTTOTAENTREGAR,
-                    DIRPACIENTE,
-                    CODSERTECAENTREGAR,
-                    NOIDEPS,
-                    CODEPS,
-                    FECDIRECCIONAMIENTO,
-                    ESTDIRECCIONAMIENTO,
+                    ULTENTREGA,
+                    ENTREGACOMPLETA,
+                    CAUSANOENTREGA,
+                    NOPRESCRIPCIONASOCIADA,
+                    CONTECASOCIADA,
+                    CANTTOTENTREGADA,
+                    NOLOTE,
+                    VALORENTREGADO,
+                    FECSUMINISTRO,
+                    ESTSUMINISTRO,
                     FECANULACION
                   )
                   VALUES
                   (
-                    " . $servicio_id. ",
                     '" . $fecha_oracle . "',
-                    " . $tipo_id . ",
-                    " . $clave["ID"] . ",
-                    " . $clave["IDDireccionamiento"] . ",
+                    '" . $servicio_id . "',
+                    '" . $tipo_id . "',
+                    '" . $clave["ID"] . "',
+                    '" . $clave["IDSuministro"] . "',
                     '" . $clave["NoPrescripcion"] . "',
                     '" . $clave["TipoTec"] . "',
-                    " . $clave["ConTec"] . ",
+                    '" . $clave["ConTec"] . "',
                     '" . $clave["TipoIDPaciente"] . "',
                     '" . $clave["NoIDPaciente"] . "',
-                    " . $clave["NoEntrega"] . ",
-                    " . $clave["NoSubEntrega"] . ",
-                    '" . $clave["TipoIDProv"] . "',
-                    '" . $clave["NoIDProv"] . "',
-                    '" . $clave["CodMunEnt"] . "',
-                    '" . $fecha_FecMaxEnt_oracle . "',
-                    '" . $clave["CantTotAEntregar"] . "',
-                    '" . $clave["DirPaciente"] . "',
-                    '" . $clave["CodSerTecAEntregar"] . "',
-                    '" . $clave["NoIDEPS"] . "',
-                    '" . $clave["CodEPS"] . "',
-                    '" . $FecDireccionamiento_oracle . "',
-                    " . $clave["EstDireccionamiento"] . ",
+                    '" .  $clave["NoEntrega"]  . "',
+                    '" . $clave["UltEntrega"] . "',
+                    '" . $clave["EntregaCompleta"] . "',
+                    '" . $clave["CausaNoEntrega"] . "',
+                    '" . $clave["NoPrescripcionAsociada"] . "',
+                    '" . $clave["ConTecAsociada"] . "',
+                    '" . $clave["CantTotEntregada"] . "',
+                    '" . $clave["NoLote"] . "',
+                    '" . $clave["ValorEntregado"] . "',
+                    '" . $FecSuministro_oracle . "',
+                    '" . $clave["EstSuministro"] . "',
                     '" . $FecAnulacion_oracle . "'
                   )";
-               // echo "<br>sql: $sql_exc";
+                // echo "<br>sql: $sql_exc";
                 $st = oci_parse($conn_oracle, $sql_exc);
                 $result = oci_execute($st);
                 oci_free_statement($st);
                 if ($result) {
-                   // echo  "<br>Insercion Correcta ";
+                    // echo  "<br>Insercion Correcta ";
                 } else {
-                    echo  "<br>Insercion Incorrecta en el direccionamiento #" . $clave["IDDireccionamiento"];
+                    echo  "<br>---------------------------------------------------------------------
+                    <br>Insercion Incorrecta en el direccionamiento #" . $clave["IDSuministro"];
+                    echo "<br>$sql_exc<br>
+                    ---------------------------------------------------------------------------------<br>";
                 }
             }
-            echo "<br>--------Cantidad de direccionamientos insertados: $cont_dir ";
+            echo "<br>--------Cantidad de suministros insertados: $cont_dir ";
         }
     }
 }

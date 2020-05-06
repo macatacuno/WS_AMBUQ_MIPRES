@@ -209,6 +209,30 @@
                   </li>-->
                 </ul>
               </li>
+
+              
+              <li id="li_open_sumi_suministro" class="nav-item has-treeview">
+                <a href="#" id="a_active_sumi_suministro" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p >
+                    Suministros
+                    <!--Nivel 2-->
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class=" nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#" id="a_active_sumi_suministro_x_fecha" class="nav-link" onclick="cargarsuministroXFecha();">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p >Consultar
+                        <!--Nivel 3-->
+                      </p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+
             </ul>
           </li>
 

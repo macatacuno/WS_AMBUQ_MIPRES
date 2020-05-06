@@ -1979,7 +1979,7 @@ $objXLS->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
 header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
 //header('Content-Type: application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename=Reporte " . $regimen . " " . $periodo_inicial . " - " . $periodo_final . ".xlsx");
+header("Content-Disposition: attachment;filename=Prescripciones " . $regimen . " " . $periodo_inicial . " - " . $periodo_final . ".xlsx");
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($objXLS, 'Excel2007');
 $objWriter->save('php://output');

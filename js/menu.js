@@ -201,6 +201,24 @@ function cargarEntregaXPacienteFecha() {
       })
 }
 
+//////////////////////////////////Suministros///////////////////////////////////////////////////////////
+function cargarsuministroXFecha() {
+      //$('#contenido_principal').load('./vistas/pagina_en_construccion.html');
+      $('#contenido_principal').load('./consumo_ws/reportes/suministros/GetSumisnistro/vistaSuministros.html');
+      jQuery.get("./menu.php", function (resul) {
+            $("#div_menu").html(resul);
+            $(".nav-link").removeClass("active");//elimina la clase active de cualquir item que la tenga       
+
+            $("#li_open_sumi").addClass("menu-open");//agrega la clase active al item seleccionado
+            $("#li_open_sumi_suministro").addClass("menu-open");//agrega la clase active al item seleccionado
+
+            $("#a_active_sumi").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_suministro").addClass("active");//agrega la clase active al item seleccionado
+            $("#a_active_sumi_suministro_x_fecha").addClass("active");//agrega la clase active al item seleccionado
+      })
+}
+
+
 /**********************************************************************************************************/
 ///////////////////////////////////WSPRESCRIPCIÓN///////////////////////////////////////////////////////////
 /**********************************************************************************************************/

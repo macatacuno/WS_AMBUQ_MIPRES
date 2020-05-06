@@ -11,7 +11,6 @@ function buscar_direc() {
         data: {
             NoPrescripcion: val_NoPrescripcion,
             NoIDPaciente: val_NoIDPaciente
-
         }
     })
         .done(function (tabla) {
@@ -29,8 +28,6 @@ function buscar_direc() {
             alert("error:" + tabla);
 
         });
-
-
 }
 
 function agregar_paginacion_datatable() {

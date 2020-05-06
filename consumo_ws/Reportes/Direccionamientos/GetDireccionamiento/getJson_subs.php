@@ -26,7 +26,7 @@ $token_temporal = obtener_datos_token_nit("TOKEN_TEMPORAL", $tipo_id, $conn_orac
 $token_temporal = actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $token, $token_temporal);
 
 /**********************Cargar Encabezado**********************************************/
-$periodo_inicial = "20-01-01";
+$periodo_inicial = "19-01-01";
 $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
 

@@ -67,7 +67,7 @@ if ($resultado = $conn->query($consulta)) {
 $periodo_inicial ="17-01-01"; 
 $periodo_final =(string)date("y-m-d",strtotime(date('y-m-d')."- 1 day")); 
 */
-$periodo_inicial = "19-10-29";
+$periodo_inicial = "19-01-01";
 $periodo_final = $periodo_inicial;
 
 
