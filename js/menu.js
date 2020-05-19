@@ -169,6 +169,7 @@ function cargarEntregaXFecha() {
 
 }
 
+
 function cargarEntregaXNoPrescripcion() {
       $('#contenido_principal').load('./vistas/pagina_en_construccion.html');
       //$('#contenido_principal').load('./consumo_ws/reportes/ReporteEntrega/GetReporteEntregaXNoPrescripcion/ReporteEntregaXNoPrescripcion.html');

@@ -1374,6 +1374,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JUSTNOPBS, $JUSTNOPBS_busc_ini) + strlen($JUSTNOPBS_busc_ini);
               $posPresFinal = strpos($cadena_JUSTNOPBS, $JUSTNOPBS_busc_fin);
               $JUSTNOPBS = substr($cadena_JUSTNOPBS, $posPresInicial, $posPresFinal - $posPresInicial);
+              $JUSTNOPBS = str_replace("'", "", $JUSTNOPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JUSTNOPBS = str_replace('"', "'", $JUSTNOPBS);
               //echo "<br> JUSTNOPBS: " . $JUSTNOPBS;
 
@@ -2109,6 +2110,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
+              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
@@ -2318,6 +2320,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
+              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
@@ -2706,6 +2709,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
+              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //Dosis
@@ -3134,6 +3138,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
+              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
