@@ -67,16 +67,19 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $cont_dir = 0;
             foreach ($json_array as $clave) {
                 $cont_dir = $cont_dir + 1;
-               // echo "<br>--------Direccionamiento #$cont_dir ";
+                // echo "<br>--------Direccionamiento #$cont_dir ";
 
-               $fecha_FecMaxEnt_oracle = date("d/m/Y", strtotime($clave["FecMaxEnt"])); //formato originar "y/m/d"
-               $FecDireccionamiento_oracle = date("d/m/Y H:i:s", strtotime($clave["FecDireccionamiento"])); //formato originar "y/m/d"
-               $FecAnulacion_oracle="";
-               if($clave["FecAnulacion"]!=''){
-                $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
-               
-               }
-               /////Insertar prescripcion (Inicio)
+                $fecha_FecMaxEnt_oracle = date("d/m/Y", strtotime($clave["FecMaxEnt"])); //formato originar "y/m/d"
+                $FecDireccionamiento_oracle = date("d/m/Y H:i:s", strtotime($clave["FecDireccionamiento"])); //formato originar "y/m/d"
+                $FecAnulacion_oracle = "";
+                if ($clave["FecAnulacion"] != '') {
+                    $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
+
+                }
+
+
+                $CantTotAEntregar = str_replace("'", "", $clave["CantTotAEntregar"]);
+                /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
                     REPO_SERV_ID,
                     REPO_PERIODO,
@@ -105,7 +108,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                   )
                   VALUES
                   (
-                    " . $servicio_id. ",
+                    " . $servicio_id . ",
                     '" . $fecha_oracle . "',
                     " . $tipo_id . ",
                     " . $clave["ID"] . ",
@@ -121,7 +124,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $clave["NoIDProv"] . "',
                     '" . $clave["CodMunEnt"] . "',
                     '" . $fecha_FecMaxEnt_oracle . "',
-                    '" . $clave["CantTotAEntregar"] . "',
+                    '" . $CantTotAEntregar . "',
                     '" . $clave["DirPaciente"] . "',
                     '" . $clave["CodSerTecAEntregar"] . "',
                     '" . $clave["NoIDEPS"] . "',
@@ -135,7 +138,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $result = oci_execute($st);
                 oci_free_statement($st);
                 if ($result) {
-                   // echo  "<br>Insercion Correcta ";
+                    // echo  "<br>Insercion Correcta ";
                 } else {
                     echo  "<br>Insercion Incorrecta en el direccionamiento #" . $clave["IDDireccionamiento"];
                 }

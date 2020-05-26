@@ -76,6 +76,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
                
                }
+
+               
+               //$CantTotAEntregar = str_replace("'", "", $clave["CantTotAEntregar"]);
                /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
                     REPO_SERV_ID,

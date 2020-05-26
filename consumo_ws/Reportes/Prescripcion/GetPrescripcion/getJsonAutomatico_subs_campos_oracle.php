@@ -106,10 +106,6 @@ $periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 
 
-
-
-
-
 //$periodo_final =   (string)date('y-m-d');
 
 
@@ -410,7 +406,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           //echo "<br><br>-------------------------------------------------------------------------prescripcion";
 
           if ($cadena_presc != '') {
-            //echo "<br> cadena_presc: " . $cadena_presc;
+            //echo "<br> cadena_presc: " . $cadena_presc."<br>";
             //NoPrescripcion
             $NoPrescripcion_busc_ini = '"NoPrescripcion":';
             $NoPrescripcion_busc_fin = ',"FPrescripcion"';
@@ -597,12 +593,22 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //echo "<br> CodAmbAte: " . $CodAmbAte;
             //RefAmbAte
             $RefAmbAte_busc_ini = '"RefAmbAte":';
-            $RefAmbAte_busc_fin = ',"EnfHuerfana"';
+            $RefAmbAte_busc_fin = ',"PacCovid19"';
             $cadena_NoPrescripcion = $subCadenaPresGene;
             $posPresInicial = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_ini) + strlen($RefAmbAte_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_fin);
             $RefAmbAte = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
             //echo "<br> RefAmbAte: " . $RefAmbAte;
+            
+            //PacCovid19
+            $PacCovid19_busc_ini = '"PacCovid19":';
+            $PacCovid19_busc_fin = ',"EnfHuerfana"';
+            $cadena_NoPrescripcion = $subCadenaPresGene;
+            $posPresInicial = strpos($cadena_NoPrescripcion, $PacCovid19_busc_ini) + strlen($PacCovid19_busc_ini);
+            $posPresFinal = strpos($cadena_NoPrescripcion, $PacCovid19_busc_fin);
+            $PacCovid19 = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
+            //echo "<br> PacCovid19: " . $PacCovid19;
+
             //EnfHuerfana
             $EnfHuerfana_busc_ini = '"EnfHuerfana":';
             $EnfHuerfana_busc_fin = ',"CodEnfHuerfana"';
@@ -831,6 +837,8 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //oci_bind_by_name($st, ":PAProfS", $PAProfS);
 
             //$SAProfS;
+            
+            $SAProfS = str_replace("'", " ", $SAProfS);
             $SAProfS = str_replace('"', "'", $SAProfS);
             /* if ($SAProfS == "null") {
               $SAProfS = '';
@@ -899,6 +907,14 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $RefAmbAte = '';
             }*/
             //oci_bind_by_name($st, ":RefAmbAte", $RefAmbAte);
+            
+
+            //$PacCovid19;
+            $PacCovid19 = str_replace('"', "'", $PacCovid19);
+            /* if ($PacCovid19 == "null") {
+              $PacCovid19 = '';
+            }*/
+            //oci_bind_by_name($st, ":PacCovid19", $PacCovid19);
 
             //$EnfHuerfana;
             $EnfHuerfana = str_replace('"', "'", $EnfHuerfana);
@@ -1003,20 +1019,10 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
             /////Insertar prescripcion (Inicio)
             $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-            (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-          )  VALUES (" . $id_pres . "," . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
+            (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,PACCOVID19,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
+          )  VALUES (" . $id_pres . "," . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $PacCovid19 . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
 
-            /*   $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-            (ID_PRES,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-          )  VALUES (SEQ_WEBSERV_PRES_PRES.nextval,:noPrescripcion,:FPrescripcion, :HPrescripcion, :CodHabIPS,:TipoIDIPS, :NroIDIPS, :CodDANEMunIPS, :DirSedeIPS, :TelSedeIPS, :TipoIDProf, :NumIDProf, :PNProfS, :SNProfS, :PAProfS, :SAProfS, :RegProfS, :TipoIDPaciente, :NroIDPaciente, :PNPaciente, :SNPaciente, :PAPaciente, :SAPaciente,:CodAmbAte, :RefAmbAte,:EnfHuerfana, :CodEnfHuerfana, :EnfHuerfanaDX, :CodDxPpal, :CodDxRel1, :CodDxRel2, :SopNutricional, :CodEPS, :TipoIDMadrePaciente, :NroIDMadrePaciente, :TipoTransc, :TipoIDDonanteVivo, :NroIDDonanteVivo,:EstPres)";*/
-
-            /*
-          $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-          (ID_PRES,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-         )  VALUES (SEQ_WEBSERV_PRES_PRES.nextval,concat('201941283780012888',SEQ_WEBSERV_PRES_PRES.nextval),:FPRESCRIPCION, :HPRESCRIPCION, '080010003701', 'NI', '890102768', '08001', 'CARRERA 48 # 70-38', '3091999', 'CC', '8755608', 'SAUL', 'ALFREDO', 'CHRISTIANSEN', 'MARTELO', '1572', 'CC', '3754775', 'HERNANDO', '', 'ESTRADA', 'GOMEZ',22, null,0, null, null, 'R579', null, null, null, 'ESS076', null, null, null, null, null,4)";
-             */
-
-            //echo $sql_exc;
+           // echo "<br><br>prescripcion general:<br>$sql_exc<br>";
 
             $st = oci_parse($conn_oracle, $sql_exc);
 
@@ -2860,7 +2866,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NoPrescAso, $NoPrescAso_busc_fin);
               $NoPrescAso = substr($cadena_NoPrescAso, $posPresInicial, $posPresFinal - $posPresInicial);
               $NoPrescAso = str_replace('"', "'", $NoPrescAso);
-              // echo "<br> NoPrescAso: " . $NoPrescAso;
+               echo "<br> NoPrescAso: " . $NoPrescAso;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -2869,16 +2875,16 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_EstJM, $EstJM_busc_fin);
               $EstJM = substr($cadena_EstJM, $posPresInicial, $posPresFinal - $posPresInicial);
               $EstJM = str_replace('"', "'", $EstJM);
-              //echo "<br> EstJM: " . $EstJM;
+              echo "<br> EstJM: " . $EstJM;
 
 
 
               /////Insertar productos nutricionales (Inicio)
               $sql_exc = "INSERT INTO  WEBSERV_PRES_PROD_NUTR
               (ID_PRNU,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,PRONUTUTILIZADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,CAUSAS5,PRONUTDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,RZNCAUSAS53,DESCRZN53,RZNCAUSAS54,DESCRZN54,DXENFHUER,DXVIH,DXCAPAL,DXENFRCEV,DXDESPRO,TIPPPRONUT,DESCPRODNUTR,CODFORMA,CODVIAADMON,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,NOPRESCASO,ESTJM)  VALUES 
-              (SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $RznCausaS53 . "," . $DescRzn53 . "," . $RznCausaS54 . "," . $DescRzn54 . "," . $DXEnfHuer . "," . $DXVIH . "," . $DXCaPal . "," . $DXEnfRCEV . "," . $DXDesPro . "," . $TippProNut . "," . $DescProdNutr . "," . $CodForma . "," . $CodViaAdmon . "," . $JustNoPBS . "," . $Dosis . "," . $DosisUM . "," . $NoFAdmon . "," . $CodFreAdmon . "," . $IndEsp .  "," . $CanTrat . "," . $DurTrat . "," . $CantTotalF . "," . $UFCantTotal . "," . $IndRec . "," . $NoPrescAso . "," . $EstJM . ")";
+              (SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $RznCausaS53 . "," . $DescRzn53 . "," . $RznCausaS54 . "," . $DescRzn54 . "," . $DXEnfHuer . "," . $DXVIH . "," . $DXCaPal . "," . $DXEnfRCEV . "," . $DXDesPro . "," . $TippProNut . "," . $DescProdNutr . "," . $CodForma . "," . $CodViaAdmon . "," . $JustNoPBS . "," . $Dosis . "," . $DosisUM . "," . $NoFAdmon . "," . $CodFreAdmon . "," . $IndEsp .  "," . $CanTrat . "," . $DurTrat . "," . $CantTotalF . "," . $UFCantTotal . "," . $IndRec . "," . $NoPrescAso . ",'" . $EstJM . "')";
 
-              //echo "<br> sql_exc: $sql_exc<br>";
+              echo "<br> sql_exc: $sql_exc<br>"; 
 
 
               $st_pr_nu = oci_parse($conn_oracle, $sql_exc);

@@ -216,11 +216,10 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         echo "<br>Insercion Incorrecta ";
 
         /////////////////////////////////////////////////////////////////////////////////////insertar en el log de errores
-
         echo "<br>json: $json<br>";
       } else if ($json == "[]") {
-
         echo "<br>/////////////////////// Json #" . $i_Principal . " Periodo: 20" . $periodo_conteo . "<br>";
+   
         $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
         echo $sql_exc;
@@ -358,7 +357,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $subCadenaBuscadaFinal   = ',{"prescripcion"';
           //echo "<br> sub Cadena Buscada Final: " . $subCadenaBuscadaFinal;
           $cadena = $json;
-          //echo "<br>$cadena <br>";
+
           //$posInicial = strpos('cadena completa', 'Subcadena buscada','se especifica si se buscara la primera o la segunda coinsidencia (Este ultimo parametro es mejor no usarlo porque no funciona bien)');
           //$posInicial = strpos($cadena, $subCadenaBuscadaInicial,0);
           $posInicial = strpos($cadena, $subCadenaBuscadaInicial);
@@ -380,7 +379,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $array[$count_report] = $subCadenaFinal;
             $count_report++;
           }
-
+          //echo "<br>subCadenaFinal: $subCadenaFinal<br>"; //error
 
           ////////////////////////////////////////////medicamentos////////////////////////////////////////
 
@@ -412,7 +411,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           //echo "<br><br>-------------------------------------------------------------------------prescripcion";
 
           if ($cadena_presc != '') {
-            //echo "<br> cadena_presc: " . $cadena_presc;
+            //echo "<br> cadena_presc: " . $cadena_presc."<br>";
             //NoPrescripcion
             $NoPrescripcion_busc_ini = '"NoPrescripcion":';
             $NoPrescripcion_busc_fin = ',"FPrescripcion"';
@@ -599,12 +598,22 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //echo "<br> CodAmbAte: " . $CodAmbAte;
             //RefAmbAte
             $RefAmbAte_busc_ini = '"RefAmbAte":';
-            $RefAmbAte_busc_fin = ',"EnfHuerfana"';
+            $RefAmbAte_busc_fin = ',"PacCovid19"';
             $cadena_NoPrescripcion = $subCadenaPresGene;
             $posPresInicial = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_ini) + strlen($RefAmbAte_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $RefAmbAte_busc_fin);
             $RefAmbAte = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
             //echo "<br> RefAmbAte: " . $RefAmbAte;
+            
+            //PacCovid19
+            $PacCovid19_busc_ini = '"PacCovid19":';
+            $PacCovid19_busc_fin = ',"EnfHuerfana"';
+            $cadena_NoPrescripcion = $subCadenaPresGene;
+            $posPresInicial = strpos($cadena_NoPrescripcion, $PacCovid19_busc_ini) + strlen($PacCovid19_busc_ini);
+            $posPresFinal = strpos($cadena_NoPrescripcion, $PacCovid19_busc_fin);
+            $PacCovid19 = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
+            //echo "<br> PacCovid19: " . $PacCovid19;
+
             //EnfHuerfana
             $EnfHuerfana_busc_ini = '"EnfHuerfana":';
             $EnfHuerfana_busc_fin = ',"CodEnfHuerfana"';
@@ -901,6 +910,14 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $RefAmbAte = '';
             }*/
             //oci_bind_by_name($st, ":RefAmbAte", $RefAmbAte);
+            
+
+            //$PacCovid19;
+            $PacCovid19 = str_replace('"', "'", $PacCovid19);
+            /* if ($PacCovid19 == "null") {
+              $PacCovid19 = '';
+            }*/
+            //oci_bind_by_name($st, ":PacCovid19", $PacCovid19);
 
             //$EnfHuerfana;
             $EnfHuerfana = str_replace('"', "'", $EnfHuerfana);
@@ -1005,20 +1022,10 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
             /////Insertar prescripcion (Inicio)
             $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-            (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-          )  VALUES (" . $id_pres . "," . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
+            (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,PACCOVID19,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
+          )  VALUES (" . $id_pres . "," . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $PacCovid19 . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
 
-            /*   $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-            (ID_PRES,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-          )  VALUES (SEQ_WEBSERV_PRES_PRES.nextval,:noPrescripcion,:FPrescripcion, :HPrescripcion, :CodHabIPS,:TipoIDIPS, :NroIDIPS, :CodDANEMunIPS, :DirSedeIPS, :TelSedeIPS, :TipoIDProf, :NumIDProf, :PNProfS, :SNProfS, :PAProfS, :SAProfS, :RegProfS, :TipoIDPaciente, :NroIDPaciente, :PNPaciente, :SNPaciente, :PAPaciente, :SAPaciente,:CodAmbAte, :RefAmbAte,:EnfHuerfana, :CodEnfHuerfana, :EnfHuerfanaDX, :CodDxPpal, :CodDxRel1, :CodDxRel2, :SopNutricional, :CodEPS, :TipoIDMadrePaciente, :NroIDMadrePaciente, :TipoTransc, :TipoIDDonanteVivo, :NroIDDonanteVivo,:EstPres)";*/
-
-            /*
-          $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
-          (ID_PRES,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
-         )  VALUES (SEQ_WEBSERV_PRES_PRES.nextval,concat('201941283780012888',SEQ_WEBSERV_PRES_PRES.nextval),:FPRESCRIPCION, :HPRESCRIPCION, '080010003701', 'NI', '890102768', '08001', 'CARRERA 48 # 70-38', '3091999', 'CC', '8755608', 'SAUL', 'ALFREDO', 'CHRISTIANSEN', 'MARTELO', '1572', 'CC', '3754775', 'HERNANDO', '', 'ESTRADA', 'GOMEZ',22, null,0, null, null, 'R579', null, null, null, 'ESS076', null, null, null, null, null,4)";
-             */
-
-            //echo $sql_exc;
+           // echo "<br><br>prescripcion general:<br>$sql_exc<br>";
 
             $st = oci_parse($conn_oracle, $sql_exc);
 
@@ -1425,9 +1432,8 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JUSTNOPBS, $JUSTNOPBS_busc_ini) + strlen($JUSTNOPBS_busc_ini);
               $posPresFinal = strpos($cadena_JUSTNOPBS, $JUSTNOPBS_busc_fin);
               $JUSTNOPBS = substr($cadena_JUSTNOPBS, $posPresInicial, $posPresFinal - $posPresInicial);
-              $JUSTNOPBS = str_replace("'", "", $JUSTNOPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
+              $JUSTNOPBS = str_replace("'", "", $JUSTNOPBS); //Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JUSTNOPBS = str_replace('"', "'", $JUSTNOPBS);
-              //echo "<br> JUSTNOPBS: " . $JUSTNOPBS;
 
               //DOSIS
               $DOSIS_busc_ini = '"Dosis":';
@@ -1552,7 +1558,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $sql_exc = "INSERT INTO WEBSERV_PRES_MEDI 
               (ID_MEDI,ID_PRES,CONORDEN,TIPOMED,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,MEDPBSUTILIZADO,RZNCAUSAS31,DESCRZN31,RZNCAUSAS32,DESCRZN32,CAUSAS4,MEDPBSDESCARTADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,RZNCAUSAS43,DESCRZN43,RZNCAUSAS44,DESCRZN44,CAUSAS5,RZNCAUSAS5,CAUSAS6,DESCMEDPRINACT,CODFF,CODVA,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,ESTJM)
               VALUES (" . $id_medi . "," . $id_pres . "," . $CONORDEN . "," . $TIPOMED . "," . $TIPOPREST . "," . $CAUSAS1 . "," . $CAUSAS2 . "," . $CAUSAS3 . "," . $MEDPBSUTILIZADO . "," . $RZNCAUSAS31 . "," . $DESCRZN31 . "," . $RZNCAUSAS32 . "," . $DESCRZN32 . "," . $CAUSAS4 . "," . $MEDPBSDESCARTADO . "," . $RZNCAUSAS41 . "," . $DESCRZN41 . "," . $RZNCAUSAS42 . "," . $DESCRZN42 . "," . $RZNCAUSAS43 . "," . $DESCRZN43 . "," . $RZNCAUSAS44 . "," . $DESCRZN44 . "," . $CAUSAS5 . "," . $RZNCAUSAS5 . "," . $CAUSAS6 . "," . $DESCMEDPRINACT . "," . $CODFF . "," . $CODVA . "," . $JUSTNOPBS . "," . $DOSIS . "," . $DOSISUM . "," . $NOFADMON . "," . $CODFREADMON . "," . $INDESP . "," . $CANTRAT . "," . $DURTRAT . "," . $CANTTOTALF . "," . $UFCANTTOTAL . "," . $INDREC . "," . $ESTJM . ")";
-              //echo "<br><br>".$sql_exc."<br><br>";
+              //echo "<br><br>".$sql_exc."<br><br>";//descomentado
               /*
               // Armar SQL
               for ($a = 0; $a < $longitud_vector_subCadenaPresMedi; $a++) {
@@ -2153,6 +2159,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_fin);
               $CodPerDurTrat = substr($cadena_CodPerDurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
               $CodPerDurTrat = str_replace('"', "'", $CodPerDurTrat);
+
               //echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
               //JustNoPBS
               $JustNoPBS_busc_ini = '"JustNoPBS":';
@@ -2161,8 +2168,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
-              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
+              $JustNoPBS = str_replace("'", "", $JustNoPBS); //Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
+
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
               $IndRec_busc_ini = '"IndRec":';
@@ -2371,7 +2379,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
-              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
+              $JustNoPBS = str_replace("'", "", $JustNoPBS); //Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
@@ -2450,7 +2458,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
             $subcadenaProdNutrBuscadaInicial   = '{"ConOrden"';
             // //echo "<br> sub cadenaProdNutr Buscada Inicial: " . $subcadenaProdNutrBuscadaInicial;
-            $subcadenaProdNutrBuscadaFinal   = '}';
+            $subcadenaProdNutrBuscadaFinal   = '}]';
             ////echo "<br> sub cadenaProdNutr Buscada Final: " . $subcadenaProdNutrBuscadaFinal;
             $posInicial = strpos($cadenaProdNutr, $subcadenaProdNutrBuscadaInicial);
             // //echo "<br> pos Inicial: " . $posInicial;
@@ -2760,7 +2768,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
-              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
+              $JustNoPBS = str_replace("'", "", $JustNoPBS); //Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //Dosis
@@ -2834,7 +2842,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_CantTotalF, $CantTotalF_busc_fin);
               $CantTotalF = substr($cadena_CantTotalF, $posPresInicial, $posPresFinal - $posPresInicial);
               $CantTotalF = str_replace('"', "'", $CantTotalF);
-              //echo "<br> CantTotalF: " . $CantTotalF;
+              // echo "<br> CantTotalF: " . $CantTotalF;
               //UFCantTotal
               $UFCantTotal_busc_ini = '"UFCantTotal":';
               $UFCantTotal_busc_fin = ',"IndRec"';
@@ -2852,7 +2860,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
               $IndRec = str_replace('"', "'", $IndRec);
-              //echo "<br> IndRec: " . $IndRec;
+              //  echo "<br> IndRec: " . $IndRec;
               //NoPrescAso
               $NoPrescAso_busc_ini = '"NoPrescAso":';
               $NoPrescAso_busc_fin = ',"EstJM"';
@@ -2861,7 +2869,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresFinal = strpos($cadena_NoPrescAso, $NoPrescAso_busc_fin);
               $NoPrescAso = substr($cadena_NoPrescAso, $posPresInicial, $posPresFinal - $posPresInicial);
               $NoPrescAso = str_replace('"', "'", $NoPrescAso);
-              //echo "<br> NoPrescAso: " . $NoPrescAso;
+              // echo "<br> NoPrescAso: " . $NoPrescAso;
               //EstJM
               $EstJM_busc_ini = '"EstJM":';
               $EstJM_busc_fin = '}';
@@ -2879,7 +2887,8 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               (ID_PRNU,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,PRONUTUTILIZADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,CAUSAS5,PRONUTDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,RZNCAUSAS53,DESCRZN53,RZNCAUSAS54,DESCRZN54,DXENFHUER,DXVIH,DXCAPAL,DXENFRCEV,DXDESPRO,TIPPPRONUT,DESCPRODNUTR,CODFORMA,CODVIAADMON,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,NOPRESCASO,ESTJM)  VALUES 
               (SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $RznCausaS53 . "," . $DescRzn53 . "," . $RznCausaS54 . "," . $DescRzn54 . "," . $DXEnfHuer . "," . $DXVIH . "," . $DXCaPal . "," . $DXEnfRCEV . "," . $DXDesPro . "," . $TippProNut . "," . $DescProdNutr . "," . $CodForma . "," . $CodViaAdmon . "," . $JustNoPBS . "," . $Dosis . "," . $DosisUM . "," . $NoFAdmon . "," . $CodFreAdmon . "," . $IndEsp .  "," . $CanTrat . "," . $DurTrat . "," . $CantTotalF . "," . $UFCantTotal . "," . $IndRec . "," . $NoPrescAso . "," . $EstJM . ")";
 
-              //echo $sql_exc;
+              //echo "<br> sql_exc: $sql_exc<br>";
+
 
               $st_pr_nu = oci_parse($conn_oracle, $sql_exc);
 
@@ -3189,7 +3198,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_JustNoPBS, $JustNoPBS_busc_ini) + strlen($JustNoPBS_busc_ini);
               $posPresFinal = strpos($cadena_JustNoPBS, $JustNoPBS_busc_fin);
               $JustNoPBS = substr($cadena_JustNoPBS, $posPresInicial, $posPresFinal - $posPresInicial);
-              $JustNoPBS = str_replace("'", "", $JustNoPBS);//Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
+              $JustNoPBS = str_replace("'", "", $JustNoPBS); //Se eliminan todas las comillas simples que esten en la cadena que se guada en esta variable
               $JustNoPBS = str_replace('"', "'", $JustNoPBS);
               //echo "<br> JustNoPBS: " . $JustNoPBS;
               //IndRec
