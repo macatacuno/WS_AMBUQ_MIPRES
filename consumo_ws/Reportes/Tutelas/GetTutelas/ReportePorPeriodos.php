@@ -94,6 +94,7 @@ if ($periodo_final < $periodo_inicial) {
   
   DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
   DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+  DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19,
   
   DECODE(PP.ENFHUERFANA,null,'NO EXISTE',ENFHUERFANA) AS ENFHUERFANA,
   DECODE(ENFHUERFANA,0,'NO',1,'SI','NO EXISTE') as DESC_ENFHUERFANA,
@@ -104,13 +105,13 @@ if ($periodo_final < $periodo_inicial) {
   DECODE(ENFHUERFANADX,NULL,'NO EXISTE',ENFHUERFANADX) AS ENFHUERFANADX,
   DECODE(ENFHUERFANADX,0,'NO',1,'SI','NO EXISTE') as DESC_ENFHUERFANADX,
   
-  DECODE(CODDXPPAL,NULL,'NO EXISTE',CODDXPPAL) AS CODDXPPAL,--4. Lista(Prec-CIE-10)
+  DECODE(CODDXPPAL,NULL,'NO EXISTE',CODDXPPAL) AS CODDXPPAL,/*4. Lista(Prec-CIE-10)*/
   DECODE(CIE_CODDXPPAL.DESCRIPCION,NULL,'NO EXISTE',CIE_CODDXPPAL.DESCRIPCION) AS DESC_CODDXPPAL, 
   
-  DECODE(CODDXREL1,NULL,'NO EXISTE',CODDXREL1) AS CODDXREL1,--4. Lista(Prec-CIE-10)
+  DECODE(CODDXREL1,NULL,'NO EXISTE',CODDXREL1) AS CODDXREL1,/*4. Lista(Prec-CIE-10)*/
   DECODE(CIE_CODDXREL1.DESCRIPCION,NULL,'NO EXISTE',CIE_CODDXREL1.DESCRIPCION) AS DESC_CODDXREL1,
   
-  DECODE(CODDXREL2,NULL,'NO EXISTE',CODDXREL2) AS CODDXREL2,--4. Lista(Prec-CIE-10)
+  DECODE(CODDXREL2,NULL,'NO EXISTE',CODDXREL2) AS CODDXREL2,/*4. Lista(Prec-CIE-10)*/
   DECODE(CIE_CODDXREL2.DESCRIPCION,NULL,'NO EXISTE',dbms_lob.substr(CIE_CODDXREL2.DESCRIPCION)) AS DESC_CODDXREL2,
   
   DECODE(SOPNUTRICIONAL, NULL,'NO EXISTE',SOPNUTRICIONAL) SOPNUTRICIONAL,
@@ -119,7 +120,7 @@ if ($periodo_final < $periodo_inicial) {
   DECODE(TIPOIDMADREPACIENTE, NULL,'NO EXISTE',TIPOIDMADREPACIENTE) TIPOIDMADREPACIENTE,
   DECODE(NROIDMADREPACIENTE, NULL,'NO EXISTE',NROIDMADREPACIENTE) NROIDMADREPACIENTE,
   
-  DECODE(TIPOTRANSC, NULL,'NO EXISTE',TIPOTRANSC) TIPOTRANSC,--5 Lista(Presc-TipoTransc)
+  DECODE(TIPOTRANSC, NULL,'NO EXISTE',TIPOTRANSC) TIPOTRANSC,/*5 Lista(Presc-TipoTransc)*/
   DECODE(TT.DESCRIPCION,NULL,'NO EXISTE',TT.DESCRIPCION) AS DESC_TIPOTRANSC,
   
   DECODE(TIPOIDDONANTEVIVO, NULL,'NO EXISTE',TIPOIDDONANTEVIVO) TIPOIDDONANTEVIVO,
@@ -140,8 +141,8 @@ if ($periodo_final < $periodo_inicial) {
                              FROM ZZZ_BDUAHISSUB@PDBLCSTBY01)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
   LEFT JOIN Client C ON C.ClientId = NROIDPACIENTE and C.TYPEDOCUMENTID=TIPOIDPACIENTE
   LEFT join GeographicLocation gl  on c.CompanyId = gl.CompanyId and c.GeographicLocationId = gl.GeographicLocationId
-where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
-
+where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "' 
+order by REPO_PERIODO";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
 
@@ -149,7 +150,12 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
 
   $objSheet = $objXLS->createSheet();
   $objSheet = $objXLS->setActiveSheetIndex($hoja);
-  $objXLS->getActiveSheet()->setTitle("PRESC GENERAL"); // AQUI AGREGO EL NOMBRE A LA HOJA
+  $objXLS
+    ->getActiveSheet()
+    ->setTitle("PRESC GENERAL") // AQUI AGREGO EL NOMBRE A LA HOJA
+    /*->getStyle('A3')
+    ->getNumberFormat()
+    ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT)*/;
   // Agregar Informacion
   $objSheet->setCellValue('A1', 'NOPRESCRIPCION');
   $objSheet->setCellValue('B1', 'PERIODO_WEBSERVICE');
@@ -181,42 +187,45 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $objSheet->setCellValue('Z1', 'DESC_CODAMBATE');
   ///$objSheet->setCellValue('AB1', 'REFAMBATE');
   $objSheet->setCellValue('AA1', 'DESC_REFAMBATE');
+  $objSheet->setCellValue('AB1', 'PACCOVID19');
 
   //$objSheet->setCellValue('AD1', 'ENFHUERFANA');
-  $objSheet->setCellValue('AB1', 'DESC_ENFHUERFANA');
+  $objSheet->setCellValue('AC1', 'DESC_ENFHUERFANA');
   //$objSheet->setCellValue('AF1', 'CODENFHUERFANA');
-  $objSheet->setCellValue('AC1', 'DESC_CODENFHUERFANA');
+  $objSheet->setCellValue('AD1', 'DESC_CODENFHUERFANA');
   // $objSheet->setCellValue('AH1', 'ENFHUERFANADX');
-  $objSheet->setCellValue('AD1', 'DESC_ENFHUERFANADX');
+  $objSheet->setCellValue('AE1', 'DESC_ENFHUERFANADX');
   // $objSheet->setCellValue('AJ1', 'CODDXPPAL');
-  $objSheet->setCellValue('AE1', 'DESC_CODDXPPAL');
+  $objSheet->setCellValue('AF1', 'DESC_CODDXPPAL');
   // $objSheet->setCellValue('AL1', 'CODDXREL1');
-  $objSheet->setCellValue('AF1', 'DESC_CODDXREL1');
+  $objSheet->setCellValue('AG1', 'DESC_CODDXREL1');
   //$objSheet->setCellValue('AN1', 'CODDXREL2');
-  $objSheet->setCellValue('AG1', 'DESC_CODDXREL2');
-  $objSheet->setCellValue('AH1', 'SOPNUTRICIONAL'); //
+  $objSheet->setCellValue('AH1', 'DESC_CODDXREL2');
+  $objSheet->setCellValue('AI1', 'SOPNUTRICIONAL'); //
   //  $objSheet->setCellValue('AQ1', 'CODEPS'); //
-  $objSheet->setCellValue('AI1', 'DESC_CODEPS'); //
-  $objSheet->setCellValue('AJ1', 'TIPOIDMADREPACIENTE'); //
-  $objSheet->setCellValue('AK1', 'NROIDMADREPACIENTE'); //
+  $objSheet->setCellValue('AJ1', 'DESC_CODEPS'); //
+  $objSheet->setCellValue('AK1', 'TIPOIDMADREPACIENTE'); //
+  $objSheet->setCellValue('AL1', 'NROIDMADREPACIENTE'); //
   // $objSheet->setCellValue('AU1', 'TIPOTRANSC');
-  $objSheet->setCellValue('AL1', 'DESC_TIPOTRANSC');
-  $objSheet->setCellValue('AM1', 'TIPOIDDONANTEVIVO');
-  $objSheet->setCellValue('AN1', 'NROIDDONANTEVIVO');
-  $objSheet->setCellValue('AO1', 'ESTPRES');
+  $objSheet->setCellValue('AM1', 'DESC_TIPOTRANSC');
+  $objSheet->setCellValue('AN1', 'TIPOIDDONANTEVIVO');
+  $objSheet->setCellValue('AO1', 'NROIDDONANTEVIVO');
+  $objSheet->setCellValue('AP1', 'ESTPRES');
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
 
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+
+    //$objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["PERIODO_WEBSERVICE"]);
     $objSheet->setCellValue('C' . $i, $row["FPRESCRIPCION"]);
     $objSheet->setCellValue('D' . $i, $row["HPRESCRIPCION"]);
-    $objSheet->setCellValue('E' . $i, '="' . $row["CODHABIPS"] . '"');
+    $objSheet->setCellValue('E' . $i, ' ' . $row["CODHABIPS"]);
     $objSheet->setCellValue('F' . $i, $row["TIPOIDIPS"]);
     $objSheet->setCellValue('G' . $i, $row["NROIDIPS"]);
-    $objSheet->setCellValue('H' . $i, '="' . $row["CODDANEMUNIPS"] . '"');
+    $objSheet->setCellValue('H' . $i, ' ' . $row["CODDANEMUNIPS"]);
     $objSheet->setCellValue('I' . $i, $row["DIRSEDEIPS"]);
     $objSheet->setCellValue('J' . $i, $row["TELSEDEIPS"]);
     $objSheet->setCellValue('K' . $i, $row["TIPOIDPROF"]);
@@ -232,8 +241,12 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     $objSheet->setCellValue('U' . $i, $row["SNPACIENTE"]);
     $objSheet->setCellValue('V' . $i, $row["PAPACIENTE"]);
     $objSheet->setCellValue('W' . $i, $row["SAPACIENTE"]);
-    $objSheet->setCellValue('X' . $i, $row["MUNICIPIO"]);
-    $objSheet->setCellValue('Y' . $i, $row["DEPARTAMENTO"]);
+
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('X' . $i, $MUNICIPIO);
+    
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('Y' . $i, $DEPARTAMENTO);
 
     // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
     $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
@@ -242,46 +255,50 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
     $objSheet->setCellValue('AA' . $i, $DESC_REFAMBATE);
 
+    $objSheet->setCellValue('AB' . $i, $row["PACCOVID19"]);
+    
     //$objSheet->setCellValue('AD' . $i, $row["ENFHUERFANA"]);
     $DESC_ENFHUERFANA = utf8_encode($row["DESC_ENFHUERFANA"]);
-    $objSheet->setCellValue('AB' . $i, $DESC_ENFHUERFANA);
+    $objSheet->setCellValue('AC' . $i, $DESC_ENFHUERFANA);
 
     //$objSheet->setCellValue('AF' . $i, $row["CODENFHUERFANA"]);
     $DESC_CODENFHUERFANA = utf8_encode($row["DESC_CODENFHUERFANA"]);
-    $objSheet->setCellValue('AC' . $i, $DESC_CODENFHUERFANA);
+    $objSheet->setCellValue('AD' . $i, $DESC_CODENFHUERFANA);
 
     //$objSheet->setCellValue('AH' . $i, $row["ENFHUERFANADX"]);
     $DESC_ENFHUERFANADX = utf8_encode($row["DESC_ENFHUERFANADX"]);
-    $objSheet->setCellValue('AD' . $i, $DESC_ENFHUERFANADX);
+    $objSheet->setCellValue('AE' . $i, $DESC_ENFHUERFANADX);
 
     //$objSheet->setCellValue('AJ' . $i, $row["CODDXPPAL"]);
     $DESC_CODDXPPAL = utf8_encode($row["DESC_CODDXPPAL"]);
-    $objSheet->setCellValue('AE' . $i, $DESC_CODDXPPAL);
+    $objSheet->setCellValue('AF' . $i, $DESC_CODDXPPAL);
 
     //$objSheet->setCellValue('AL' . $i, $row["CODDXREL1"]);
     $DESC_CODDXREL1 = utf8_encode($row["DESC_CODDXREL1"]);
-    $objSheet->setCellValue('AF' . $i, $DESC_CODDXREL1);
+    $objSheet->setCellValue('AG' . $i, $DESC_CODDXREL1);
 
     //$objSheet->setCellValue('AN' . $i, $row["CODDXREL2"]);
     $DESC_CODDXREL2 = utf8_encode($row["DESC_CODDXREL2"]);
-    $objSheet->setCellValue('AG' . $i, $DESC_CODDXREL2);
+    $objSheet->setCellValue('AH' . $i, $DESC_CODDXREL2);
 
-    $objSheet->setCellValue('AH' . $i, $row["SOPNUTRICIONAL"]);
+    $objSheet->setCellValue('AI' . $i, $row["SOPNUTRICIONAL"]);
 
     //$objSheet->setCellValue('AQ' . $i, $row["CODEPS"]);
     $DESC_CODEPS = utf8_encode($row["DESC_CODEPS"]);
-    $objSheet->setCellValue('AI' . $i, $DESC_CODEPS);
+    $objSheet->setCellValue('AJ' . $i, $DESC_CODEPS);
 
-    $objSheet->setCellValue('AJ' . $i, $row["TIPOIDMADREPACIENTE"]);
-    $objSheet->setCellValue('AK' . $i, $row["NROIDMADREPACIENTE"]);
+    $objSheet->setCellValue('AK' . $i, $row["TIPOIDMADREPACIENTE"]);
+    $objSheet->setCellValue('AL' . $i, $row["NROIDMADREPACIENTE"]);
 
     //$objSheet->setCellValue('AU' . $i, $row["TIPOTRANSC"]);
     $DESC_TIPOTRANSC = utf8_encode($row["DESC_TIPOTRANSC"]);
-    $objSheet->setCellValue('AL' . $i, $DESC_TIPOTRANSC);
+    $objSheet->setCellValue('AM' . $i, $DESC_TIPOTRANSC);
 
-    $objSheet->setCellValue('AM' . $i, $row["TIPOIDDONANTEVIVO"]);
-    $objSheet->setCellValue('AN' . $i, $row["NROIDDONANTEVIVO"]);
-    $objSheet->setCellValue('AO' . $i, $row["ESTPRES"]);
+    $objSheet->setCellValue('AN' . $i, $row["TIPOIDDONANTEVIVO"]);
+    $objSheet->setCellValue('AO' . $i, $row["NROIDDONANTEVIVO"]);
+    $objSheet->setCellValue('AP' . $i, $row["ESTPRES"]);
+
+    
   }
   oci_free_statement($st_tire);
 
@@ -325,8 +342,8 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $objXLS->getActiveSheet()->getColumnDimension("AL")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("AM")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("AN")->setAutoSize(true);
-  $objXLS->getActiveSheet()->getColumnDimension("AO")->setAutoSize(true);/*
-  $objXLS->getActiveSheet()->getColumnDimension("AP")->setAutoSize(true);
+  $objXLS->getActiveSheet()->getColumnDimension("AO")->setAutoSize(true);
+  $objXLS->getActiveSheet()->getColumnDimension("AP")->setAutoSize(true);/*
   $objXLS->getActiveSheet()->getColumnDimension("AQ")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("AR")->setAutoSize(true);
   $objXLS->getActiveSheet()->getColumnDimension("AS")->setAutoSize(true);
@@ -564,7 +581,7 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
     $objSheet->setCellValue('A' . $i, $row["ID_MEDI"]);
-    $objSheet->setCellValue('B' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('B' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('C' . $i, $row["CONORDEN"]);
 
     //$objSheet->setCellValue('D' . $i, $row["TIPOMED"]);
@@ -790,6 +807,7 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
 */
 
 
+
   /***************************************************************************************/
   /***************************************************************************************/
   ////////////////////////////Hoja 2 Medicamentos(Fin)////////////////////////////////
@@ -834,7 +852,7 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["ID_MEDI"]);
     $objSheet->setCellValue('C' . $i, $row["CONORDEN"]);
 
@@ -1003,7 +1021,7 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["CONORDEN"]);
 
     //$objSheet->setCellValue('C' . $i, $row["TIPOPREST"]);
@@ -1321,7 +1339,7 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["CONORDEN"]);
     //$objSheet->setCellValue('C' . $i, $row["TIPOPREST"]);
     $DESC_TIPOPREST = utf8_encode($row["DESC_TIPOPREST"]);
@@ -1623,8 +1641,8 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $objSheet->setCellValue('M1', 'CADAFREUSO');
   //$objSheet->setCellValue('P1', 'CODFREUSO');
   $objSheet->setCellValue('N1', 'DESC_CODFREUSO');
-  $objSheet->setCellValue('O1', 'CANT');
-  $objSheet->setCellValue('P1', 'CANTTOTAL');
+  $objSheet->setCellValue('O1', 'CANTTOTAL');
+  $objSheet->setCellValue('P1', 'CANT');
   // $objSheet->setCellValue('T1', 'CODPERDURTRAT');
   $objSheet->setCellValue('Q1', 'DESC_CODPERDURTRAT');
   // $objSheet->setCellValue('V1', 'TIPOTRANS');
@@ -1645,7 +1663,7 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["CONORDEN"]);
     //$objSheet->setCellValue('C' . $i, $row["TIPOPREST"]);
     $DESC_TIPOPREST = utf8_encode($row["DESC_TIPOPREST"]);
@@ -1673,8 +1691,8 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     $DESC_CODFREUSO = utf8_encode($row["DESC_CODFREUSO"]);
     $objSheet->setCellValue('N' . $i, $DESC_CODFREUSO);
 
-    $objSheet->setCellValue('O' . $i, $row["CANT"]);
-    $objSheet->setCellValue('P' . $i, $row["CANTTOTAL"]);
+    $objSheet->setCellValue('O' . $i, $row["CANTTOTAL"]);
+    $objSheet->setCellValue('P' . $i, $row["CANT"]);
 
     //$objSheet->setCellValue('T' . $i, $row["CODPERDURTRAT"]);
     $DESC_CODPERDURTRAT = utf8_encode($row["DESC_CODPERDURTRAT"]);
@@ -1863,7 +1881,7 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
-    $objSheet->setCellValue('A' . $i, '="' . $row["NOPRESCRIPCION"] . '"');
+    $objSheet->setCellValue('A' . $i, ' ' . $row["NOPRESCRIPCION"]);
     $objSheet->setCellValue('B' . $i, $row["CONORDEN"]);
     //$objSheet->setCellValue('C' . $i, $row["TIPOPREST"]);
     $DESC_TIPOPREST = utf8_encode($row["DESC_TIPOPREST"]);
@@ -1955,19 +1973,15 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
   /***************************************************************************************/
 }
 
-
-
-
-
-
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objXLS->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
 header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
 //header('Content-Type: application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename=Reporte " . $regimen . " " . $periodo_inicial . " - " . $periodo_final . ".xlsx");
+header("Content-Disposition: attachment;filename=Prescripciones " . $regimen . " " . $periodo_inicial . " - " . $periodo_final . ".xlsx");
 header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($objXLS, 'Excel2007');
 $objWriter->save('php://output');
 //header("Location:../Administrador/ReportesTecnico.php");
 exit;
+
