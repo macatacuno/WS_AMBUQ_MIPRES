@@ -120,6 +120,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
       $url = $url_bd . "/" . $nit . '/' . $token . '/' . "20" . $periodo_conteo;
+      echo "url: $url";
       $json = Webservice_get($url);
       //$json = (string) file_get_contents($url);
       $json = str_replace("\\\"", "", $json);

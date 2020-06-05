@@ -153,7 +153,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
 
                 }
-                
+               /* 
                 $sql_exc = "INSERT INTO WEBSERV_SUMINISTROS
                   (
                     REPO_PERIODO,
@@ -207,7 +207,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 // echo "<br>sql: $sql_exc";
                 $st = oci_parse($conn_oracle, $sql_exc);
                 $result = oci_execute($st);
-                oci_free_statement($st);
+                oci_free_statement($st);*/
                 if ($result) {
                     // echo  "<br>Insercion Correcta ";
                 } else {
