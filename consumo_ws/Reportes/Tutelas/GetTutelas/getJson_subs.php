@@ -320,8 +320,6 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //echo "<br> pos Final no encontrado: " . $posFinal;
           }
 
-
-
           //$subCadenaFinal = substr($cadena, posicion Inicial,cantidad de caracteres despues de la pocicion inicial);
           $subCadenaFinal = substr($cadena, $posInicial, $posFinal - $posInicial + 1);
           // echo "<br> Sub Cadena: " . $subCadenaFinal;
