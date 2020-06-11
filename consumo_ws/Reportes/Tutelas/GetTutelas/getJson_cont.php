@@ -87,14 +87,14 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         //$posInicial = strpos('cadena completa', 'Subcadena buscada','se especifica si se buscara la primera o la segunda coinsidencia (Este ultimo parametro es mejor no usarlo porque no funciona bien)');
         //$posInicial = strpos($cadena, $subCadenaBuscadaInicial,0);
         $posInicial = strpos($cadena, $subCadenaBuscadaInicial);
-        echo "<br> pos Inicial: " . $posInicial;
+        //echo "<br> pos Inicial: " . $posInicial;
         $posFinal = strpos($cadena, $subCadenaBuscadaFinal);
         if ($posFinal == "") {
           $posFinal = strlen($cadena) - 2; //Sera igual a la última posición de la cadena
           //echo "<br> pos Final no encontrado: " . $posFinal;
         }
 
-        echo "<br> pos Final: " . $posFinal;
+        //echo "<br> pos Final: " . $posFinal;
         //$subCadenaFinal = substr($cadena, posicion Inicial,cantidad de caracteres despues de la pocicion inicial);
         $subCadenaFinal = substr($cadena, $posInicial, $posFinal - $posInicial + 1);
         // echo "<br> Sub Cadena: " . $subCadenaFinal;
@@ -130,6 +130,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
         if ($cadena_presc != '') {
 
+         // insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'SI', $serv_nombre, $tipo_get, $periodo_conteo);
           $json_array = json_decode($subCadenaPresGene, true);
 
           $cont_dir = 0;
