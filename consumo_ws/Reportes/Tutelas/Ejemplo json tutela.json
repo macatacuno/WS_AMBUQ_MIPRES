@@ -1,0 +1,299 @@
+{
+    "tutela": {
+        "NoTutela": "20200616225001122163",
+        "FTutela": "2020-06-16T00:00:00",
+        "HTutela": "12:11:53",
+        "CodEPS": "ESSC76",
+        "TipoIDEPS": "NI",
+        "NroIDEPS": "818000140",
+        "TipoIDProf": "CC",
+        "NumIDProf": "31402004",
+        "PNProfS": "MARTHA",
+        "SNProfS": "TERESA",
+        "PAProfS": "LOPEZ",
+        "SAProfS": "SILVA",
+        "RegProfS": "06947",
+        "TipoIDPaciente": "CC",
+        "NroIDPaciente": "38901272",
+        "PNPaciente": "OFELIA",
+        "SNPaciente": "",
+        "PAPaciente": "RAMIREZ",
+        "SAPaciente": "MONTOYA",
+        "NroFallo": "2018008700",
+        "FFalloTutela": "2018-02-22T00:00:00",
+        "F1Instan": null,
+        "F2Instan": null,
+        "FCorte": null,
+        "FDesacato": null,
+        "EnfHuerfana": 0,
+        "CodEnfHuerfana": null,
+        "EnfHuerfanaDX": null,
+        "CodDxPpal": "C509",
+        "CodDxRel1": null,
+        "CodDxRel2": null,
+        "AclFalloTut": "TUTELA INTEGRAL, ORDENA TRANSPORTE Y VIÁTICOS CON ACOMPAÑANTE FUERA DE SU CIUDAD. ASISTIR Y RECIBIR TRATAMIENTO, CITAS, TERAPIAS, ACCESO A SERVICIOS DE SALUD",
+        "CodDxMotS1": "C509",
+        "CodDxMotS2": null,
+        "CodDxMotS3": null,
+        "JustifMed": "\tTUTELA INTEGRAL, ORDENA TRANSPORTE Y VIÁTICOS CON ACOMPAÑANTE FUERA DE SU CIUDAD. ASISTIR Y RECIBIR TRATAMIENTO, CITAS, TERAPIAS, ACCESO A SERVICIOS DE SALUD",
+        "CritDef1CC": 1,
+        "CritDef2CC": 0,
+        "CritDef3CC": 1,
+        "CritDef4CC": 1,
+        "TipoIDMadrePaciente": null,
+        "NroIDMadrePaciente": null,
+        "EstTut": 4
+    },
+  "fallosAdicionales": [
+    {
+      "FFalloAdic": "2018-02-22T00:00:00",
+      "NroFalloAdic": "656"
+    },
+    {
+      "FFalloAdic": "2018-02-22T00:00:00",
+      "NroFalloAdic": "4"
+    }
+  ],
+  "medicamentos": [
+    {
+      "ConOrden": 3,
+      "TipoMed": 1,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TipMed": 4,
+      "DscMedPA": "515",
+      "CodFF": "516",
+      "CodVA": "517",
+      "JustNoPBS": "518",
+      "Dosis": "519",
+      "DosisUM": "5110",
+      "NoFAdmon": "5111",
+      "CodFreAdmon": 1,
+      "IndEsp": 1,
+      "CanTrat": "5112",
+      "DurTrat": 1,
+      "CantTotalF": "5113",
+      "UFCantTotal": "5114",
+      "IndRec": "5115",
+      "PrincipiosActivos": [
+        {
+          "ConOrden": 4,
+          "CodPriAct": "516",
+          "ConcCant": "517",
+          "UMedConc": "518",
+          "CantCont": "519",
+          "UMedCantCont": "5110"
+        },
+        {
+          "ConOrden": 4,
+          "CodPriAct": "516",
+          "ConcCant": "517",
+          "UMedConc": "518",
+          "CantCont": "519",
+          "UMedCantCont": "5110"
+        }
+      ],
+      "IndicacionesUNIRS": [
+        {
+          "ConOrden": 4,
+          "CodIndicacion": "515"
+        },
+        {
+          "ConOrden": 4,
+          "CodIndicacion": "515"
+        }
+      ]
+    },
+    {
+      "ConOrden": 3,
+      "TipoMed": 1,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TipMed": 4,
+      "DscMedPA": "515",
+      "CodFF": "516",
+      "CodVA": "517",
+      "JustNoPBS": "518",
+      "Dosis": "519",
+      "DosisUM": "5110",
+      "NoFAdmon": "5111",
+      "CodFreAdmon": 1,
+      "IndEsp": 1,
+      "CanTrat": "5112",
+      "DurTrat": 1,
+      "CantTotalF": "5113",
+      "UFCantTotal": "5114",
+      "IndRec": "5115",
+      "PrincipiosActivos": [
+        {
+          "ConOrden": 4,
+          "CodPriAct": "516",
+          "ConcCant": "517",
+          "UMedConc": "518",
+          "CantCont": "519",
+          "UMedCantCont": "5110"
+        },
+        {
+          "ConOrden": 4,
+          "CodPriAct": "516",
+          "ConcCant": "517",
+          "UMedConc": "518",
+          "CantCont": "519",
+          "UMedCantCont": "5110"
+        }
+      ],
+      "IndicacionesUNIRS": [
+        {
+          "ConOrden": 4,
+          "CodIndicacion": "515"
+        },
+        {
+          "ConOrden": 4,
+          "CodIndicacion": "515"
+        }
+      ]
+    }
+  ],
+  "procedimientos": [
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TipPro": 4,
+      "CodCUPS": "515",
+      "NomProc": "516",
+      "CanForm": "517",
+      "CadaFreUso": "518",
+      "CodFreUso": 9,
+      "Cant": "5110",
+      "CodPerDurTrat": 1,
+      "CantTotal": "5111",
+      "JustNoPBS": "5112",
+      "IndRec": "5113",
+      "Objetivo": "5114"
+    },
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TipPro": 4,
+      "CodCUPS": "515",
+      "NomProc": "516",
+      "CanForm": "517",
+      "CadaFreUso": "518",
+      "CodFreUso": 9,
+      "Cant": "5110",
+      "CodPerDurTrat": 1,
+      "CantTotal": "5111",
+      "JustNoPBS": "5112",
+      "IndRec": "5113",
+      "Objetivo": "5114"
+    }
+  ],
+  "dispositivos": [
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "CodDisp": "514",
+      "CanForm": "515",
+      "CadaFreUso": "516",
+      "CodFreUso": 7,
+      "Cant": "518",
+      "CodPerDurTrat": 1,
+      "CantTotal": "519",
+      "JustNoPBS": "5110",
+      "IndRec": "5111",
+      "Objetivo": "5112"
+    },
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "CodDisp": "514",
+      "CanForm": "515",
+      "CadaFreUso": "516",
+      "CodFreUso": 7,
+      "Cant": "518",
+      "CodPerDurTrat": 1,
+      "CantTotal": "519",
+      "JustNoPBS": "5110",
+      "IndRec": "5111",
+      "Objetivo": "5112"
+    }
+  ],
+  "productosnutricionales": [
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TippProNut": "514",
+      "DescProdNutr": "515",
+      "CodForma": "516",
+      "CodViaAdmon": "517",
+      "JustNoPBS": "518",
+      "Dosis": "519",
+      "DosisUM": "5110",
+      "NoFAdmon": "5111",
+      "CodFreAdmon": 1,
+      "IndEsp": 1,
+      "CanTrat": "5112",
+      "DurTrat": 1,
+      "CantTotalF": "5113",
+      "UFCantTotal": "5114",
+      "IndRec": "5115"
+    },
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "TippProNut": "514",
+      "DescProdNutr": "515",
+      "CodForma": "516",
+      "CodViaAdmon": "517",
+      "JustNoPBS": "518",
+      "Dosis": "519",
+      "DosisUM": "5110",
+      "NoFAdmon": "5111",
+      "CodFreAdmon": 1,
+      "IndEsp": 1,
+      "CanTrat": "5112",
+      "DurTrat": 1,
+      "CantTotalF": "5113",
+      "UFCantTotal": "5114",
+      "IndRec": "5115"
+    }
+  ],
+  "serviciosComplementarios": [
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "CodSerComp": 4,
+      "DescSerComp": "515",
+      "CanForm": "516",
+      "CadaFreUso": "517",
+      "CodFreUso": 8,
+      "Cant": "519",
+      "CodPerDurTrat": 1,
+      "CantTotal": "5110",
+      "JustNoPBS": "5111",
+      "IndRec": "5112"
+    },
+    {
+      "ConOrden": 3,
+      "TipTut": 1,
+      "TipoPrest": 1,
+      "CodSerComp": 4,
+      "DescSerComp": "515",
+      "CanForm": "516",
+      "CadaFreUso": "517",
+      "CodFreUso": 8,
+      "Cant": "519",
+      "CodPerDurTrat": 1,
+      "CantTotal": "5110",
+      "JustNoPBS": "5111",
+      "IndRec": "5112"
+    }
+  ]
+}

@@ -136,9 +136,9 @@ if ($periodo_final < $periodo_inicial) {
   LEFT JOIN WEBSERV_REF_PRE_TI_TR TT ON PP.TIPOTRANSC=TT.CODIGO
   LEFT JOIN WEBSERV_REF_PRE_EPS PE ON PP.CODEPS=PE.CODIGO
   LEFT JOIN (SELECT B.ESTADO,B.TIDPODOCUMENTO,B.DOCUMENTO, B.DEPARTAMENTO, B.MUNICIPIO,B.NOM_MPIO,B.NOM_DPTO,B.MES 
-             FROM ZZZ_BDUAHISSUB@PDBLCSTBY01 B 
+             FROM ZZZ_BDUAHISSUB@consulta_pstby B 
              WHERE B.MES IN (SELECT MAX(MES) 
-                             FROM ZZZ_BDUAHISSUB@PDBLCSTBY01)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
+                             FROM ZZZ_BDUAHISSUB@consulta_pstby)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
   LEFT JOIN Client C ON C.ClientId = NROIDPACIENTE and C.TYPEDOCUMENTID=TIPOIDPACIENTE
   LEFT join GeographicLocation gl  on c.CompanyId = gl.CompanyId and c.GeographicLocationId = gl.GeographicLocationId
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "' 

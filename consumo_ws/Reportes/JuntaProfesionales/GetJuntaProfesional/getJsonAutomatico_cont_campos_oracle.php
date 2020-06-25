@@ -120,7 +120,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
       $url = $url_bd . "/" . $nit . '/' . $token . '/' . "20" . $periodo_conteo;
-      echo "url: $url";
+      //echo "url: $url";
       $json = Webservice_get($url);
       //$json = (string) file_get_contents($url);
       $json = str_replace("\\\"", "", $json);
@@ -258,7 +258,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           //$subCadenaFinal = substr($cadena, posicion Inicial,cantidad de caracteres despues de la pocicion inicial);
           $subCadenaFinal = substr($cadena, $posInicial, $posFinal - $posInicial + 1);
-          // echo "<br> Sub Cadena: " . $subCadenaFinal;
+           echo "<br> Sub Cadena: " . $subCadenaFinal;
           if ($subCadenaFinal != '[' && $subCadenaFinal != '') {
 
             $array[$count_report] = $subCadenaFinal;

@@ -371,7 +371,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             $posPresInicial = strpos($cadena_NoPrescripcion, $NoPrescripcion_busc_ini) + strlen($NoPrescripcion_busc_ini);
             $posPresFinal = strpos($cadena_NoPrescripcion, $NoPrescripcion_busc_fin);
             $noPrescripcion = substr($cadena_NoPrescripcion, $posPresInicial, $posPresFinal - $posPresInicial);
-            //echo "<br> NoPrescripcion: " . $noPrescripcion;
+            //echo "<br> NoPrescripcion: " . $noPrescripcion."<br>";
             //FPrescripcion
             $FPrescripcion_busc_ini = '"FPrescripcion":';
             $FPrescripcion_busc_fin = ',"HPrescripcion"';
@@ -2112,6 +2112,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_ini) + strlen($CodPerDurTrat_busc_ini);
               $posPresFinal = strpos($cadena_CodPerDurTrat, $CodPerDurTrat_busc_fin);
               $CodPerDurTrat = substr($cadena_CodPerDurTrat, $posPresInicial, $posPresFinal - $posPresInicial);
+              $CodPerDurTrat = str_replace("'", "", $CodPerDurTrat);
               $CodPerDurTrat = str_replace('"', "'", $CodPerDurTrat);
 
               //echo "<br> CodPerDurTrat: " . $CodPerDurTrat;
@@ -2133,6 +2134,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               $posPresInicial = strpos($cadena_IndRec, $IndRec_busc_ini) + strlen($IndRec_busc_ini);
               $posPresFinal = strpos($cadena_IndRec, $IndRec_busc_fin);
               $IndRec = substr($cadena_IndRec, $posPresInicial, $posPresFinal - $posPresInicial);
+              $IndRec = str_replace("'", "", $IndRec);
               $IndRec = str_replace('"', "'", $IndRec);
               //echo "<br> IndRec: " . $IndRec;
               //EstJM
@@ -2151,7 +2153,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             (ID_PROC,ID_PRES,CONORDEN,TIPOPREST,CAUSAS11,CAUSAS12,CAUSAS2,CAUSAS3,CAUSAS4,PROPBSUTILIZADO,CAUSAS5,PROPBSDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,CAUSAS6,CAUSAS7,CODCUPS,CANFORM,CADAFREUSO,CODFREUSO,CANT,CANTTOTAL,CODPERDURTRAT,JUSTNOPBS,INDREC,ESTJM)  VALUES 
             (SEQ_WEBSERV_PRES_PROC.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS11 . "," . $CausaS12 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProPBSUtilizado . "," . $CausaS5 . "," . $ProPBSDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $CausaS6 . "," . $CausaS7 . "," . $CodCUPS . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
-              //echo $sql_exc;
+              //echo "<br>$sql_exc<br>";
 
               $st_proc = oci_parse($conn_oracle, $sql_exc);
 
