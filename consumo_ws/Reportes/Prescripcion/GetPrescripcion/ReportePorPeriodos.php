@@ -139,8 +139,8 @@ if ($periodo_final < $periodo_inicial) {
              FROM ZZZ_BDUAHISSUB@consulta_pstby B 
              WHERE B.MES IN (SELECT MAX(MES) 
                              FROM ZZZ_BDUAHISSUB@consulta_pstby)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
-  LEFT JOIN Client C ON C.ClientId = NROIDPACIENTE and C.TYPEDOCUMENTID=TIPOIDPACIENTE
-  LEFT join GeographicLocation gl  on c.CompanyId = gl.CompanyId and c.GeographicLocationId = gl.GeographicLocationId
+  LEFT JOIN Client@consulta_pstby C ON C.Clientcode = NROIDPACIENTE /*and C.TYPEDOCUMENTID=TIPOIDPACIENTE*/
+  LEFT join GeographicLocation@consulta_pstby gl  on c.CompanyId = gl.CompanyId and c.GeographicLocationId = gl.GeographicLocationId
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "' 
 order by REPO_PERIODO";
   $st_tire = oci_parse($conn_oracle, $query);
