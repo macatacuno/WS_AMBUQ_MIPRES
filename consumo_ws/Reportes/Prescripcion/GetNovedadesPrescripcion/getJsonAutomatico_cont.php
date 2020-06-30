@@ -103,7 +103,7 @@ $consulta = "SELECT repo_periodo, repo_json FROM reportesws  where serv_id=".$se
   
   $json = Webservice_get($url);
   //$json = file_get_contents($url);
-  if ($json == "" || $json=='{"Message":"Error."}') {
+  if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
     $peri_error= $peri_error."20".$periodo_conteo."(Error al consumir la API)<br>";
     $peri_error_conteo=$peri_error_conteo+1;
     $sql="INSERT INTO log_errores(serv_id, tire_id, logErr_periodo, log_Err_nombre, logErr_descripcion) 

@@ -100,7 +100,7 @@ $consulta = "SELECT repo_periodo, repo_json FROM reportesws  where serv_id=".$se
   //$url ='https://wsmipres.sispro.gov.co/WSSUMMIPRESNOPBS/api/ReporteEntregaXFecha/'.$nit.'/'.$token.'/'."20".$periodo_conteo;
   $json = Webservice_get($url);
   //$json = (string)file_get_contents($url);
-  if ($json == "" || $json=='{"Message":"Error."}') {
+  if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
 
 
     $peri_error= $peri_error."20".$periodo_conteo."(Error al consumir la API)<br>";

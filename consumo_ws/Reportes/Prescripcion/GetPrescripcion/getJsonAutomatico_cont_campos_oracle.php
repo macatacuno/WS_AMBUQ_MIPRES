@@ -157,7 +157,6 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       $json = str_replace("\\\"", "", $json);
       $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
 
-      //      if ($json == "" || $json == '{"Message":"Error."}' || '{"Message":"An error has occurred."}') {
 
       if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
 

@@ -86,9 +86,11 @@ if ($periodo_final < $periodo_inicial) {
   DECODE(PAPACIENTE, NULL,'.',PAPACIENTE) PAPACIENTE,
   DECODE(SAPACIENTE, NULL,'.',SAPACIENTE) SAPACIENTE,
   
-  DECODE (UB.NOM_MPIO,NULL,DECODE(gl.GeographicLocationName,NULL,'NO EXISTE',gl.GeographicLocationName),UB.NOM_MPIO) MUNICIPIO,
-  DECODE(UB.NOM_DPTO,NULL,'NO EXISTE',UB.NOM_DPTO)DEPARTAMENTO,
-  
+  /*DECODE (UB.NOM_MPIO,NULL,DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName),UB.NOM_MPIO) MUNICIPIO,
+  DECODE(UB.NOM_DPTO,NULL,'NO EXISTE',UB.NOM_DPTO)DEPARTAMENTO,*/
+  DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+  DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+
   DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
   DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
   
@@ -135,12 +137,14 @@ if ($periodo_final < $periodo_inicial) {
   LEFT JOIN WEBSERV_REF_PRE_CIE_10 CIE_CODDXREL2 ON CIE_CODDXREL2.CODIGO=PP.CODDXREL2
   LEFT JOIN WEBSERV_REF_PRE_TI_TR TT ON PP.TIPOTRANSC=TT.CODIGO
   LEFT JOIN WEBSERV_REF_PRE_EPS PE ON PP.CODEPS=PE.CODIGO
-  LEFT JOIN (SELECT B.ESTADO,B.TIDPODOCUMENTO,B.DOCUMENTO, B.DEPARTAMENTO, B.MUNICIPIO,B.NOM_MPIO,B.NOM_DPTO,B.MES 
+  /*LEFT JOIN (SELECT B.ESTADO,B.TIDPODOCUMENTO,B.DOCUMENTO, B.DEPARTAMENTO, B.MUNICIPIO,B.NOM_MPIO,B.NOM_DPTO,B.MES 
              FROM ZZZ_BDUAHISSUB@consulta_pstby B 
              WHERE B.MES IN (SELECT MAX(MES) 
-                             FROM ZZZ_BDUAHISSUB@consulta_pstby)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE
-  LEFT JOIN Client@consulta_pstby C ON C.Clientcode = NROIDPACIENTE and /*C.TYPEDOCUMENTID=TIPOIDPACIENTE*/
-  LEFT join GeographicLocation@consulta_pstby gl  on c.CompanyId = gl.CompanyId and c.GeographicLocationId = gl.GeographicLocationId
+                             FROM ZZZ_BDUAHISSUB@consulta_pstby)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE*/
+  LEFT JOIN Client@consulta_pstby C ON C.Clientcode = pp.NROIDPACIENTE /*and C.TYPEDOCUMENTID=pp.TIPOIDPACIENTE*/
+  LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+  LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+      and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "' 
 order by REPO_PERIODO";
   $st_tire = oci_parse($conn_oracle, $query);
