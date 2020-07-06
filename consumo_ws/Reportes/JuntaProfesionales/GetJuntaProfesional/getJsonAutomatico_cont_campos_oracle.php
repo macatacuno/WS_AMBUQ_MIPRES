@@ -258,7 +258,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           //$subCadenaFinal = substr($cadena, posicion Inicial,cantidad de caracteres despues de la pocicion inicial);
           $subCadenaFinal = substr($cadena, $posInicial, $posFinal - $posInicial + 1);
-           echo "<br> Sub Cadena: " . $subCadenaFinal;
+         //  echo "<br> Sub Cadena: " . $subCadenaFinal;
           if ($subCadenaFinal != '[' && $subCadenaFinal != '') {
 
             $array[$count_report] = $subCadenaFinal;

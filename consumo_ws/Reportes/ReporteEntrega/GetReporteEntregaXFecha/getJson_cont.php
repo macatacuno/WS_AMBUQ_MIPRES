@@ -127,14 +127,16 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $clave["EstRepEntrega"] . "',
                     '" . $FecAnulacion_oracle . "'
                   )";
-               // echo "<br>sql: $sql_exc";
+                  
                 $st = oci_parse($conn_oracle, $sql_exc);
                 $result = oci_execute($st);
                 oci_free_statement($st);
                 if ($result) {
                     // echo  "<br>Insercion Correcta ";
                 } else {
-                    echo  "<br>Insercion Incorrecta en el Reporte de entrega #" . $clave["IDReporteEntrega"];
+                    
+                echo "<br>sql: $sql_exc";
+                echo  "<br>Insercion Incorrecta en la rescrion: ".$clave["NoPrescripcion"]." y en Reporte de entrega #" . $clave["IDReporteEntrega"];
                 }
             }
             echo "<br>--------Cantidad de Reportes de entrega insertados: $cont_rep_ent ";

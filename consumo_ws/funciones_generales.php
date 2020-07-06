@@ -243,3 +243,10 @@ ya que con commillas simples la funcion str_replace no encuentra los datos busca
 	$json = str_replace("\t", "", $json); //quitar \t
 	return $json;
 }
+
+function obtener_sub_cadena_tutelas($cad_busc_ini,$cad_busc_fin,$cadena,$cant_caracteres_para_quitar){
+	$posInicial = strpos($cadena, $cad_busc_ini) + $cant_caracteres_para_quitar;
+	$posFinal = strpos($cadena, $cad_busc_fin);
+	$subCadenaGene = substr($cadena, $posInicial, $posFinal - $posInicial);
+	return $subCadenaGene;
+}

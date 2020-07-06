@@ -161,6 +161,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
 
 
+        echo "<br>json: $json<br>";
         $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
         $peri_error_conteo = $peri_error_conteo + 1;
         $sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 

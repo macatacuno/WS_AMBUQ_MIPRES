@@ -134,7 +134,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 if ($result) {
                     // echo  "<br>Insercion Correcta ";
                 } else {
-                    echo  "<br>Insercion Incorrecta en el Reporte de entrega #" . $clave["IDReporteEntrega"];
+                    echo "<br>sql: $sql_exc";
+                    echo  "<br>Insercion Incorrecta en la rescrion: ".$clave["NoPrescripcion"]." y en Reporte de entrega #" . $clave["IDReporteEntrega"];
                 }
             }
             echo "<br>--------Cantidad de Reportes de entrega insertados: $cont_rep_ent ";
