@@ -191,6 +191,14 @@
                       </p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="#" id="a_active_sumi_entrega_x_fecha" class="nav-link" onclick="cargarEntregaXFechaSinReportar();">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p >Consultar(No Reportar)
+                        <!--Nivel 3-->
+                      </p>
+                    </a>
+                  </li>
 
 
                   <!--<li class="nav-item">

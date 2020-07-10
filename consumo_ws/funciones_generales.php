@@ -205,7 +205,7 @@ function insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $json, $serv_nombre, $tipo_get, $periodo_conteo)
 {
 	$sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "','$json')"; //no se inserta el json porque provoca error al insertar el registro
-	echo $sql_exc;
+	echo "<br>$sql_exc";
 	$st = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st);
 	oci_free_statement($st);
@@ -224,7 +224,7 @@ function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 	} else {
 		$sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
 		 VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
-		echo $sql_log_err;
+		echo "<br>$sql_log_err";
 		$st_log_err = oci_parse($conn_oracle, $sql_log_err);
 		$result = oci_execute($st_log_err);
 		oci_free_statement($st_log_err);
