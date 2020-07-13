@@ -163,7 +163,7 @@ LEFT JOIN  WEBSERV_REPORTE_ENTREGA ree ON
    ree.NOPRESCRIPCION=re.NOPRESCRIPCION and ree.FECENTREGA=re.FECENTREGA and ree.REPO_TIRE_ID=re.REPO_TIRE_ID
    AND ree.IDREPORTEENTREGA<>re.IDREPORTEENTREGA 
    and re.FECREPENTREGA<ree.FECREPENTREGA
-where  RE.REPO_SERV_ID=" . $servicio_id . " and RE.REPO_TIRE_ID=" . $tipo_id . " and RE.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'"
+where  D.REPO_SERV_ID=" . $servicio_id . " and D.REPO_TIRE_ID=" . $tipo_id . " and D.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'"
 ."order by re.NOPRESCRIPCION, re.FECENTREGA,RE.FECREPENTREGA,REE.FECREPENTREGA";
 $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
