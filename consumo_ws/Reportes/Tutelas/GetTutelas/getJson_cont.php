@@ -10,6 +10,7 @@ $conn_oracle = conectar_oracle(); //funcion para abir la conexion con QAS
 /**********************Variables generales*******************************************/
 $tipo_get = "contributivo";
 $tipo_id = 1; //contributivo
+$tipo_id = 2; //Subsidiado
 $servicio_id = 12; // Se asigna el codigo del servicio Tutelas
 
 /**********************Obtener los datos para armar la URL***************************/
@@ -29,8 +30,8 @@ $token_temporal = actualizar_token_temporal($horas_de_diferencia, $conn_oracle, 
 
 /**********************Cargar Encabezado**********************************************/
 
-$periodo_inicial = "20-06-20";
-$periodo_final = "20-06-24";
+$periodo_inicial = "19-01-01";
+$periodo_final = "20-07-08";
 //$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
@@ -63,9 +64,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
     echo "<br>/////////////////////// Json #" . $i_Principal . " Periodo: 20" . $periodo_conteo . "<br>";
 
     if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
-      //insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);
+      insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);
     } else if ($json == "[]") {
-      // insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO', $serv_nombre, $tipo_get, $periodo_conteo);
+       insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO', $serv_nombre, $tipo_get, $periodo_conteo);
     } else {
 
       insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'SI', $serv_nombre, $tipo_get, $periodo_conteo);

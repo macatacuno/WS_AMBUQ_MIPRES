@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>WS AMBUQ MIPRES</title>
-  <link rel="shortcut icon" href="http://www.ambuq.org.co/wp-content/themes/wordpress-bootstrap-master/images/logito.png">
+  <link rel="shortcut icon" href="http://ambuq.org.co/wp-content/uploads/2020/05/logo-ambuq.png">
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php

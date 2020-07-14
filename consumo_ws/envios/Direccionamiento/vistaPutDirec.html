@@ -33,11 +33,13 @@
 
                                         <div class="form-group">
                                             <label for="NoPrescripcion" class="col-md-12 control-label">Número de
-                                                prescripción(NoPrescripcion)</label>
+                                                prescripción</label>
                                             <div class="col-sm-12">
                                                 <input type="text" onkeydown="cargar_tipotec_pres();"
                                                     onkeyup="cargar_tipotec(); " id="NoPrescripcion"
                                                     name="NoPrescripcion" value="" placeholder="Ingresar número"
+                                                    class="form-control">
+                                                <input disabled="disabled" type="text" id="tipoNumero" name="tipoNumero"
                                                     class="form-control">
                                             </div>
                                         </div>
@@ -88,7 +90,8 @@
                                                 Entrega(NoEntrega)</label>
                                             <div class="col-sm-12">
                                                 <input type="number" id="NoEntrega" onkeyup="cargar_datos_direc();"
-                                                name="NoEntrega" placeholder="Ingresar Número de Entrega" class="form-control limpiar">
+                                                    name="NoEntrega" placeholder="Ingresar Número de Entrega"
+                                                    class="form-control limpiar">
                                                 <!--<select id="NoEntrega" name="NoEntrega" class="form-control">
                                                     <option value="">Seleccionar opción</option>
                                                     <option value="1">1</option>
@@ -172,9 +175,9 @@
                                             <label for="FecMaxEnt" class="col-md-12 control-label">Fecha máxima de
                                                 entrega(FecMaxEnt)</label>
                                             <div class="col-sm-12">
-                                                <input type="date" id="FecMaxEnt"  name="FecMaxEnt"
-                                                    value="" placeholder="" class="form-control limpiar">
-                                                    <input disabled="disabled" type="text" id="desc_codambate"
+                                                <input type="date" id="FecMaxEnt" name="FecMaxEnt" value=""
+                                                    placeholder="" class="form-control limpiar">
+                                                <input disabled="disabled" type="text" id="desc_codambate"
                                                     name="desc_codambate" value="" placeholder=""
                                                     class="form-control limpiar">
                                             </div>

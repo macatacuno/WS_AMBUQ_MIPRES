@@ -246,6 +246,9 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'DESC_CODAMBATE') {
                         $("#desc_codambate").val(sub_json[sub_key]);
 
+                    } else if (sub_key == 'TIPONUMERO') {
+                        $("#tipoNumero").val(sub_json[sub_key]);
+
                     } else if (sub_key == 'CODSERTECAENTREGAR') {
                         if (sub_json[sub_key] == 'NO EXISTE') {
                             $("#CodSerTecAEntregar").val('');

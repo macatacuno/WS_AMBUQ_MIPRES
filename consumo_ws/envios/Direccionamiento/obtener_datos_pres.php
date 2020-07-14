@@ -34,7 +34,8 @@ decode(CODAMBATE,11,decode((select
 decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
 decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR,
 DECODE(DIR_IDDIRECCIONAMIENTO,NULL,0,DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
-DECODE(DIR_ID,NULL,0,DIR_ID)DIR_ID
+DECODE(DIR_ID,NULL,0,DIR_ID)DIR_ID,
+decode(pi.TIPONUMERO,'P','PRESCRIPCION','T','TUTELA',pi.TIPONUMERO) TIPONUMERO
 from view_webserv_pres_info_direc pi
 where  NOPRESCRIPCION='" . $NoPrescripcion . "'
  and TIPOTEC='" . $TipoTec . "' 
@@ -72,7 +73,8 @@ while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
         . '","CODSERTECAENTREGAR":"' . $row['CODSERTECAENTREGAR']
         . '","DESC_CODSERTECAENTREGAR":"' .  utf8_encode($row['DESC_CODSERTECAENTREGAR'])
         . '","DIR_ID":"' .  $row['DIR_ID']
-        . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO'] . '"},';
+        . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO'] 
+        . '","TIPONUMERO":"' .  $row['TIPONUMERO'] . '"},';
 }
 if ($tipos_tecnologia_json != '[') {
     $tipos_tecnologia_json = substr($tipos_tecnologia_json, 0, -1);

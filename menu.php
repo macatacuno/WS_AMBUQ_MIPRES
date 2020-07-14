@@ -2,7 +2,7 @@
   <aside class="main-sidebar elevation-4 sidebar-light-olive">
     <!-- Brand Logo -->
     <a href="#" onclick="location.reload();" class="brand-link">
-      <!-- <img src="http://www.ambuq.org.co/wp-content/themes/wordpress-bootstrap-master/images/logito.png"
+      <!-- <img src="http://ambuq.org.co/wp-content/uploads/2020/05/logo-ambuq.png"
       alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">-->
       <i class="fas fa-link"></i>
