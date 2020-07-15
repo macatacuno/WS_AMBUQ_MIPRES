@@ -11,6 +11,8 @@ $dir_id_direccionamiento = $_POST['dir_id_direccionamiento'];
 $dir_id = $_POST['dir_id'];
 $tipo_id = $_POST['tipo'];
 $TipoTec = $_POST['TipoTec'];
+$TipoTec = $_POST['TipoTec'];
+$tipoNumero = $_POST['tipoNumero'];
 
 $servicio_id = 11; // Servicio de direccionamiento
 
@@ -85,53 +87,46 @@ $response = direccionar_put($url, $json_direc);
 echo "Response: " . $response;
 
 //echo " <br> " . $json_direc;
-$nombre_tabla = "";
-if ($tipoNumero == 'PRESCRIPCION') {
-	if ($TipoTec == 'M') {
-		$nombre_tabla = 'WEBSERV_PRES_MEDI';
-	} else if ($TipoTec == 'P') {
-		$nombre_tabla = 'WEBSERV_PRES_PROC';
-	} else if ($TipoTec == 'N') {
-		$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
-	} else if ($TipoTec == 'S') {
-		$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
-	} else if ($TipoTec == 'D') {
-		$nombre_tabla = 'WEBSERV_PRES_DISP';
-	}
-
-	$sql_exc = "UPDATE " . $nombre_tabla . " 
-			  SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
-		. " WHERE  CONORDEN = " . $ConTec
-		. " AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='"
-		. $NoPrescripcion . "')";
-} else if ($tipoNumero == 'TUTELA') {
-	if ($TipoTec == 'M') {
-		$nombre_tabla = 'WEBSERV_TUTELA_MEDICAMENTOS';
-	} else if ($TipoTec == 'P') {
-		$nombre_tabla = 'WEBSERV_TUTELA_PROCEDIMIENTOS';
-	} else if ($TipoTec == 'N') {
-		$nombre_tabla = 'WEBSERV_TUTELA_PROD_NUTR';
-	} else if ($TipoTec == 'S') {
-		$nombre_tabla = 'WEBSERV_TUTELA_SERV_COMP';
-	} else if ($TipoTec == 'D') {
-		$nombre_tabla = 'WEBSERV_TUTELA_DISPOSITIVOS';
-	}
-
-	$sql_exc = "UPDATE " . $nombre_tabla . " 
-				 SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
-		. " WHERE  CONORDEN = " . $ConTec
-		. " AND id_tute in ( select id_tute from WEBSERV_TUTELA_TUTELA where NOTUTELA='"
-		. $NoPrescripcion . "')";
-}
-
 
 
 if (strpos($response, 'Exitosa') !== false) {
+	$nombre_tabla = "";
+	$sql_exc = "";
+	if ($tipoNumero == 'PRESCRIPCION') {
+		if ($TipoTec == 'M') {
+			$nombre_tabla = 'WEBSERV_PRES_MEDI';
+		} else if ($TipoTec == 'P') {
+			$nombre_tabla = 'WEBSERV_PRES_PROC';
+		} else if ($TipoTec == 'N') {
+			$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
+		} else if ($TipoTec == 'S') {
+			$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
+		} else if ($TipoTec == 'D') {
+			$nombre_tabla = 'WEBSERV_PRES_DISP';
+		}
 
-	////Actualizar tabla con el token temporal (Inicio)
-	$sql_exc = "UPDATE " . $nombre_tabla . " 
-        SET  DIR_IDDIRECCIONAMIENTO = '', DIR_ID = '' WHERE  DIR_IDDIRECCIONAMIENTO = " .
-		$dir_id_direccionamiento . " and DIR_ID = " . $dir_id;
+		$sql_exc = "UPDATE " . $nombre_tabla . " 
+                 SET  DIR_IDDIRECCIONAMIENTO = '', DIR_ID = '' WHERE  DIR_IDDIRECCIONAMIENTO = " .
+			$dir_id_direccionamiento . " and DIR_ID = " . $dir_id;
+	} else if ($tipoNumero == 'TUTELA') {
+		if ($TipoTec == 'M') {
+			$nombre_tabla = 'WEBSERV_TUTELA_MEDICAMENTOS';
+		} else if ($TipoTec == 'P') {
+			$nombre_tabla = 'WEBSERV_TUTELA_PROCEDIMIENTOS';
+		} else if ($TipoTec == 'N') {
+			$nombre_tabla = 'WEBSERV_TUTELA_PROD_NUTR';
+		} else if ($TipoTec == 'S') {
+			$nombre_tabla = 'WEBSERV_TUTELA_SERV_COMP';
+		} else if ($TipoTec == 'D') {
+			$nombre_tabla = 'WEBSERV_TUTELA_DISPOSITIVOS';
+		}
+
+		$sql_exc = "UPDATE " . $nombre_tabla . " 
+		           SET  DIR_IDDIRECCIONAMIENTO = '', DIR_ID = '' WHERE  DIR_IDDIRECCIONAMIENTO = " .
+			$dir_id_direccionamiento . " and DIR_ID = " . $dir_id;
+	}
+
+
 	$st_direc = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st_direc);
 	oci_free_statement($st_direc);

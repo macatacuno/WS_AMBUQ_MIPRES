@@ -579,7 +579,8 @@ function anular_direc() {
             dir_id_direccionamiento: dir_id_direccionamiento,
             dir_id: dir_id,
             tipo: val_tipo,
-            TipoTec: val_TipoTec
+            TipoTec: val_TipoTec,
+            tipoNumero: val_tipoNumero
         }
     })
         .done(function (data) {
