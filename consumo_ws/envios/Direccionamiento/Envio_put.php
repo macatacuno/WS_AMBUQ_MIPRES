@@ -22,6 +22,7 @@ $FecMaxEnt = $_POST['FecMaxEnt'];
 $CantTotAEntregar = $_POST['CantTotAEntregar'];
 $DirPaciente = $_POST['DirPaciente'];
 $CodSerTecAEntregar = $_POST['CodSerTecAEntregar'];
+$tipoNumero = $_POST['tipoNumero'];
 
 //agregar los 0 faltantes del codigo DANE(Inicio)
 if (strlen($CodMunEnt) == 4) {
@@ -140,28 +141,45 @@ if (strpos($response, 'Message') !== false) {
 	//$IdDireccionamiento = str_replace('"', "'", $IdDireccionamiento);
 	$id = $Id;
 	$id_direc = $IdDireccionamiento;
+	$nombre_tabla = "";
+	if ($tipoNumero == 'PRESCRIPCION') {
+		if ($TipoTec == 'M') {
+			$nombre_tabla = 'WEBSERV_PRES_MEDI';
+		} else if ($TipoTec == 'P') {
+			$nombre_tabla = 'WEBSERV_PRES_PROC';
+		} else if ($TipoTec == 'N') {
+			$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
+		} else if ($TipoTec == 'S') {
+			$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
+		} else if ($TipoTec == 'D') {
+			$nombre_tabla = 'WEBSERV_PRES_DISP';
+		}
 
+		$sql_exc = "UPDATE " . $nombre_tabla . " 
+	              SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
+			   . " WHERE  CONORDEN = " . $ConTec
+			      . " AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='"
+			      . $NoPrescripcion . "')";
+	} else if ($tipoNumero == 'TUTELA') {
+		if ($TipoTec == 'M') {
+			$nombre_tabla = 'WEBSERV_TUTELA_MEDICAMENTOS';
+		} else if ($TipoTec == 'P') {
+			$nombre_tabla = 'WEBSERV_TUTELA_PROCEDIMIENTOS';
+		} else if ($TipoTec == 'N') {
+			$nombre_tabla = 'WEBSERV_TUTELA_PROD_NUTR';
+		} else if ($TipoTec == 'S') {
+			$nombre_tabla = 'WEBSERV_TUTELA_SERV_COMP';
+		} else if ($TipoTec == 'D') {
+			$nombre_tabla = 'WEBSERV_TUTELA_DISPOSITIVOS';
+		}
 
-	if ($TipoTec == 'M') {
-		$nombre_tabla = 'WEBSERV_PRES_MEDI';
-	} else if ($TipoTec == 'P') {
-		$nombre_tabla = 'WEBSERV_PRES_PROC';
-	} else if ($TipoTec == 'N') {
-		$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
-	} else if ($TipoTec == 'S') {
-		$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
-	} else if ($TipoTec == 'D') {
-		$nombre_tabla = 'WEBSERV_PRES_DISP';
+		$sql_exc = "UPDATE " . $nombre_tabla . " 
+	                 SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
+			       . " WHERE  CONORDEN = " . $ConTec
+			        . " AND id_tute in ( select id_tute from WEBSERV_TUTELA_TUTELA where NOTUTELA='"
+			              . $NoPrescripcion . "')";
 	}
 
-
-
-	////Actualizar tabla con el token temporal (Inicio)
-	$sql_exc = "UPDATE " . $nombre_tabla . " 
- SET  DIR_IDDIRECCIONAMIENTO = " . $id_direc . ", DIR_ID = " . $id
-		. " WHERE  CONORDEN = " . $ConTec
-		. " AND ID_PRES in ( select id_pres from WEBSERV_PRES_PRES where NOPRESCRIPCION='"
-		. $NoPrescripcion . "')";
 
 	$st_direc = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st_direc);
@@ -174,11 +192,10 @@ if (strpos($response, 'Message') !== false) {
 	/////Actualizar tabla con el token temporal  (Fin)
 
 
-	
-	////Actualizar tabla con el token temporal (Inicio)
+
 
 	$fecha_oracle = date("d/m/Y", strtotime($FecMaxEnt)); //formato originar "y/m/d"
-$sql_exc = 	"INSERT
+	$sql_exc = 	"INSERT
 		INTO WEBSERV_PRES_DIRECCIONADOS
 		  (
 			NOPRESCRIPCION,
@@ -187,7 +204,8 @@ $sql_exc = 	"INSERT
 			DIR_ID,
 			DIR_IDDIRECCIONAMIENTO,
 			CONORDEN,
-			FECMAXENT
+			FECMAXENT,
+			TIPO_NUMERO
 
 		  )
 		  VALUES
@@ -198,7 +216,8 @@ $sql_exc = 	"INSERT
 			$id,
 			$id_direc,
 			$ConTec,
-			'$fecha_oracle'
+			'$fecha_oracle',
+			'$tipoNumero'
 		  )";
 
 	$st_direc2 = oci_parse($conn_oracle, $sql_exc);

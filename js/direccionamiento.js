@@ -479,6 +479,7 @@ function enviar_direc() {
     val_DirPaciente = $('#DirPaciente').val();
     val_CodSerTecAEntregar = '';
     val_CodSerTecAEntregar = $('#CodSerTecAEntregar').val();
+    val_tipoNumero = $('#tipoNumero').val();
     /*
         if (val_TipoTec == 'M') {
             val_CodSerTecAEntregar = $('#CodSerTecAEntregar_medi').val();
@@ -527,7 +528,9 @@ function enviar_direc() {
                 FecMaxEnt: val_FecMaxEnt,
                 CantTotAEntregar: val_CantTotAEntregar,
                 DirPaciente: val_DirPaciente,
-                CodSerTecAEntregar: val_CodSerTecAEntregar
+                CodSerTecAEntregar: val_CodSerTecAEntregar,
+                tipoNumero: val_tipoNumero
+                
             }
         })
             .done(function (data) {
@@ -810,6 +813,10 @@ function validar_campos() {
 
     if (val_CodSerTecAEntregar == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
+        $("#CodSerTecAEntregar").addClass("is-invalid");
+    } else if(val_CodSerTecAEntregar.includes('-')==false && val_TipoTec=='M'){
+        count_valid_incumpl = count_valid_incumpl + 1;
+        alert('Servicio tecnologico invalido. Debe ingresar el codigo CUMS CON EL -');
         $("#CodSerTecAEntregar").addClass("is-invalid");
     } else {
         $("#CodSerTecAEntregar").removeClass("is-invalid");
