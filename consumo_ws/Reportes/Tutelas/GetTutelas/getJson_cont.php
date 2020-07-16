@@ -10,7 +10,6 @@ $conn_oracle = conectar_oracle(); //funcion para abir la conexion con QAS
 /**********************Variables generales*******************************************/
 $tipo_get = "contributivo";
 $tipo_id = 1; //contributivo
-$tipo_id = 2; //Subsidiado
 $servicio_id = 12; // Se asigna el codigo del servicio Tutelas
 
 /**********************Obtener los datos para armar la URL***************************/
@@ -31,8 +30,7 @@ $token_temporal = actualizar_token_temporal($horas_de_diferencia, $conn_oracle, 
 /**********************Cargar Encabezado**********************************************/
 
 $periodo_inicial = "19-01-01";
-$periodo_final = "20-07-08";
-//$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
+$periodo_final = (string) date("y-m-d", strtotime(date('y-m-d') . "- 1 day"));
 
 $cant_dias = armar_encabezado($periodo_inicial, $periodo_final, $ws_nombre, $serv_nombre, $tipo_get);
 
@@ -66,7 +64,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
     if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
       insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);
     } else if ($json == "[]") {
-       insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO', $serv_nombre, $tipo_get, $periodo_conteo);
+      insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO', $serv_nombre, $tipo_get, $periodo_conteo);
     } else {
 
       insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'SI', $serv_nombre, $tipo_get, $periodo_conteo);
@@ -129,7 +127,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       $cont_tute = 0;
       for ($i = 0; $i < $longitud; $i++) {
         $cont_tute = $cont_tute + 1;
-        echo "<br>---------------------------------------------Insertar tutela #: $cont_tute<br>";
+        //echo "<br>---------------------------------------------Insertar tutela #: $cont_tute<br>";
         //////////////////////////////////////////////////////////////////////////////////////////////////////////Tutela
         //Obtener cadena general de Tutela
 
@@ -154,7 +152,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
             //$CantTotAEntregar = str_replace("'", "", $clave["CantTotAEntregar"]);
             /////Insertar Tutela (Inicio)
-            echo "<br>----------------------Insertar tutela general<br>";
+            //echo "<br>----------------------Insertar tutela general<br>";
             //Cambiar formato a las fechas
             $FTutela_oracle = "";
             if ($clave["FTutela"] != '') {
@@ -181,6 +179,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               $FDesacato_oracle = date("d/m/Y", strtotime($clave["FDesacato"]));
             }
 
+
+            $JustifMed = str_replace("'", "´", $clave["JustifMed"]);
             $sql_exc = "INSERT
             INTO WEBSERV_TUTELA_TUTELA
               (
@@ -273,7 +273,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                         '" . $clave["CodDxMotS1"] . "',
                         '" . $clave["CodDxMotS2"] . "',
                         '" . $clave["CodDxMotS3"] . "',
-                        '" . $clave["JustifMed"] . "',
+                        '" . $JustifMed . "',
                         '" . $clave["CritDef1CC"] . "',
                         '" . $clave["CritDef2CC"] . "',
                         '" . $clave["CritDef3CC"] . "',
@@ -282,15 +282,15 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                         '" . $clave["NroIDMadrePaciente"] . "',
                         '" . $clave["EstTut"] . "'
                       )";
-            //echo "<br>sql: $sql_exc";
+
             $st = oci_parse($conn_oracle, $sql_exc);
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
               $INSERCIONGENERALTUTELA = true;
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
-
+              echo "<br>sql: $sql_exc";
               $INSERCIONGENERALTUTELA = false;
               echo  "<br>Insercion Incorrecta en la tutela #" . $clave["NoTutela"];
             }
@@ -308,7 +308,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           $json_array = json_decode($subCadenaGene, true);
           $FFalloAdic_oracle = '';
-          echo "<br>----------------------Insertar fallosAdicionales";
+          // echo "<br>----------------------Insertar fallosAdicionales";
           foreach ($json_array as $clave) {
             if ($clave["FFalloAdic"] != '') {
               $FFalloAdic_oracle = date("d/m/Y", strtotime($clave["FFalloAdic"]));
@@ -331,8 +331,10 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
+
+              echo "<br>sql: $sql_exc<br>";
               echo  "<br>Insercion Incorrecta";
             }
           }
@@ -340,7 +342,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           ////////////medicamentos--medicamentos--medicamentos--medicamentos--medicamentos////////////////////Tutela
           //Obtener cadena general de Tutela-medicamentos
-          echo "<br>----------------------Insertar Medicamentos";
+          //echo "<br>----------------------Insertar Medicamentos";
           $cadMedicamentos = obtener_sub_cadena_tutelas(',"medicamentos"', ',"procedimientos"', $array[$i], 16);
           //echo "<br>cadMedicamentos: $cadMedicamentos<br>";
 
@@ -357,7 +359,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $vecMedi = obtener_sub_cadena_tutelas('{', ',"PrincipiosActivos"', $cadMedicamento, 0);
 
             if ($vecMedi != '' && $vecMedi != '[]') {
-              echo "<br>----------------Medicamento";
+              // echo "<br>----------------Medicamento";
               $vecMedi = '[' . $vecMedi . '}]';
               //echo "<br>vecMedi: $vecMedi<br>";
               $vecMedi_array = json_decode($vecMedi, true);
@@ -419,8 +421,10 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 if ($result) {
 
                   $INSERCIONTUTELAMEDI = true;
-                  echo  "<br>Insercion Correcta ";
+                  //echo  "<br>Insercion Correcta ";
                 } else {
+
+                  echo "<br>sql: $sql_exc";
                   echo  "<br>Insercion Incorrecta";
                 }
               }
@@ -429,7 +433,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             if ($INSERCIONTUTELAMEDI) {
 
               //consultar el id del medicamento
-              echo "<br>------Prinsipios activos";
+              //echo "<br>------Prinsipios activos";
               $vecPriAct = null;
               $vecPriAct = obtener_sub_cadena_tutelas(',"PrincipiosActivos"', ',"IndicacionesUNIRS"', $cadMedicamento, strlen(',"PrincipiosActivos"') + 1);
               //echo "<br>vecPriAct: " . $vecPriAct;
@@ -462,13 +466,15 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                   $result = oci_execute($st);
                   oci_free_statement($st);
                   if ($result) {
-                    echo  "<br>Insercion Correcta ";
+                    //echo  "<br>Insercion Correcta ";
                   } else {
+
+                    echo "<br>sql: $sql_exc";
                     echo  "<br>Insercion Incorrecta";
                   }
                 }
               }
-              echo "<br>------IndicacionesUNIRS";
+              //echo "<br>------IndicacionesUNIRS";
               $vecIndUni = obtener_sub_cadena_tutelas(',"IndicacionesUNIRS"', ']}', $cadMedicamento, strlen(',"IndicacionesUNIRS"') + 1) . ']';
               //echo "<br>vecIndUni: $vecIndUni<br>";
               if ($vecIndUni != null) {
@@ -492,8 +498,10 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                   $result = oci_execute($st);
                   oci_free_statement($st);
                   if ($result) {
-                    echo  "<br>Insercion Correcta ";
+                    //echo  "<br>Insercion Correcta ";
                   } else {
+
+                    echo "<br>sql: $sql_exc";
                     echo  "<br>Insercion Incorrecta";
                   }
                 }
@@ -504,7 +512,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           ////////////procedimientos--procedimientos--procedimientos--procedimientos--procedimientos/////////////
           ///////////////////////////////////////////////////////////////////////////////////////////////////////
-          echo "<br>----------------------Insertar procedimientos";
+          // echo "<br>----------------------Insertar procedimientos";
           $subCadenaGene = obtener_sub_cadena_tutelas(',"procedimientos"', ',"dispositivos"', $array[$i], strlen(',"procedimientos"') + 1);
           //echo "<br>subCadenaGene: $subCadenaGene<br>";
 
@@ -556,8 +564,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
+              echo "<br>sql: $sql_exc";
               echo  "<br>Insercion Incorrecta";
             }
           }
@@ -565,7 +574,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           ////////////dispositivos--dispositivos--dispositivos--dispositivos--dispositivos/////////////
           ///////////////////////////////////////////////////////////////////////////////////////////////////////
-          echo "<br>----------------------Insertar dispositivos";
+          //echo "<br>----------------------Insertar dispositivos";
           $subCadenaGene = obtener_sub_cadena_tutelas(',"dispositivos"', ',"productosnutricionales"', $array[$i], strlen(',"dispositivos"') + 1);
           //echo "<br>subCadenaGene: $subCadenaGene<br>";
 
@@ -613,8 +622,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
+              echo "<br>sql: $sql_exc";
               echo  "<br>Insercion Incorrecta";
             }
           }
@@ -622,7 +632,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           ////////////productosnutricionales--productosnutricionales--productosnutricionales--/////////////
           ///////////////////////////////////////////////////////////////////////////////////////////////////////
-          echo "<br>----------------------Insertar productosnutricionales";
+          //echo "<br>----------------------Insertar productosnutricionales";
           $subCadenaGene = obtener_sub_cadena_tutelas(',"productosnutricionales"', ',"serviciosComplementarios"', $array[$i], strlen(',"productosnutricionales"') + 1);
           //echo "<br>subCadenaGene: $subCadenaGene<br>";
 
@@ -680,8 +690,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
+              echo "<br>sql: $sql_exc";
               echo  "<br>Insercion Incorrecta";
             }
           }
@@ -690,7 +701,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           ////////////serviciosComplementarios--serviciosComplementarios--serviciosComplementarios--/////////////
           ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          echo "<br>----------------------Insertar serviciosComplementarios";
+          //echo "<br>----------------------Insertar serviciosComplementarios";
           $cad_busc_ini = ',"serviciosComplementarios"';
           $posInicial = strpos($array[$i], $cad_busc_ini) + strlen(',"serviciosComplementarios"') + 1;
           $posFinal = strlen($array[$i]);
@@ -742,8 +753,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
             $result = oci_execute($st);
             oci_free_statement($st);
             if ($result) {
-              echo  "<br>Insercion Correcta ";
+              //echo  "<br>Insercion Correcta ";
             } else {
+              echo "<br>sql: $sql_exc";
               echo  "<br>Insercion Incorrecta";
             }
           }

@@ -18,10 +18,11 @@ NROIDPACIENTE,
 CODMUNENT,
 DIRPACIENTE,
 REGIMEN,
-decode(CODAMBATE,null,'NO EXISTE',CODAMBATE)CODAMBATE,
-decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE)DESC_CODAMBATE,
+decode(TIPONUMERO, 'T',12,decode(CODAMBATE,null,'NO EXISTE',CODAMBATE))CODAMBATE,
+decode(TIPONUMERO, 'T','Ambulatorio No Priorizado',decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE))DESC_CODAMBATE,
 decode(TIPOTEC,'P',to_date(sysdate+90, 'YYYY-MM-DD'),
-decode(CODAMBATE,11,decode((select 
+       decode(TIPONUMERO, 'T',to_date(sysdate+30, 'YYYY-MM-DD'),
+       decode(CODAMBATE,11,decode((select 
                             count(1) cantidad_entregas
                             from  WEBSERV_PRES_DIRECCIONADOS pd 
                             where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
@@ -30,7 +31,7 @@ decode(CODAMBATE,11,decode((select
                               to_date(sysdate+30, 'YYYY-MM-DD')),
                  12,to_date(sysdate+30, 'YYYY-MM-DD'),
                  21,to_date(sysdate+30, 'YYYY-MM-DD'),
-                   '11-11-1111')) FECHA_MAXIMA_DE_ENTREGA,
+                   '11-11-1111'))) FECHA_MAXIMA_DE_ENTREGA,
 decode(CODSERTECAENTREGAR,null,'NO EXISTE',CODSERTECAENTREGAR)CODSERTECAENTREGAR,
 decode(DESC_CODSERTECAENTREGAR,null,'NO EXISTE',DESC_CODSERTECAENTREGAR)DESC_CODSERTECAENTREGAR,
 DECODE(DIR_IDDIRECCIONAMIENTO,NULL,0,DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
