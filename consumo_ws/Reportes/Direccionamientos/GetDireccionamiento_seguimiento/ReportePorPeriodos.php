@@ -207,7 +207,7 @@ where  D.REPO_SERV_ID=" . $servicio_id . " and D.REPO_TIRE_ID=" . $tipo_id . " a
     $objSheet->setCellValue('F' . $i, $row["CONTEC"]);
     $objSheet->setCellValue('G' . $i, $row["TIPOIDPACIENTE"]);
     $objSheet->setCellValue('H' . $i, $row["NOIDPACIENTE"]);
-    $objSheet->setCellValue('Y' . $i, $row["NOENTREGA"]);
+    $objSheet->setCellValue('I' . $i, $row["NOENTREGA"]);
     $objSheet->setCellValue('J' . $i, $row["NOSUBENTREGA"]);
     $objSheet->setCellValue('K' . $i, $row["TIPOIDPROV"]);
     $objSheet->setCellValue('L' . $i, $row["NOIDPROV"]);
@@ -229,7 +229,7 @@ where  D.REPO_SERV_ID=" . $servicio_id . " and D.REPO_TIRE_ID=" . $tipo_id . " a
     $objSheet->setCellValue('X' . $i, $row["ESTDIRECCIONAMIENTO"]);
     $objSheet->setCellValue('Y' . $i, $row["FECANULACION"]);
 
-    $objSheet->setCellValue('Z1' . $i, '-----REPORTE_DE_ENTREGA-----');
+    $objSheet->setCellValue('Z' . $i, '-----REPORTE_DE_ENTREGA-----');
     $objSheet->setCellValue('AA' . $i, $row["RE_ID"]);
     $objSheet->setCellValue('AB' . $i, $row["RE_IDREPORTEENTREGA"]);
     $objSheet->setCellValue('AC' . $i, ' ' . $row["RE_NOPRESCRIPCION"]);

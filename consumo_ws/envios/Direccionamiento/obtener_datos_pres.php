@@ -15,8 +15,8 @@ TIPOTEC,
 CONORDEN,
 TIPOIDPACIENTE,
 NROIDPACIENTE,
-CODMUNENT,
-DIRPACIENTE,
+decode(CODMUNENT,null,'NO EXISTE',CODMUNENT)CODMUNENT,
+decode(DIRPACIENTE,null,'NO EXISTE',DIRPACIENTE)DIRPACIENTE,
 REGIMEN,
 decode(TIPONUMERO, 'T',12,decode(CODAMBATE,null,'NO EXISTE',CODAMBATE))CODAMBATE,
 decode(TIPONUMERO, 'T','Ambulatorio No Priorizado',decode(DESC_CODAMBATE,null,'NO EXISTE',DESC_CODAMBATE))DESC_CODAMBATE,
@@ -62,6 +62,15 @@ while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
     }
     //agregar los 0 faltantes del codigo DANE(Fin)
 
+
+
+    if ($row['DIRPACIENTE'] == 'NO EXISTE') {
+        $row['DIRPACIENTE'] = '';
+    }
+    if ($row['CODMUNENT'] == 'NO EXISTE') {
+        $row['CODMUNENT'] = '';
+    }
+    
     $tipos_tecnologia_json = $tipos_tecnologia_json
         . '{"TIPOIDPACIENTE":"' . $row['TIPOIDPACIENTE']
         . '","NROIDPACIENTE":"' . $row['NROIDPACIENTE']
@@ -74,7 +83,7 @@ while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
         . '","CODSERTECAENTREGAR":"' . $row['CODSERTECAENTREGAR']
         . '","DESC_CODSERTECAENTREGAR":"' .  utf8_encode($row['DESC_CODSERTECAENTREGAR'])
         . '","DIR_ID":"' .  $row['DIR_ID']
-        . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO'] 
+        . '","DIR_IDDIRECCIONAMIENTO":"' .  $row['DIR_IDDIRECCIONAMIENTO']
         . '","TIPONUMERO":"' .  $row['TIPONUMERO'] . '"},';
 }
 if ($tipos_tecnologia_json != '[') {

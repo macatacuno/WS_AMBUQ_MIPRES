@@ -1,0 +1,90 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Reporte masivo de suministros</h1>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+
+                <!--------------------------------Estructura del formulario de busqueda----------------------------------------------->
+
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Envío de suministros</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="list_esto_repo" class="col-md-12 control-label">Tipo de
+                                            tecnología(TipoTec)</label>
+                                        <div class="col-sm-12">
+                                            <select onchange="buscar_reportes();" id="list_esto_repo"
+                                                name="list_esto_repo" class="form-control">
+                                                <option value=''>Seleccionar</option>
+                                                <option value='1'>pendientes sin errores</option>
+                                                <option value='2'>Pendientes con errores</option>
+                                                <option value='3'>Reportados</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div><!-- /col-md-4 -->
+
+                                <div class="col-md-6">
+                                </div><!-- /col-md-4 -->
+
+                            </div> <!-- row -->
+                        </div>
+                        <!--<textarea name="textarea" id="textarea" rows="10" cols="50"></textarea>-->
+                    </div>
+                    <!-- /.card -->
+                </div>
+
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+
+        <!----------------------------Estrutura de la tabla ------------------------------------------------------------------------>
+
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div id="dt-addrows_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                            <div id="contenido_tabla">
+                                            </div>
+                                            <button type="botton"  onclick="enviar_sumi();"
+                                                class="btn btn-success">Reportar</button>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </section>

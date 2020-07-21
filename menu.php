@@ -247,6 +247,15 @@
                       </p>
                     </a>
                   </li>
+
+                  <li class="nav-item">
+                    <a href="#" id="a_active_sumi_reporte_masivo" class="nav-link" onclick="cargarsuministroRepoMasi();">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>Reportar
+                        <!--Nivel 3-->
+                      </p>
+                    </a>
+                  </li>
                 </ul>
               </li>
 

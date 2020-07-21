@@ -236,10 +236,15 @@ function cargar_datos_pres() {
 
                     } else if (sub_key == 'CODMUNENT') {
                         $("#CodMunEnt").val(sub_json[sub_key]);
+                        if (sub_json[sub_key] == '') {
+                            $("#CodMunEnt").removeAttr('disabled');
+                        }
 
                     } else if (sub_key == 'DIRPACIENTE') {
                         $("#DirPaciente").val(sub_json[sub_key]);
-
+                        if (sub_json[sub_key] == '') {
+                            $("#DirPaciente").removeAttr('disabled');
+                        }
                     } else if (sub_key == 'FECHA_MAXIMA_DE_ENTREGA') {
                         $("#FecMaxEnt").val(sub_json[sub_key]);
 
@@ -530,7 +535,7 @@ function enviar_direc() {
                 DirPaciente: val_DirPaciente,
                 CodSerTecAEntregar: val_CodSerTecAEntregar,
                 tipoNumero: val_tipoNumero
-                
+
             }
         })
             .done(function (data) {
@@ -628,6 +633,9 @@ function habilitar_NoIDProv() {
 
 function limpiar() {
     $(".limpiar").val('');
+
+    $("#DirPaciente").attr("disabled", true);
+    $("#CodMunEnt").attr("disabled", true);
 
     val_tipo = $('#tipo').val();
     val_NoEntrega = $('#NoEntrega').val();
@@ -815,7 +823,7 @@ function validar_campos() {
     if (val_CodSerTecAEntregar == '') {
         count_valid_incumpl = count_valid_incumpl + 1;
         $("#CodSerTecAEntregar").addClass("is-invalid");
-    } else if(val_CodSerTecAEntregar.includes('-')==false && val_TipoTec=='M'){
+    } else if (val_CodSerTecAEntregar.includes('-') == false && val_TipoTec == 'M') {
         count_valid_incumpl = count_valid_incumpl + 1;
         alert('Servicio tecnologico invalido. Debe ingresar el codigo CUMS CON EL -');
         $("#CodSerTecAEntregar").addClass("is-invalid");
