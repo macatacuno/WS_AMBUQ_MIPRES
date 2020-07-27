@@ -119,7 +119,9 @@ LEFT JOIN  view_webserv_pres_info_direc PR
      and PR.TIPOTEC=RE.TIPOTEC 
      and PR.conorden=RE.CONTEC
 LEFT JOIN  VIEW_WEBSERV_PRES_CODI_TEC CODTEC_REP
-ON CODTEC_REP.TIPOTEC=re.TIPOTEC and CODTEC_REP.CODIGO=re.CODTECENTREGADO
+ON CODTEC_REP.TIPOTEC=re.TIPOTEC and 
+(CODTEC_REP.CODIGO=replace(re.CODTECENTREGADO, chr(9), '')-- quitar tablulados en la cadena de texto
+or replace(CODTEC_REP.CODIGO,'-','-0')=replace(re.CODTECENTREGADO, chr(9), ''))
 where  RE.REPO_SERV_ID=" . $servicio_id . " and RE.REPO_TIRE_ID=" . $tipo_id . " and RE.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
