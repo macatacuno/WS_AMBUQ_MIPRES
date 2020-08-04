@@ -237,7 +237,7 @@ function cargar_datos_pres() {
                     } else if (sub_key == 'CODMUNENT') {
                         $("#CodMunEnt").val(sub_json[sub_key]);
                         if (sub_json[sub_key] == '') {
-                            $("#CodMunEnt").removeAttr('disabled');
+                           // $("#CodMunEnt").removeAttr('disabled');// esta no se hablita por que si esto esta vacio significa que el paciente no existe en oasis y no se debe direccionar
                         }
 
                     } else if (sub_key == 'DIRPACIENTE') {

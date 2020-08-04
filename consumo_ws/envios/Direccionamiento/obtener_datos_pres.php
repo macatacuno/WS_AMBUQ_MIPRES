@@ -61,16 +61,13 @@ while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
         $CodMunEnt = '0' . $CodMunEnt;
     }
     //agregar los 0 faltantes del codigo DANE(Fin)
-
-
-
+    if ($CodMunEnt == 'NO EXISTE') {
+        $CodMunEnt = '';
+    }
+    
     if ($row['DIRPACIENTE'] == 'NO EXISTE') {
         $row['DIRPACIENTE'] = '';
     }
-    if ($row['CODMUNENT'] == 'NO EXISTE') {
-        $row['CODMUNENT'] = '';
-    }
-    
     $tipos_tecnologia_json = $tipos_tecnologia_json
         . '{"TIPOIDPACIENTE":"' . $row['TIPOIDPACIENTE']
         . '","NROIDPACIENTE":"' . $row['NROIDPACIENTE']
