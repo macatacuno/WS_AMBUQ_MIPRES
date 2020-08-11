@@ -141,7 +141,8 @@ if ($periodo_final < $periodo_inicial) {
              FROM ZZZ_BDUAHISSUB@consulta_pstby B 
              WHERE B.MES IN (SELECT MAX(MES) 
                              FROM ZZZ_BDUAHISSUB@consulta_pstby)) UB ON UB.TIDPODOCUMENTO=PP.TIPOIDPACIENTE AND UB.DOCUMENTO=PP.NROIDPACIENTE*/
-  LEFT JOIN Client@consulta_pstby C ON C.Clientcode = pp.NROIDPACIENTE /*and C.TYPEDOCUMENTID=pp.TIPOIDPACIENTE*/
+  LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+         AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)  
   LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
   LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
       and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2
@@ -489,7 +490,18 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
   DECODE(INDREC, NULL,'NO EXISTE',INDREC) INDREC,
   
   DECODE(ESTJM, NULL,'NO EXISTE',ESTJM) ESTJM,--14. Lista (Medi-EstJM)
-  DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
+  DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM,
+  DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
+  DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
+  DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+  DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+  
+  DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
+  DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
+  
+  DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
+  DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+  DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19
   
 FROM WEBSERV_PRES_MEDI pm
 LEFT JOIN WEBSERV_PRES_PRES       PP ON PM.ID_PRES=    PP.ID_PRES
@@ -503,6 +515,10 @@ LEFT JOIN WEBSERV_REF_PRE_IN_ES   IE ON PM.INDESP=     IE.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON PM.DURTRAT=    DT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_UF_CT   UC ON PM.UFCANTTOTAL=UC.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PM.ESTJM=EJ.CODIGO
+LEFT JOIN WEBSERV_REF_PRE_AMB_ATE PAA ON PAA.CODIGO=pp.CODAMBATE
+LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+               and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
 
   $st_tire = oci_parse($conn_oracle, $query);
@@ -580,6 +596,16 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $objSheet->setCellValue('AO1', 'INDREC');
   //$objSheet->setCellValue('BK1', 'ESTJM');
   $objSheet->setCellValue('AP1', 'DESC_ESTJM');
+
+  $objSheet->setCellValue('AQ1', 'NROIDIPS');
+  $objSheet->setCellValue('AR1', 'NROIDPACIENTE');
+  $objSheet->setCellValue('AS1', 'MUNICIPIO');
+  $objSheet->setCellValue('AT1', 'DEPARTAMENTO');
+  //$objSheet->setCellValue('Z1', 'CODAMBATE');
+  $objSheet->setCellValue('AU1', 'DESC_CODAMBATE');
+  ///$objSheet->setCellValue('AB1', 'REFAMBATE');
+  $objSheet->setCellValue('AV1', 'DESC_REFAMBATE');
+  $objSheet->setCellValue('AW1', 'PACCOVID19');
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -712,6 +738,21 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     //$objSheet->setCellValue('BK' . $i, $row["ESTJM"]);
     $DESC_ESTJM = utf8_encode($row["DESC_ESTJM"]);
     $objSheet->setCellValue('AP' . $i, $DESC_ESTJM);
+
+    $objSheet->setCellValue('AQ' . $i, $row["NROIDIPS"]);
+    $objSheet->setCellValue('AR' . $i, $row["NROIDPACIENTE"]);
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('AS' . $i, $MUNICIPIO);
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('AT' . $i, $DEPARTAMENTO);
+    // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
+    $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
+    $objSheet->setCellValue('AU' . $i, $DESC_CODAMBATE);
+    // $objSheet->setCellValue('AB' . $i, $row["REFAMBATE"]);
+    $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
+    $objSheet->setCellValue('AV' . $i, $DESC_REFAMBATE);
+    $objSheet->setCellValue('AW' . $i, $row["PACCOVID19"]);
+
   }
   oci_free_statement($st_tire);
 
@@ -965,7 +1006,19 @@ DECODE(PPR.JUSTNOPBS,NULL,'NO EXISTE',PPR.JUSTNOPBS)JUSTNOPBS,
 DECODE(PPR.INDREC,NULL,'NO EXISTE',PPR.INDREC) INDREC,
 
 DECODE(PPR.ESTJM,NULL,'NO EXISTE',PPR.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
-DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) DESC_ESTJM
+DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) DESC_ESTJM,
+
+DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
+DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
+DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+
+DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
+DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
+
+DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
+DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19
 
 from WEBSERV_PRES_PROC PPR
 LEFT JOIN WEBSERV_PRES_PRES PP ON PP.ID_PRES=PPR.ID_PRES
@@ -976,6 +1029,10 @@ LEFT JOIN WEBSERV_REF_PRE_CUPS CP ON CP.CODIGO=PPR.CODCUPS
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS FU ON FU.CODIGO=PPR.CODFREUSO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON DT.CODIGO=PPR.CODPERDURTRAT
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
+LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+               and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
   where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -1021,6 +1078,16 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
   $objSheet->setCellValue('Z1', 'JUSTNOPBS');
   $objSheet->setCellValue('AA1', 'INDREC');
   $objSheet->setCellValue('AB1', 'ESTJM');
+
+  $objSheet->setCellValue('AC1', 'NROIDIPS');
+  $objSheet->setCellValue('AD1', 'NROIDPACIENTE');
+  $objSheet->setCellValue('AE1', 'MUNICIPIO');
+  $objSheet->setCellValue('AF1', 'DEPARTAMENTO');
+  //$objSheet->setCellValue('Z1', 'CODAMBATE');
+  $objSheet->setCellValue('AG1', 'DESC_CODAMBATE');
+  ///$objSheet->setCellValue('AB1', 'REFAMBATE');
+  $objSheet->setCellValue('AH1', 'DESC_REFAMBATE');
+  $objSheet->setCellValue('AI1', 'PACCOVID19');
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -1079,6 +1146,21 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     //$objSheet->setCellValue('AG' . $i, $row["ESTJM"]);
     $DESC_ESTJM = utf8_encode($row["DESC_ESTJM"]);
     $objSheet->setCellValue('AB' . $i, $DESC_ESTJM);
+
+    $objSheet->setCellValue('AC' . $i, $row["NROIDIPS"]);
+    $objSheet->setCellValue('AD' . $i, $row["NROIDPACIENTE"]);
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('AE' . $i, $MUNICIPIO);
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('AF' . $i, $DEPARTAMENTO);
+    // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
+    $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
+    $objSheet->setCellValue('AG' . $i, $DESC_CODAMBATE);
+    // $objSheet->setCellValue('AB' . $i, $row["REFAMBATE"]);
+    $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
+    $objSheet->setCellValue('AH' . $i, $DESC_REFAMBATE);
+    $objSheet->setCellValue('AI' . $i, $row["PACCOVID19"]);
+
   }
   oci_free_statement($st_tire);
 
@@ -1253,6 +1335,18 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     
     DECODE(PPN.ESTJM,NULL,'NO EXISTE',PPN.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
     DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
+
+    DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
+    DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
+    DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+    DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+    
+    DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
+    DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
+    
+    DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
+    DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+    DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19
     
     FROM WEBSERV_PRES_PROD_NUTR PPN
     LEFT JOIN WEBSERV_PRES_PRES PP ON PP.ID_PRES=PPN.ID_PRES
@@ -1271,6 +1365,10 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON PPN.DURTRAT=    DT.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_FP_NU FCT ON PPN.UFCANTTOTAL=FCT.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PPN.ESTJM=EJ.CODIGO
+    LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+               LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+               LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+                              and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
   where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -1339,6 +1437,16 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
   $objSheet->setCellValue('AN1', 'NOPRESCASO');
   //$objSheet->setCellValue('AY1', 'ESTJM');
   $objSheet->setCellValue('AO1', 'DESC_ESTJM');
+
+  $objSheet->setCellValue('AP1', 'NROIDIPS');
+  $objSheet->setCellValue('AQ1', 'NROIDPACIENTE');
+  $objSheet->setCellValue('AR1', 'MUNICIPIO');
+  $objSheet->setCellValue('AS1', 'DEPARTAMENTO');
+  //$objSheet->setCellValue('Z1', 'CODAMBATE');
+  $objSheet->setCellValue('AT1', 'DESC_CODAMBATE');
+  ///$objSheet->setCellValue('AB1', 'REFAMBATE');
+  $objSheet->setCellValue('AU1', 'DESC_REFAMBATE');
+  $objSheet->setCellValue('AV1', 'PACCOVID19');
 
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -1450,6 +1558,22 @@ LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
     //$objSheet->setCellValue('AY' . $i, $row["ESTJM"]);
     $DESC_ESTJM = utf8_encode($row["DESC_ESTJM"]);
     $objSheet->setCellValue('AO' . $i, $DESC_ESTJM);
+    
+
+    $objSheet->setCellValue('AP' . $i, $row["NROIDIPS"]);
+    $objSheet->setCellValue('AQ' . $i, $row["NROIDPACIENTE"]);
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('AR' . $i, $MUNICIPIO);
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('AS' . $i, $DEPARTAMENTO);
+    // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
+    $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
+    $objSheet->setCellValue('AT' . $i, $DESC_CODAMBATE);
+    // $objSheet->setCellValue('AB' . $i, $row["REFAMBATE"]);
+    $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
+    $objSheet->setCellValue('AU' . $i, $DESC_REFAMBATE);
+    $objSheet->setCellValue('AV' . $i, $row["PACCOVID19"]);
+
   }
   oci_free_statement($st_tire);
 
@@ -1606,6 +1730,18 @@ DECODE(SC.INDREC,NULL,'NO EXISTE',SC.INDREC)INDREC,
 DECODE(SC.ESTJM,NULL,'NO EXISTE',SC.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
 DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
 
+DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
+DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
+DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+
+DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
+DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
+
+DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
+DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19
+
 FROM WEBSERV_PRES_SERV_COMP SC
 LEFT JOIN WEBSERV_REF_PRE_TI_PR TP ON SC.TIPOPREST=  TP.CODIGO
 LEFT JOIN WEBSERV_PRES_PRES PP ON PP.ID_PRES=SC.ID_PRES
@@ -1616,6 +1752,10 @@ LEFT JOIN WEBSERV_REF_PRE_TI_TRANSPORTE TT ON SC.TIPOTRANS=TT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TD_AA TA ON SC.TIPOIDACOMALB=TA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_PA_AA PA ON SC.PARENTACOMALB=PA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP EJ ON SC.ESTJM=EJ.CODIGO
+LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+           LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+           LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+                          and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -1664,6 +1804,16 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
   $objSheet->setCellValue('AA1', 'INDREC');
   //$objSheet->setCellValue('AI1', 'ESTJM');
   $objSheet->setCellValue('AB1', 'DESC_ESTJM');
+
+  $objSheet->setCellValue('AC1', 'NROIDIPS');
+  $objSheet->setCellValue('AD1', 'NROIDPACIENTE');
+  $objSheet->setCellValue('AE1', 'MUNICIPIO');
+  $objSheet->setCellValue('AF1', 'DEPARTAMENTO');
+  //$objSheet->setCellValue('Z1', 'CODAMBATE');
+  $objSheet->setCellValue('AG1', 'DESC_CODAMBATE');
+  ///$objSheet->setCellValue('AB1', 'REFAMBATE');
+  $objSheet->setCellValue('AH1', 'DESC_REFAMBATE');
+  $objSheet->setCellValue('AI1', 'PACCOVID19');
   $i = 1;
   while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
     $i = $i + 1;
@@ -1730,6 +1880,21 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
     // $objSheet->setCellValue('AI' . $i, $row["ESTJM"]);
     $DESC_ESTJM = utf8_encode($row["DESC_ESTJM"]);
     $objSheet->setCellValue('AB' . $i, $DESC_ESTJM);
+
+    $objSheet->setCellValue('AC' . $i, $row["NROIDIPS"]);
+    $objSheet->setCellValue('AD' . $i, $row["NROIDPACIENTE"]);
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('AE' . $i, $MUNICIPIO);
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('AF' . $i, $DEPARTAMENTO);
+    // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
+    $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
+    $objSheet->setCellValue('AG' . $i, $DESC_CODAMBATE);
+    // $objSheet->setCellValue('AB' . $i, $row["REFAMBATE"]);
+    $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
+    $objSheet->setCellValue('AH' . $i, $DESC_REFAMBATE);
+    $objSheet->setCellValue('AI' . $i, $row["PACCOVID19"]);
+
   }
   oci_free_statement($st_tire);
 
@@ -1845,12 +2010,28 @@ DECODE(PD.INDREC,NULL,'NO EXISTE',PD.INDREC)INDREC,
 DECODE(PD.ESTJM,NULL,'NO EXISTE',PD.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
 DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
 
+DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
+DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
+DECODE(gl_muni.GeographicLocationName,NULL,'NO EXISTE',gl_muni.GeographicLocationName)MUNICIPIO,
+DECODE(gl_depa.GeographicLocationName,NULL,'NO EXISTE',gl_depa.GeographicLocationName)DEPARTAMENTO,
+
+DECODE(PP.CODAMBATE,null,'NO EXISTE',CODAMBATE) AS CODAMBATE,
+DECODE(PAA.DESCRIPCION,NULL,'NO EXISTE',PAA.DESCRIPCION) AS DESC_CODAMBATE,
+
+DECODE(PP.REFAMBATE,null,'NO EXISTE',REFAMBATE) AS REFAMBATE,
+DECODE(REFAMBATE,0,'NO',1,'SI','NO EXISTE') as DESC_REFAMBATE,
+DECODE(PP.PACCOVID19,null,'NO EXISTE',PP.PACCOVID19) AS PACCOVID19
+
 FROM WEBSERV_PRES_DISP PD
 LEFT JOIN WEBSERV_PRES_PRES PP ON PD.ID_PRES=PP.ID_PRES
 LEFT JOIN WEBSERV_REF_PRE_TI_PR   TP ON PD.TIPOPREST=  TP.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TD_ME TM ON PD.CODDISP=TM.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS PDU ON PD.CODPERDURTRAT=PDU.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PD.ESTJM=EJ.CODIGO
+LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE 
+           LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
+           LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
+                          and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
 where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . " and pp.REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -1915,7 +2096,22 @@ where  pp.REPO_SERV_ID=" . $servicio_id . " and pp.REPO_TIRE_ID=" . $tipo_id . "
 
     //$objSheet->setCellValue('Q' . $i, $row["ESTJM"]);
     $DESC_ESTJM = utf8_encode($row["DESC_ESTJM"]);
-    $objSheet->setCellValue('N' . $i, $DESC_ESTJM);
+    $objSheet->setCellValue('N' . $i, $DESC_ESTJM);    
+
+    $objSheet->setCellValue('O' . $i, $row["NROIDIPS"]);
+    $objSheet->setCellValue('P' . $i, $row["NROIDPACIENTE"]);
+    $MUNICIPIO = utf8_encode($row["MUNICIPIO"]);
+    $objSheet->setCellValue('Q' . $i, $MUNICIPIO);
+    $DEPARTAMENTO = utf8_encode($row["DEPARTAMENTO"]);
+    $objSheet->setCellValue('R' . $i, $DEPARTAMENTO);
+    // $objSheet->setCellValue('Z' . $i, $row["CODAMBATE"]);
+    $DESC_CODAMBATE = utf8_encode($row["DESC_CODAMBATE"]);
+    $objSheet->setCellValue('S' . $i, $DESC_CODAMBATE);
+    // $objSheet->setCellValue('AB' . $i, $row["REFAMBATE"]);
+    $DESC_REFAMBATE = utf8_encode($row["DESC_REFAMBATE"]);
+    $objSheet->setCellValue('T' . $i, $DESC_REFAMBATE);
+    $objSheet->setCellValue('U' . $i, $row["PACCOVID19"]);
+
   }
   oci_free_statement($st_tire);
 
@@ -1976,7 +2172,7 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
   /***************************************************************************************/
   /***************************************************************************************/
 }
-
+/*
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objXLS->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
@@ -1989,3 +2185,4 @@ $objWriter->save('php://output');
 //header("Location:../Administrador/ReportesTecnico.php");
 exit;
 
+*/
