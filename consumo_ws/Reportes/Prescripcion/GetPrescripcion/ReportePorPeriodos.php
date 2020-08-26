@@ -515,7 +515,8 @@ LEFT JOIN WEBSERV_REF_PRE_IN_ES   IE ON PM.INDESP=     IE.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON PM.DURTRAT=    DT.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_UF_CT   UC ON PM.UFCANTTOTAL=UC.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PM.ESTJM=EJ.CODIGO
-LEFT JOIN WEBSERV_REF_PRE_AMB_ATE PAA ON PAA.CODIGO=pp.CODAMBATE
+LEFT JOIN WEBSERV_REF_PRE_AMB_ATE PAA ON PAA.CODIGO=pp.CODAMBATE  LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)
 LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
 LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
                and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
@@ -1030,6 +1031,8 @@ LEFT JOIN WEBSERV_REF_PRE_TIEMPOS FU ON FU.CODIGO=PPR.CODFREUSO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS DT ON DT.CODIGO=PPR.CODPERDURTRAT
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON EJ.CODIGO=PPR.ESTJM
 LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)
 LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
 LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
                and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
@@ -1334,7 +1337,7 @@ LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_d
     DECODE(PPN.NOPRESCASO,NULL,'NO EXISTE',PPN.NOPRESCASO)NOPRESCASO,
     
     DECODE(PPN.ESTJM,NULL,'NO EXISTE',PPN.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
-    DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
+    DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM,
 
     DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
     DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
@@ -1366,6 +1369,8 @@ LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_d
     LEFT JOIN WEBSERV_REF_PRE_FP_NU FCT ON PPN.UFCANTTOTAL=FCT.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PPN.ESTJM=EJ.CODIGO
     LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+    LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+    AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)
                LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
                LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
                               and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
@@ -1728,7 +1733,7 @@ DECODE(SC.JUSTNOPBS,NULL,'NO EXISTE',SC.JUSTNOPBS)JUSTNOPBS,
 DECODE(SC.INDREC,NULL,'NO EXISTE',SC.INDREC)INDREC, 
 
 DECODE(SC.ESTJM,NULL,'NO EXISTE',SC.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
-DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
+DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM,
 
 DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
 DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
@@ -1753,6 +1758,8 @@ LEFT JOIN WEBSERV_REF_PRE_TD_AA TA ON SC.TIPOIDACOMALB=TA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_PA_AA PA ON SC.PARENTACOMALB=PA.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP EJ ON SC.ESTJM=EJ.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE
+LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)
            LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
            LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
                           and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
@@ -2008,7 +2015,7 @@ DECODE(PD.JUSTNOPBS,NULL,'NO EXISTE',PD.JUSTNOPBS)JUSTNOPBS,
 DECODE(PD.INDREC,NULL,'NO EXISTE',PD.INDREC)INDREC,
 
 DECODE(PD.ESTJM,NULL,'NO EXISTE',PD.ESTJM)ESTJM,--14. Lista (Medi-EstJM)
-DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM
+DECODE(EJ.DESCRIPCION,NULL,'NO EXISTE',EJ.DESCRIPCION) AS DESC_ESTJM,
 
 DECODE(NROIDIPS, NULL,'NO EXISTE',NROIDIPS) NROIDIPS,
 DECODE(NROIDPACIENTE, NULL,'NO EXISTE',NROIDPACIENTE) NROIDPACIENTE,
@@ -2029,6 +2036,8 @@ LEFT JOIN WEBSERV_REF_PRE_TD_ME TM ON PD.CODDISP=TM.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_TIEMPOS PDU ON PD.CODPERDURTRAT=PDU.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_ES_JP   EJ ON PD.ESTJM=EJ.CODIGO
 LEFT JOIN WEBSERV_REF_PRE_AMB_ATE paa ON paa.CODIGO=pp.CODAMBATE 
+LEFT JOIN client@consulta_pstby c on c.clientcode = PP.NROIDPACIENTE /*and c.TypeDocumentId=PP.TIPOIDPACIENTE*/ 
+AND c.clientid in (select max(c.CLIENTID)/*,c.CLIENTCODE,count(*)*/ cantidad from client c  group by c.clientcode)
            LEFT join GeographicLocation@consulta_pstby gl_muni  on c.CompanyId = gl_muni.CompanyId and c.GeographicLocationId = gl_muni.GeographicLocationId
            LEFT join GeographicLocation@consulta_pstby gl_depa  on gl_muni.CompanyId = gl_depa.CompanyId 
                           and gl_muni.Parent=gl_depa.GeographicLocationId and gl_muni.\"Level\">2  
@@ -2172,7 +2181,7 @@ $objXLS->getActiveSheet()->getStyle('A2:G'.$numero)->getAlignment()->setHorizont
   /***************************************************************************************/
   /***************************************************************************************/
 }
-/*
+
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objXLS->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.
@@ -2185,4 +2194,3 @@ $objWriter->save('php://output');
 //header("Location:../Administrador/ReportesTecnico.php");
 exit;
 
-*/
