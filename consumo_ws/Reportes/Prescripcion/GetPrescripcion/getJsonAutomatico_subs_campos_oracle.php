@@ -357,9 +357,12 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
           $cad_pres_busc_ini = '{"prescripcion"';
           $cad_pres_busc_fin = ',"medicamentos"';
           $cadena_presc = $array[$i];
+          $cadena_presc = str_replace("'", "´", $cadena_presc);
           $posPresInicial = strpos($cadena_presc, $cad_pres_busc_ini);
           $posPresFinal = strpos($cadena_presc, $cad_pres_busc_fin);
           $subCadenaPresGene = substr($cadena_presc, $posPresInicial, $posPresFinal - $posPresInicial);
+          
+          
           //echo "<br><br>-------------------------------------------------------------------------prescripcion";
 
           if ($cadena_presc != '') {
