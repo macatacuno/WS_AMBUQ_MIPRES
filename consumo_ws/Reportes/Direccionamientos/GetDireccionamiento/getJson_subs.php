@@ -48,7 +48,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         echo "<br>___________________________________________________________________________________________________________________________________________________________________________________________";
 
         $url = $url_bd . "/" . $nit . '/' . $token_temporal . '/' . "20" . $periodo_conteo;
-        $json = Webservice_get($url); //$json = file_get_contents($url);
+        $json = Webservice_get($url); //$json = file_get_contents($url);        
+        $json = str_replace("\\n", "", $json);
+        $json = str_replace("\\t", "", $json);
         $json = formatear_json_general($json);
 
         $fecha_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato original "y/m/d"
@@ -74,10 +76,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $FecAnulacion_oracle = "";
                 if ($clave["FecAnulacion"] != '') {
                     $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
-
                 }
-
-
+                $CodSerTecAEntregar = str_replace(" ", "", $clave["CodSerTecAEntregar"]);
                 $CantTotAEntregar = str_replace("'", "", $clave["CantTotAEntregar"]);
                 /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
@@ -126,14 +126,14 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $fecha_FecMaxEnt_oracle . "',
                     '" . $CantTotAEntregar . "',
                     '" . $clave["DirPaciente"] . "',
-                    '" . $clave["CodSerTecAEntregar"] . "',
+                    '" . $CodSerTecAEntregar . "',
                     '" . $clave["NoIDEPS"] . "',
                     '" . $clave["CodEPS"] . "',
                     '" . $FecDireccionamiento_oracle . "',
                     " . $clave["EstDireccionamiento"] . ",
                     '" . $FecAnulacion_oracle . "'
                   )";
-               // echo "<br>sql: $sql_exc";
+                // echo "<br>sql: $sql_exc";
                 $st = oci_parse($conn_oracle, $sql_exc);
                 $result = oci_execute($st);
                 oci_free_statement($st);

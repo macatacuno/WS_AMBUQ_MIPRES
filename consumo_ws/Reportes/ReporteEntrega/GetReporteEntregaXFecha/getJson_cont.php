@@ -48,7 +48,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         echo "<br>___________________________________________________________________________________________________________________________________________________________________________________________";
 
         $url = $url_bd . "/" . $nit . '/' . $token_temporal . '/' . "20" . $periodo_conteo;
-        $json = Webservice_get($url); //$json = file_get_contents($url);
+        $json = Webservice_get($url); //$json = file_get_contents($url);  
+        $json = str_replace("\\n", "", $json);
+        $json = str_replace("\\t", "", $json);
         $json = formatear_json_general($json);
         //echo "<br>url: $url<br>";
         //echo "<br>json: $json<br>";
@@ -77,6 +79,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     $FecAnulacion_oracle = date("d/m/Y H:i:s", strtotime($clave["FecAnulacion"])); //formato originar "y/m/d"
 
                 }
+                
+                $CodTecEntregado = str_replace(" ", "", $clave["CodTecEntregado"]);
                 /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT
                 INTO WEBSERV_REPORTE_ENTREGA
@@ -119,7 +123,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     '" . $clave["EstadoEntrega"] . "',
                     '" . $clave["CausaNoEntrega"] . "',
                     '" . $clave["ValorEntregado"] . "',
-                    '" . $clave["CodTecEntregado"] . "',
+                    '" . $CodTecEntregado . "',
                     '" . $clave["CantTotEntregada"] . "',
                     '" . $clave["NoLote"] . "',
                     '" . $FecEntrega_oracle . "',
