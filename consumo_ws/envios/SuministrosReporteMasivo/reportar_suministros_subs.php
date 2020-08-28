@@ -60,13 +60,13 @@ for ($row = 2; $row <= $highestRow; $row++) {
       \"NoLote\": \"$nolote\",
       \"ValorEntregado\": \"$valorentregado\"
     }";
-    echo "$json_reporte_sumi<br>";
+    //echo "$json_reporte_sumi<br>";
 
     $url = $url_bd . "/" . $nit . '/' . $token_temporal;
-    echo "url: $url<br>";
+    //echo "url: $url<br>";
 
     $respuesta = direccionar_put($url, $json_reporte_sumi);
-    echo "$respuesta<br><br>";
+    echo "$respuesta<br>";
   }
 }
 
