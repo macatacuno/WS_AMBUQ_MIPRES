@@ -179,7 +179,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
         $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
-        //echo $sql_exc;
+        echo $sql_exc;
 
         $st = oci_parse($conn_oracle, $sql_exc);
 
