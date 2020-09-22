@@ -3,7 +3,7 @@
 set_time_limit(9999999);
 //ini_set('memory_limit', '-1');
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 
 include('../../../funciones_generales.php');
 ///////Declaracion de Variables Generales(Inicio)/////////
@@ -27,12 +27,12 @@ $json = "";
 $count_report = 0;
 ///////Declaracion de Variables Generales(Fin)/////////
 
-$id_pres = ""; //llave primaria de la tabla WEBSERV_PRES_PRES
-$id_medi = ""; //llave primaria de la tabla WEBSERV_PRES_MEDI
+$id_pres = ""; //llave primaria de la tabla OASIS4.WEBSERV_PRES_PRES
+$id_medi = ""; //llave primaria de la tabla OASIS4.WEBSERV_PRES_MEDI
 $dato_vec[] = "";
 
 /////obtener los parametros la url(inicio)
-$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID from WEBSERV_SERVICIOS S JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
+$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID FROM OASIS4.WEBSERV_SERVICIOS S JOIN OASIS4.WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
 $st_serv = oci_parse($conn_oracle, $query);
 oci_execute($st_serv, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
@@ -49,7 +49,7 @@ oci_free_statement($st_serv);
 
 //////obtener el nit y el token(inicio)
 
-$query = "select NIT,TOKEN from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+$query = "select NIT,TOKEN FROM OASIS4.WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
 $st_tire = oci_parse($conn_oracle, $query);
 oci_execute($st_tire, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -103,7 +103,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
   $periodo_conteo_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
-  $query_exist = "select count(1) CANTIDAD from WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
+  $query_exist = "select count(1) CANTIDAD FROM OASIS4.WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
   //echo "<br> query_exist: ".$query_exist."<br>";
   $st_exist = oci_parse($conn_oracle, $query_exist);
   $resultado = oci_execute($st_exist, OCI_DEFAULT);
@@ -132,7 +132,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         
         $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
         $peri_error_conteo = $peri_error_conteo + 1;
-        $sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+        $sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
         VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al consumir el WebService','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
         echo $sql_log_err;
 
@@ -146,7 +146,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
       } else if ($json == "[]") {
          echo "<br>/////////////////////// Json #" . $i_Principal . " Periodo: 20" . $periodo_conteo . "<br>";
-        $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
+        $sql_exc = "INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
         echo $sql_exc;
 
@@ -174,7 +174,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         
         /////Insertar prescripcion (Inicio)
 
-        $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'SI')"; //no se inserta el json porque provoca error al insertar el registro
+        $sql_exc = "INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'SI')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
         echo "<br>" . $sql_exc;
 
@@ -187,7 +187,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           //echo "<br>Insercion Correcta ";
           $periodos_cargados = $periodos_cargados . "20" . $periodo_conteo . "<br>";
           $periodos_cargados_conteo = $periodos_cargados_conteo + 1;
-          $sql_log_err = "delete from webserv_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
+          $sql_log_err = "delete FROM OASIS4.WEBSERV_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
 
           // echo $sql_log_err;
 
@@ -205,7 +205,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
           $peri_error_conteo = $peri_error_conteo + 1;
-          $sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+          $sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
            VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
           echo $sql_log_err;
 
@@ -488,13 +488,13 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
             /////Insertar prescripcion (Inicio)
-            $sql_exc = "INSERT INTO WEBSERV_JUNTA_PROFESIONAL 
+            $sql_exc = "INSERT INTO OASIS4.WEBSERV_JUNTA_PROFESIONAL 
             (ID_JUPR,REPO_SERV_ID,REPO_TIRE_ID,REPO_PERIODO,NoPrescripcion,
             FPrescripcion,TipoTecnologia,Consecutivo,EstJM,CodEntProc,
             Observaciones,JustificacionTecnica,Modalidad,NoActa,FechaActa,FProceso,
             TipoIDPaciente,NroIDPaciente,CodEntJM
             )  
-            VALUES (SEQ_WEBSERV_JUNTA_PROFESIONAL.nextval" . "," . $servicio_id . "," . $tipo_id . ",'"
+            VALUES (OASIS4.SEQ_WEBSERV_JUNTA_PROFESIONAL.nextval" . "," . $servicio_id . "," . $tipo_id . ",'"
               . $fecha_oracle . "',"  . $NoPrescripcion . "," . $FPrescripcion . ","
               . $TipoTecnologia . "," . $Consecutivo . "," . $EstJM . "," . $CodEntProc . ","
               . $Observaciones . "," . $JustificacionTecnica . "," . $Modalidad . "," . $NoActa . ","

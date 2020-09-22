@@ -182,7 +182,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
             $JustifMed = str_replace("'", "´", $clave["JustifMed"]);
             $sql_exc = "INSERT
-            INTO WEBSERV_TUTELA_TUTELA
+            INTO OASIS4.WEBSERV_TUTELA_TUTELA
               (
                 ID_TUTE,
                 REPO_PERIODO,
@@ -234,7 +234,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               )
                 VALUES
                 (
-                        SEQ_WEBSERV_TUTELA_TUTELA.nextval,
+                        OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.nextval,
                         '" . $fecha_oracle . "',
                         '" . $servicio_id . "',
                         '" . $tipo_id . "',
@@ -314,7 +314,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               $FFalloAdic_oracle = date("d/m/Y", strtotime($clave["FFalloAdic"]));
             }
             $sql_exc = "INSERT
-                INTO WEBSERV_TUTELA_FALLOS_ADIC
+                INTO OASIS4.WEBSERV_TUTELA_FALLOS_ADIC
                   (
                     ID_TUTE,
                     FFALLOADIC,
@@ -322,7 +322,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                   )
                   VALUES
                   (
-                    " . "SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
+                    " . "OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
                     '" . $FFalloAdic_oracle . "',
                     '" . $clave["NroFalloAdic"] . "'
                   )";
@@ -366,7 +366,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               foreach ($vecMedi_array as $clave) {
 
                 $sql_exc = "INSERT
-                  INTO WEBSERV_TUTELA_MEDICAMENTOS
+                  INTO OASIS4.WEBSERV_TUTELA_MEDICAMENTOS
                     (
                       ID_MEDI,
                       ID_TUTE,
@@ -392,8 +392,8 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     )
                     VALUES
                     (
-                      SEQ_WEBSERV_TUTELA_MEDI.nextval,
-                      SEQ_WEBSERV_TUTELA_TUTELA.currval,
+                      OASIS4.SEQ_WEBSERV_TUTELA_MEDI.nextval,
+                      OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval,
                       '" . $clave["ConOrden"] . "',
                       '" . $clave["TipoMed"] . "',
                       '" . $clave["TipTut"] . "',
@@ -441,7 +441,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $vecPriAct_array = json_decode($vecPriAct, true);
                 foreach ($vecPriAct_array as $clave) {
                   $sql_exc = "INSERT
-                  INTO WEBSERV_TUTELA_PRIN_ACTI
+                  INTO OASIS4.WEBSERV_TUTELA_PRIN_ACTI
                     (
                       ID_MEDI,
                       CONORDEN,
@@ -453,7 +453,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     )
                     VALUES
                     (
-                      SEQ_WEBSERV_TUTELA_MEDI.currval,
+                      OASIS4.SEQ_WEBSERV_TUTELA_MEDI.currval,
                        '" . $clave["ConOrden"] . "',
                        '" . $clave["CodPriAct"] . "',
                        '" . $clave["ConcCant"] . "',
@@ -481,7 +481,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $vecIndUni_array = json_decode($vecIndUni, true);
                 foreach ($vecIndUni_array as $clave) {
                   $sql_exc = "INSERT
-                  INTO WEBSERV_TUTELA_INDI_UNIRS
+                  INTO OASIS4.WEBSERV_TUTELA_INDI_UNIRS
                     (
                       ID_MEDI,
                       CONORDEN,
@@ -489,7 +489,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     )
                     VALUES
                     (
-                      SEQ_WEBSERV_TUTELA_MEDI.currval,
+                      OASIS4.SEQ_WEBSERV_TUTELA_MEDI.currval,
                        '" . $clave["ConOrden"] . "',
                        '" . $clave["CodIndicacion"] . "'
                      )";
@@ -521,7 +521,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           foreach ($json_array as $clave) {
 
             $sql_exc = "INSERT
-            INTO WEBSERV_TUTELA_PROCEDIMIENTOS
+            INTO OASIS4.WEBSERV_TUTELA_PROCEDIMIENTOS
               (
                 ID_TUTE,
                 CONORDEN,
@@ -542,7 +542,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               )
               VALUES
               (
-                " . "SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
+                " . "OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
                 '" . $clave["ConOrden"] . "',
                 '" . $clave["TipTut"] . "',
                 '" . $clave["TipoPrest"] . "',
@@ -583,7 +583,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           foreach ($json_array as $clave) {
 
             $sql_exc = "INSERT
-            INTO WEBSERV_TUTELA_DISPOSITIVOS
+            INTO OASIS4.WEBSERV_TUTELA_DISPOSITIVOS
               (
                 ID_TUTE,
                 CONORDEN,
@@ -602,7 +602,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               )
               VALUES
               (
-                " . "SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
+                " . "OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
                 '" . $clave["ConOrden"] . "',
                 '" . $clave["TipTut"] . "',
                 '" . $clave["TipoPrest"] . "',
@@ -641,7 +641,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           foreach ($json_array as $clave) {
 
             $sql_exc = "INSERT
-            INTO WEBSERV_TUTELA_PROD_NUTR
+            INTO OASIS4.WEBSERV_TUTELA_PROD_NUTR
               (
                 ID_TUTE,
                 CONORDEN,
@@ -665,7 +665,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               )
               VALUES
               (
-                " . "SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
+                " . "OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
                 '" . $clave["ConOrden"] . "',
                 '" . $clave["TipTut"] . "',
                 '" . $clave["TipoPrest"] . "',
@@ -714,7 +714,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
             $sql_exc = "INSERT
-            INTO WEBSERV_TUTELA_SERV_COMP
+            INTO OASIS4.WEBSERV_TUTELA_SERV_COMP
               (
                 ID_TUTE,
                 CONORDEN,
@@ -733,7 +733,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
               )
               VALUES
               (
-                " . "SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
+                " . "OASIS4.SEQ_WEBSERV_TUTELA_TUTELA.currval" . ",
                 '" . $clave["ConOrden"] . "',
                 '" . $clave["TipTut"] . "',
                 '" . $clave["TipoPrest"] . "',

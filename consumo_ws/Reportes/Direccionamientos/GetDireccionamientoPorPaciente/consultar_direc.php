@@ -1,6 +1,6 @@
 <?php
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 set_time_limit(9999999);
 ini_set('memory_limit', '-1');
 
@@ -41,11 +41,11 @@ if (($NoPrescripcion != '' && $NoPrescripcion != null) || ($NoIDPaciente != '' &
   decode(d.TIPOIDPACIENTE,null,'.',d.TIPOIDPACIENTE)TIPOIDPACIENTE,
   decode(d.NOIDPACIENTE,null,'.',d.NOIDPACIENTE)NOIDPACIENTE
   --decode(d.CODEPS,null,'.',d.CODEPS)CODEPS
-  from WEBSERV_DIRECCIONAMIENTOS d
-  left JOIN view_webserv_pres_info_direc pi 
+  FROM OASIS4.WEBSERV_DIRECCIONAMIENTOS d
+  left JOIN OASIS4.VIEW_WEBSERV_pres_info_direc pi 
   ON trim(pi.NOPRESCRIPCION)=trim(d.NOPRESCRIPCION)  and trim(pi.NROIDPACIENTE)=trim(d.NOIDPACIENTE) 
      and pi.CONORDEN=d.CONTEC and pi.TIPOTEC=d.TIPOTEC
-  left join WEBSERV_PRES_LIST_PROV pr on pr.NOIDPROV=d.NOIDPROV
+  left JOIN OASIS4.WEBSERV_PRES_LIST_PROV pr on pr.NOIDPROV=d.NOIDPROV
   where 1=1";
 
   if ($NoPrescripcion != '' && $NoPrescripcion != null) {

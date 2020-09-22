@@ -27,7 +27,7 @@ $serv_nombre = "";
 $url_api_generar_token = "";
 
 /////obtener los parametros la url(inicio)
-$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID from WEBSERV_SERVICIOS S JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
+$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID FROM OASIS4.WEBSERV_SERVICIOS S JOIN OASIS4.WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
 $st_serv = oci_parse($conn_oracle, $query);
 oci_execute($st_serv, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
@@ -45,7 +45,7 @@ $query = "SELECT TOKEN,NIT,
 decode(TOKEN_TEMPORAL,null,'vacio',TOKEN_TEMPORAL) TOKEN_TEMPORAL, 
 decode(round(24 * (sysdate - to_date(to_char(FECHA_TOKEN_TEMPORAL, 'YYYY-MM-DD hh24:mi'), 'YYYY-MM-DD hh24:mi')),2),null,-1,
        round(24 * (sysdate - to_date(to_char(FECHA_TOKEN_TEMPORAL, 'YYYY-MM-DD hh24:mi'), 'YYYY-MM-DD hh24:mi')),2))as HORAS_DE_DIFERENCIA 
-FROM WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+FROM OASIS4.WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
 $st_tire = oci_parse($conn_oracle, $query);
 oci_execute($st_tire, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -94,15 +94,15 @@ if (strpos($response, 'Exitosa') !== false) {
 	$sql_exc = "";
 	if ($tipoNumero == 'PRESCRIPCION') {
 		if ($TipoTec == 'M') {
-			$nombre_tabla = 'WEBSERV_PRES_MEDI';
+			$nombre_tabla = 'OASIS4.WEBSERV_PRES_MEDI';
 		} else if ($TipoTec == 'P') {
-			$nombre_tabla = 'WEBSERV_PRES_PROC';
+			$nombre_tabla = 'OASIS4.WEBSERV_PRES_PROC';
 		} else if ($TipoTec == 'N') {
-			$nombre_tabla = 'WEBSERV_PRES_PROD_NUTR';
+			$nombre_tabla = 'OASIS4.WEBSERV_PRES_PROD_NUTR';
 		} else if ($TipoTec == 'S') {
-			$nombre_tabla = 'WEBSERV_PRES_SERV_COMP';
+			$nombre_tabla = 'OASIS4.WEBSERV_PRES_SERV_COMP';
 		} else if ($TipoTec == 'D') {
-			$nombre_tabla = 'WEBSERV_PRES_DISP';
+			$nombre_tabla = 'OASIS4.WEBSERV_PRES_DISP';
 		}
 
 		$sql_exc = "UPDATE " . $nombre_tabla . " 
@@ -110,15 +110,15 @@ if (strpos($response, 'Exitosa') !== false) {
 			$dir_id_direccionamiento . " and DIR_ID = " . $dir_id;
 	} else if ($tipoNumero == 'TUTELA') {
 		if ($TipoTec == 'M') {
-			$nombre_tabla = 'WEBSERV_TUTELA_MEDICAMENTOS';
+			$nombre_tabla = 'OASIS4.WEBSERV_TUTELA_MEDICAMENTOS';
 		} else if ($TipoTec == 'P') {
-			$nombre_tabla = 'WEBSERV_TUTELA_PROCEDIMIENTOS';
+			$nombre_tabla = 'OASIS4.WEBSERV_TUTELA_PROCEDIMIENTOS';
 		} else if ($TipoTec == 'N') {
-			$nombre_tabla = 'WEBSERV_TUTELA_PROD_NUTR';
+			$nombre_tabla = 'OASIS4.WEBSERV_TUTELA_PROD_NUTR';
 		} else if ($TipoTec == 'S') {
-			$nombre_tabla = 'WEBSERV_TUTELA_SERV_COMP';
+			$nombre_tabla = 'OASIS4.WEBSERV_TUTELA_SERV_COMP';
 		} else if ($TipoTec == 'D') {
-			$nombre_tabla = 'WEBSERV_TUTELA_DISPOSITIVOS';
+			$nombre_tabla = 'OASIS4.WEBSERV_TUTELA_DISPOSITIVOS';
 		}
 
 		$sql_exc = "UPDATE " . $nombre_tabla . " 
@@ -146,7 +146,7 @@ if (strpos($response, 'Exitosa') !== false) {
 
 
 	$sql_exc = "DELETE
-		FROM WEBSERV_PRES_DIRECCIONADOS
+		FROM OASIS4.WEBSERV_PRES_DIRECCIONADOS
 		WHERE DIR_ID                = $dir_id
 		AND DIR_IDDIRECCIONAMIENTO = $dir_id_direccionamiento";
 

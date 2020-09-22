@@ -83,7 +83,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $CodTecEntregado = str_replace(" ", "", $clave["CodTecEntregado"]);
                 /////Insertar prescripcion (Inicio)
                 $sql_exc = "INSERT
-                INTO WEBSERV_REPORTE_ENTREGA
+                INTO OASIS4.WEBSERV_REPORTE_ENTREGA
                   (
                     REPO_SERV_ID,
                     REPO_PERIODO,

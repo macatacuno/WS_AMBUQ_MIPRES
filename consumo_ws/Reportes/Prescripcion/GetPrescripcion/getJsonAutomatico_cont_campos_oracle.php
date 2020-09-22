@@ -17,7 +17,7 @@ if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
 */
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 
 
 ///////Declaracion de Variables Generales(Inicio)/////////
@@ -41,8 +41,8 @@ $json = "";
 $count_report = 0;
 ///////Declaracion de Variables Generales(Fin)/////////
 
-$id_pres = ""; //llave primaria de la tabla WEBSERV_PRES_PRES
-$id_medi = ""; //llave primaria de la tabla WEBSERV_PRES_MEDI
+$id_pres = ""; //llave primaria de la tabla OASIS4.WEBSERV_PRES_PRES
+$id_medi = ""; //llave primaria de la tabla OASIS4.WEBSERV_PRES_MEDI
 $dato_vec[] = "";
 
 /////obtener los parametros la url(inicio)
@@ -55,7 +55,7 @@ if ($resultado = $conn->query($consulta)) {
   }
 }*/
 
-$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID from WEBSERV_SERVICIOS S JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
+$query = "select S.URL,S.NOMBRE AS SERV_NOMBRE,TS.WS_ID FROM OASIS4.WEBSERV_SERVICIOS S JOIN OASIS4.WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID WHERE S.SERV_ID=" . $servicio_id;
 $st_serv = oci_parse($conn_oracle, $query);
 oci_execute($st_serv, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
@@ -82,7 +82,7 @@ if ($resultado = $conn->query($consulta)) {
 
 */
 
-$query = "select NIT,TOKEN from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+$query = "select NIT,TOKEN FROM OASIS4.WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
 $st_tire = oci_parse($conn_oracle, $query);
 oci_execute($st_tire, OCI_DEFAULT);
 while (($row = oci_fetch_array($st_tire, OCI_BOTH)) != false) {
@@ -136,7 +136,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
   $periodo_conteo_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
-  $query_exist = "select count(1) CANTIDAD from WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
+  $query_exist = "select count(1) CANTIDAD FROM OASIS4.WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
   //echo "<br> query_exist: ".$query_exist."<br>";
   $st_exist = oci_parse($conn_oracle, $query_exist);
   $resultado = oci_execute($st_exist, OCI_DEFAULT);
@@ -164,7 +164,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         echo "<br>json: $json<br>";
         $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
         $peri_error_conteo = $peri_error_conteo + 1;
-        $sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+        $sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
         VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al consumir el WebService','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
         echo $sql_log_err;
 
@@ -177,7 +177,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
       } else if ($json == "[]") {
         echo "<br>/////////////////////// Json #" . $i_Principal . " Periodo: 20" . $periodo_conteo . "<br>";
 
-        $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
+        $sql_exc = "INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'NO')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
         echo $sql_exc;
 
@@ -207,7 +207,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
         /////Insertar prescripcion (Inicio)
 
-        $sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'SI')"; //no se inserta el json porque provoca error al insertar el registro
+        $sql_exc = "INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'SI')"; //no se inserta el json porque provoca error al insertar el registro
         //$repo_json_periodo="'".$servicio_id."-".$tipo_id."-".$fecha_oracle."'";
         echo "<br>" . $sql_exc;
 
@@ -220,7 +220,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
           //echo "<br>Insercion Correcta ";
           $periodos_cargados = $periodos_cargados . "20" . $periodo_conteo . "<br>";
           $periodos_cargados_conteo = $periodos_cargados_conteo + 1;
-          $sql_log_err = "delete from webserv_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
+          $sql_log_err = "delete FROM OASIS4.WEBSERV_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
 
           // echo $sql_log_err;
 
@@ -238,7 +238,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
           $peri_error = $peri_error . "20" . $periodo_conteo . "(Error al insertar el registro)<br>";
           $peri_error_conteo = $peri_error_conteo + 1;
-          $sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+          $sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
            VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
           echo $sql_log_err;
 
@@ -252,7 +252,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
 
         /*
-    $sql="INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json, fecha_actualizacion, fecha_registro) VALUES (".$servicio_id.",".$tipo_id.",'20".$periodo_conteo."', '".$json."')";
+    $sql="INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json, fecha_actualizacion, fecha_registro) VALUES (".$servicio_id.",".$tipo_id.",'20".$periodo_conteo."', '".$json."')";
     if (mysqli_query($conn, $sql)) {
           $periodos_cargados=$periodos_cargados."20".$periodo_conteo."<br>";
           $periodos_cargados_conteo=$periodos_cargados_conteo+1;
@@ -263,7 +263,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
 
       $peri_error= $peri_error."20".$periodo_conteo."(Error al insertar el registro)<br>";
       $peri_error_conteo=$peri_error_conteo+1;
-      $sql="INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+      $sql="INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
       VALUES (".$servicio_id.",".$tipo_id.",'20".$periodo_conteo."', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó ".$serv_nombre." ".$tipo_get." 20".$periodo_conteo."')";
       mysqli_query($conn, $sql);
   }*/
@@ -689,7 +689,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
             ////ID_PRES
-            $sql_id_pres = "select SEQ_WEBSERV_PRES_PRES.nextval as ID_PRES from dual";
+            $sql_id_pres = "select OASIS4.SEQ_WEBSERV_PRES_PRES.nextval as ID_PRES from dual";
             $st_id_pres = oci_parse($conn_oracle, $sql_id_pres);
             oci_execute($st_id_pres, OCI_DEFAULT);
             while (($row = oci_fetch_array($st_id_pres, OCI_BOTH)) != false) {
@@ -981,7 +981,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
             /////Insertar prescripcion (Inicio)
-            $sql_exc = "INSERT INTO WEBSERV_PRES_PRES 
+            $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_PRES 
             (ID_PRES,REPO_SERV_ID, REPO_TIRE_ID, REPO_PERIODO,NOPRESCRIPCION, FPRESCRIPCION,HPRESCRIPCION,CODHABIPS,TIPOIDIPS,NROIDIPS,CODDANEMUNIPS,DIRSEDEIPS,TELSEDEIPS,TIPOIDPROF,NUMIDPROF,PNPROFS,SNPROFS,PAPROFS,SAPROFS,REGPROFS,TIPOIDPACIENTE,NROIDPACIENTE,PNPACIENTE,SNPACIENTE,PAPACIENTE,SAPACIENTE,CODAMBATE,PACCOVID19,REFAMBATE,ENFHUERFANA,CODENFHUERFANA,ENFHUERFANADX,CODDXPPAL,CODDXREL1,CODDXREL2,SOPNUTRICIONAL,CODEPS,TIPOIDMADREPACIENTE,NROIDMADREPACIENTE,TIPOTRANSC,TIPOIDDONANTEVIVO,NROIDDONANTEVIVO,ESTPRES
           )  VALUES (" . $id_pres . "," . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "'," . $noPrescripcion . "," . $FPrescripcion . "," . $HPrescripcion . "," . $CodHabIPS . "," . $TipoIDIPS . "," . $NroIDIPS . "," . $CodDANEMunIPS . "," . $DirSedeIPS . "," . $TelSedeIPS . "," . $TipoIDProf . "," . $NumIDProf . "," . $PNProfS . "," . $SNProfS . "," . $PAProfS . "," . $SAProfS . "," . $RegProfS . "," . $TipoIDPaciente . "," . $NroIDPaciente . "," . $PNPaciente . "," . $SNPaciente . "," . $PAPaciente . "," . $SAPaciente . "," . $CodAmbAte . "," . $PacCovid19 . "," . $RefAmbAte . "," . $EnfHuerfana . "," . $CodEnfHuerfana . "," . $EnfHuerfanaDX . "," . $CodDxPpal . "," . $CodDxRel1 . "," . $CodDxRel2 . "," . $SopNutricional . "," . $CodEPS . "," . $TipoIDMadrePaciente . "," . $NroIDMadrePaciente . "," . $TipoTransc . "," . $TipoIDDonanteVivo . "," . $NroIDDonanteVivo . "," . $EstPres . ")";
 
@@ -1076,7 +1076,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
             //echo "<br> subCadenaPresMedi: " . $subCadenaPresMedi."<br>";
             if ($subCadenaPresMedi !== '},"medicamentos":[]' && $subCadenaPresMedi !== '') {
               ////ID_MEDI
-              $sql_id_medi = "select SEQ_WEBSERV_PRES_MEDI.nextval as ID_MEDI from dual";
+              $sql_id_medi = "select OASIS4.SEQ_WEBSERV_PRES_MEDI.nextval as ID_MEDI from dual";
               $st_id_medi = oci_parse($conn_oracle, $sql_id_medi);
               oci_execute($st_id_medi, OCI_DEFAULT);
               while (($row = oci_fetch_array($st_id_medi, OCI_BOTH)) != false) {
@@ -1515,7 +1515,7 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               //echo "<br> ESTJM: " . $ESTJM;
 
               //Armar el query
-              $sql_exc = "INSERT INTO WEBSERV_PRES_MEDI 
+              $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_MEDI 
               (ID_MEDI,ID_PRES,CONORDEN,TIPOMED,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,MEDPBSUTILIZADO,RZNCAUSAS31,DESCRZN31,RZNCAUSAS32,DESCRZN32,CAUSAS4,MEDPBSDESCARTADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,RZNCAUSAS43,DESCRZN43,RZNCAUSAS44,DESCRZN44,CAUSAS5,RZNCAUSAS5,CAUSAS6,DESCMEDPRINACT,CODFF,CODVA,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,ESTJM)
               VALUES (" . $id_medi . "," . $id_pres . "," . $CONORDEN . "," . $TIPOMED . "," . $TIPOPREST . "," . $CAUSAS1 . "," . $CAUSAS2 . "," . $CAUSAS3 . "," . $MEDPBSUTILIZADO . "," . $RZNCAUSAS31 . "," . $DESCRZN31 . "," . $RZNCAUSAS32 . "," . $DESCRZN32 . "," . $CAUSAS4 . "," . $MEDPBSDESCARTADO . "," . $RZNCAUSAS41 . "," . $DESCRZN41 . "," . $RZNCAUSAS42 . "," . $DESCRZN42 . "," . $RZNCAUSAS43 . "," . $DESCRZN43 . "," . $RZNCAUSAS44 . "," . $DESCRZN44 . "," . $CAUSAS5 . "," . $RZNCAUSAS5 . "," . $CAUSAS6 . "," . $DESCMEDPRINACT . "," . $CODFF . "," . $CODVA . "," . $JUSTNOPBS . "," . $DOSIS . "," . $DOSISUM . "," . $NOFADMON . "," . $CODFREADMON . "," . $INDESP . "," . $CANTRAT . "," . $DURTRAT . "," . $CANTTOTALF . "," . $UFCANTTOTAL . "," . $INDREC . "," . $ESTJM . ")";
               //echo "<br><br>".$sql_exc."<br><br>";//descomentado
@@ -1667,9 +1667,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
                     //echo   "<br> " . $nombre_dato . ": " . $pa_UMedCantCont;
 
                     /////Insertar prescripcion (Inicio)
-                    $sql_exc = "INSERT INTO WEBSERV_PRES_PRIN_ACTI 
+                    $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_PRIN_ACTI 
                     (ID_PRAC,ID_MEDI,CONORDEN,CODPRIACT,CONCCANT,UMEDCONC,CANTCONT,UMEDCANTCONT)  VALUES 
-                    (SEQ_WEBSERV_PRES_PRIN_ACTI.nextval," . $id_medi . "," . $pa_ConOrden . "," . $pa_CodPriAct . "," . $pa_ConcCant . "," . $pa_UMedConc . "," . $pa_CantCont . "," . $pa_UMedCantCont . ")";
+                    (OASIS4.SEQ_WEBSERV_PRES_PRIN_ACTI.nextval," . $id_medi . "," . $pa_ConOrden . "," . $pa_CodPriAct . "," . $pa_ConcCant . "," . $pa_UMedConc . "," . $pa_CantCont . "," . $pa_UMedCantCont . ")";
                     // echo $sql_exc;
 
                     $st_pr_ac = oci_parse($conn_oracle, $sql_exc);
@@ -1771,9 +1771,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
                     /////Insertar prescripcion (Inicio)
-                    $sql_exc = "INSERT INTO WEBSERV_PRES_INDI_UNIRS 
+                    $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_INDI_UNIRS 
                      (ID_IMUN,ID_MEDI,CONORDEN,CODINDICACION)  VALUES 
-                     (SEQ_WEBSERV_PRES_INDI_UNIRS.nextval," . $id_medi . "," . $iu_ConOrden . "," . $iu_CodIndicacion . ")";
+                     (OASIS4.SEQ_WEBSERV_PRES_INDI_UNIRS.nextval," . $id_medi . "," . $iu_ConOrden . "," . $iu_CodIndicacion . ")";
                     //echo $sql_exc;
 
                     $st_in_un = oci_parse($conn_oracle, $sql_exc);
@@ -2153,9 +2153,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
               /////Insertar prescripcion (Inicio)
-              $sql_exc = "INSERT INTO  WEBSERV_PRES_PROC
+              $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_PROC
             (ID_PROC,ID_PRES,CONORDEN,TIPOPREST,CAUSAS11,CAUSAS12,CAUSAS2,CAUSAS3,CAUSAS4,PROPBSUTILIZADO,CAUSAS5,PROPBSDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,CAUSAS6,CAUSAS7,CODCUPS,CANFORM,CADAFREUSO,CODFREUSO,CANT,CANTTOTAL,CODPERDURTRAT,JUSTNOPBS,INDREC,ESTJM)  VALUES 
-            (SEQ_WEBSERV_PRES_PROC.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS11 . "," . $CausaS12 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProPBSUtilizado . "," . $CausaS5 . "," . $ProPBSDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $CausaS6 . "," . $CausaS7 . "," . $CodCUPS . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
+            (OASIS4.SEQ_WEBSERV_PRES_PROC.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS11 . "," . $CausaS12 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProPBSUtilizado . "," . $CausaS5 . "," . $ProPBSDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $CausaS6 . "," . $CausaS7 . "," . $CodCUPS . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
               //echo $sql_exc;
 
@@ -2362,9 +2362,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
               //echo "<br> EstJM: " . $EstJM;
 
               /////Insertar dispositivos (Inicio)
-              $sql_exc = "INSERT INTO  WEBSERV_PRES_DISP
+              $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_DISP
               (ID_DISP,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CODDISP,CANFORM,CADAFREUSO,CODFREUSO,CANT,CODPERDURTRAT,CANTTOTAL,JUSTNOPBS,INDREC,ESTJM)  VALUES 
-              (SEQ_WEBSERV_PRES_DISP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CodDisp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CodPerDurTrat . "," . $CantTotal . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
+              (OASIS4.SEQ_WEBSERV_PRES_DISP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CodDisp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CodPerDurTrat . "," . $CantTotal . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
               //echo $sql_exc;
 
@@ -2843,9 +2843,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
               /////Insertar productos nutricionales (Inicio)
-              $sql_exc = "INSERT INTO  WEBSERV_PRES_PROD_NUTR
+              $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_PROD_NUTR
               (ID_PRNU,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,PRONUTUTILIZADO,RZNCAUSAS41,DESCRZN41,RZNCAUSAS42,DESCRZN42,CAUSAS5,PRONUTDESCARTADO,RZNCAUSAS51,DESCRZN51,RZNCAUSAS52,DESCRZN52,RZNCAUSAS53,DESCRZN53,RZNCAUSAS54,DESCRZN54,DXENFHUER,DXVIH,DXCAPAL,DXENFRCEV,DXDESPRO,TIPPPRONUT,DESCPRODNUTR,CODFORMA,CODVIAADMON,JUSTNOPBS,DOSIS,DOSISUM,NOFADMON,CODFREADMON,INDESP,CANTRAT,DURTRAT,CANTTOTALF,UFCANTTOTAL,INDREC,NOPRESCASO,ESTJM)  VALUES 
-              (SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $RznCausaS53 . "," . $DescRzn53 . "," . $RznCausaS54 . "," . $DescRzn54 . "," . $DXEnfHuer . "," . $DXVIH . "," . $DXCaPal . "," . $DXEnfRCEV . "," . $DXDesPro . "," . $TippProNut . "," . $DescProdNutr . "," . $CodForma . "," . $CodViaAdmon . "," . $JustNoPBS . "," . $Dosis . "," . $DosisUM . "," . $NoFAdmon . "," . $CodFreAdmon . "," . $IndEsp .  "," . $CanTrat . "," . $DurTrat . "," . $CantTotalF . "," . $UFCantTotal . "," . $IndRec . "," . $NoPrescAso . "," . $EstJM . ")";
+              (OASIS4.SEQ_WEBSERV_PRES_PROD_NUTR.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $ProNutUtilizado . "," . $RznCausaS41 . "," . $DescRzn41 . "," . $RznCausaS42 . "," . $DescRzn42 . "," . $CausaS5 . "," . $ProNutDescartado . "," . $RznCausaS51 . "," . $DescRzn51 . "," . $RznCausaS52 . "," . $DescRzn52 . "," . $RznCausaS53 . "," . $DescRzn53 . "," . $RznCausaS54 . "," . $DescRzn54 . "," . $DXEnfHuer . "," . $DXVIH . "," . $DXCaPal . "," . $DXEnfRCEV . "," . $DXDesPro . "," . $TippProNut . "," . $DescProdNutr . "," . $CodForma . "," . $CodViaAdmon . "," . $JustNoPBS . "," . $Dosis . "," . $DosisUM . "," . $NoFAdmon . "," . $CodFreAdmon . "," . $IndEsp .  "," . $CanTrat . "," . $DurTrat . "," . $CantTotalF . "," . $UFCantTotal . "," . $IndRec . "," . $NoPrescAso . "," . $EstJM . ")";
 
               //echo "<br> sql_exc: $sql_exc<br>";
 
@@ -3182,9 +3182,9 @@ echo "<br> sub Cadena Buscada Final: ".$subCadenaBuscadaFinal;
 
 
               /////Insertar servicios Complementarios (Inicio)
-              $sql_exc = "INSERT INTO  WEBSERV_PRES_SERV_COMP
+              $sql_exc = "INSERT INTO OASIS4.WEBSERV_PRES_SERV_COMP
                 (ID_SECO,ID_PRES,CONORDEN,TIPOPREST,CAUSAS1,CAUSAS2,CAUSAS3,CAUSAS4,DESCCAUSAS4,CAUSAS5,CODSERCOMP,DESCSERCOMP,CANFORM,CADAFREUSO,CODFREUSO,CANT,CANTTOTAL,CODPERDURTRAT,TIPOTRANS,REQACOM,TIPOIDACOMALB,NROIDACOMALB,PARENTACOMALB,NOMBALB,CODMUNORIALB,CODMUNDESALB,JUSTNOPBS,INDREC,ESTJM)  VALUES 
-                (SEQ_WEBSERV_PRES_SERV_COMP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $DescCausaS4 . "," . $CausaS5 . "," . $CodSerComp . "," . $DescSerComp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $TipoTrans . "," . $ReqAcom . "," . $TipoIDAcomAlb . "," . $NroIDAcomAlb . "," . $ParentAcomAlb . "," . $NombAlb . "," . $CodMunOriAlb . "," . $CodMunDesAlb . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
+                (OASIS4.SEQ_WEBSERV_PRES_SERV_COMP.nextval," . $id_pres . "," . $ConOrden . "," . $TipoPrest . "," . $CausaS1 . "," . $CausaS2 . "," . $CausaS3 . "," . $CausaS4 . "," . $DescCausaS4 . "," . $CausaS5 . "," . $CodSerComp . "," . $DescSerComp . "," . $CanForm . "," . $CadaFreUso . "," . $CodFreUso . "," . $Cant . "," . $CantTotal . "," . $CodPerDurTrat . "," . $TipoTrans . "," . $ReqAcom . "," . $TipoIDAcomAlb . "," . $NroIDAcomAlb . "," . $ParentAcomAlb . "," . $NombAlb . "," . $CodMunOriAlb . "," . $CodMunDesAlb . "," . $JustNoPBS . "," . $IndRec . "," . $EstJM . ")";
 
               //echo "<br>".$sql_exc."<br>";
 

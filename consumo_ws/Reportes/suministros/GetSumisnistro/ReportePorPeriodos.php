@@ -1,6 +1,6 @@
 <?php
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 set_time_limit(9999999);
 ini_set('memory_limit', '-1');
 
@@ -86,7 +86,7 @@ if ($periodo_final < $periodo_inicial) {
   DECODE(FECSUMINISTRO,NULL,'NO EXISTE',FECSUMINISTRO)FECSUMINISTRO,
   DECODE(ESTSUMINISTRO,NULL,'NO EXISTE',ESTSUMINISTRO)ESTSUMINISTRO,
   DECODE(FECANULACION,NULL,'NO EXISTE',FECANULACION)FECANULACION
-FROM WEBSERV_SUMINISTROS 
+FROM OASIS4.WEBSERV_SUMINISTROS 
 where  REPO_PERIODO BETWEEN '$periodo_inicial_oracle' AND '$periodo_final_oracle'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);

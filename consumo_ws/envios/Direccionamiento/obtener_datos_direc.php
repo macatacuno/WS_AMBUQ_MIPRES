@@ -2,7 +2,7 @@
 set_time_limit(9999999);
 ini_set('memory_limit', '-1');
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 $NoPrescripcion = $_POST['NoPrescripcion'];
 $TipoTec = $_POST['TipoTec'];
 $ConTec = $_POST['ConTec'];
@@ -18,8 +18,8 @@ pd.NOENTREGA,
 to_date(pd.FECMAXENT, 'YYYY-MM-DD') FECMAXENT,
 DECODE(pd.DIR_IDDIRECCIONAMIENTO,NULL,0,pd.DIR_IDDIRECCIONAMIENTO)DIR_IDDIRECCIONAMIENTO,
 DECODE(pd.DIR_ID,NULL,0,pd.DIR_ID)DIR_ID
-from view_webserv_pres_info_direc pi
-left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
+from OASIS4.VIEW_WEBSERV_pres_info_direc pi
+left JOIN OASIS4.WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
 where  pd.NOPRESCRIPCION='" . $NoPrescripcion . "' 
 and pd.TIPOTEC='" . $TipoTec . "' 
 and pd.CONORDEN=" . $ConTec . " 

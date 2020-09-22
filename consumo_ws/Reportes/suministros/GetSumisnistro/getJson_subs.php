@@ -87,7 +87,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     $NoEntrega = 'null';
                 }*/
                 /////Insertar prescripcion (Inicio)
-                $sql_exc = "INSERT INTO WEBSERV_SUMINISTROS
+                $sql_exc = "INSERT INTO OASIS4.WEBSERV_SUMINISTROS
                   (
                     REPO_PERIODO,
                     REPO_SERV_ID,

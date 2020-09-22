@@ -2,7 +2,7 @@
 set_time_limit(9999999);
 ini_set('memory_limit', '-1');
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 $NoPrescripcion = $_POST['NoPrescripcion'];
 $TipoTec = $_POST['TipoTec'];
 $ConTec = $_POST['ConTec'];
@@ -14,7 +14,7 @@ CANTIDAD_ENTREGAS,
 decode(pi.TIPOTEC,'P',to_date(FECMAXENT_ULTIMA_ENTREGA+90, 'YYYY-MM-DD'),
                 decode(CODAMBATE,11,decode((select 
                             count(1) cantidad_entregas
-                            from  WEBSERV_PRES_DIRECCIONADOS pd 
+                            FROM  OASIS4.WEBSERV_PRES_DIRECCIONADOS pd 
                             where  pd.NOPRESCRIPCION=pi.NOPRESCRIPCION
                             and pd.TIPOTEC=pi.TIPOTEC
                             and pd.CONORDEN=pi.CONORDEN),0,to_date(FECMAXENT_ULTIMA_ENTREGA+15, 'YYYY-MM-DD'),
@@ -22,12 +22,12 @@ decode(pi.TIPOTEC,'P',to_date(FECMAXENT_ULTIMA_ENTREGA+90, 'YYYY-MM-DD'),
                  12,to_date(FECMAXENT_ULTIMA_ENTREGA+30, 'YYYY-MM-DD'),
                  21,to_date(FECMAXENT_ULTIMA_ENTREGA+30, 'YYYY-MM-DD'),
                    '11-11-1111'))  FECMAXENT
-from view_webserv_pres_info_direc pi
-left join WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
+from OASIS4.VIEW_WEBSERV_pres_info_direc pi
+left JOIN OASIS4.WEBSERV_PRES_DIRECCIONADOS pd on pd.NOPRESCRIPCION=pi.NOPRESCRIPCION and pi.TIPOTEC=pd.TIPOTEC and pi.CONORDEN=pd.CONORDEN
 left join (select pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN, 
 count(NOENTREGA) CANTIDAD_ENTREGAS,
 max(FECMAXENT) FECMAXENT_ULTIMA_ENTREGA
-from WEBSERV_PRES_DIRECCIONADOS pd
+FROM OASIS4.WEBSERV_PRES_DIRECCIONADOS pd
 GROUP by pd.NOPRESCRIPCION,pd.TIPOTEC,pd.CONORDEN) pm on pd.NOPRESCRIPCION=pm.NOPRESCRIPCION and pd.TIPOTEC=pm.TIPOTEC 
 and pd.CONORDEN=pm.CONORDEN
 where  pd.NOPRESCRIPCION='" . $NoPrescripcion . "' 

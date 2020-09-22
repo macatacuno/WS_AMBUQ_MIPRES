@@ -8,7 +8,7 @@ function actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $to
 	if ($horas_de_diferencia == -1 || $horas_de_diferencia > 10 || $token_temporal == 'vacio') {
 
 		//Generar token temporal(inicio)
-		$query = "SELECT URL FROM WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";
+		$query = "SELECT URL FROM OASIS4.WEBSERV_SERVICIOS where NOMBRE='GenerarToken'";
 		$st_token_temp = oci_parse($conn_oracle, $query);
 		oci_execute($st_token_temp, OCI_DEFAULT);
 		while (($row = oci_fetch_array($st_token_temp, OCI_BOTH)) != false) {
@@ -27,7 +27,7 @@ function actualizar_token_temporal($horas_de_diferencia, $conn_oracle, $nit, $to
 		//Generar token temporal(fin)
 
 		////Actualizar tabla con el token temporal (Inicio)
-		$sql_exc = "UPDATE WEBSERV_TIPOREPORTES
+		$sql_exc = "UPDATE OASIS4.WEBSERV_TIPOREPORTES
                 SET TOKEN_TEMPORAL    = '" . $token_temporal . "',
                     FECHA_TOKEN_TEMPORAL=sysdate
                 WHERE TOKEN = '" . $token . "'";
@@ -101,9 +101,9 @@ function obtener_datos_url($campo_oracle_alias, $servicio_id, $conn_oracle)
 	}
 
 	$query = "select 
-" . $campo_oracle_exacto . " from WEBSERV_SERVICIOS S 
-JOIN WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID 
-JOIN WEBSERV_WEBSERVICES WS ON WS.WS_ID=TS.WS_ID
+" . $campo_oracle_exacto . " FROM OASIS4.WEBSERV_SERVICIOS S 
+JOIN OASIS4.WEBSERV_TIPOSERVICIOS TS ON S.TISE_ID=TS.TISE_ID 
+JOIN OASIS4.WEBSERV_WEBSERVICES WS ON WS.WS_ID=TS.WS_ID
 WHERE S.SERV_ID=" . $servicio_id;
 	$st_serv = oci_parse($conn_oracle, $query);
 	oci_execute($st_serv, OCI_DEFAULT);
@@ -131,8 +131,8 @@ function obtener_datos_token_nit($campo_oracle_alias, $tipo_id, $conn_oracle)
 		round(24 * (sysdate - to_date(to_char(FECHA_TOKEN_TEMPORAL, 'YYYY-MM-DD hh24:mi'), 'YYYY-MM-DD hh24:mi')),2))as HORAS_DE_DIFERENCIA";
 	};
 
-	//$query = "select " . $campo_oracle_exacto . " from WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
-	$query = "SELECT $campo_oracle_exacto FROM WEBSERV_TIPOREPORTES WHERE TIRE_ID=$tipo_id";
+	//$query = "select " . $campo_oracle_exacto . " FROM OASIS4.WEBSERV_TIPOREPORTES WHERE TIRE_ID=" . $tipo_id;
+	$query = "SELECT $campo_oracle_exacto FROM OASIS4.WEBSERV_TIPOREPORTES WHERE TIRE_ID=$tipo_id";
 	$st_serv = oci_parse($conn_oracle, $query);
 	oci_execute($st_serv, OCI_DEFAULT);
 	while (($row = oci_fetch_array($st_serv, OCI_BOTH)) != false) {
@@ -166,7 +166,7 @@ function validar_que_el_periodo_exista($conn_oracle, $periodo_conteo, $servicio_
 {
 	//Codico para validar si existe el registro antes de insertarlo
 	$periodo_conteo_oracle = date("d/m/Y", strtotime($periodo_conteo)); //formato originar "y/m/d"
-	$query_exist = "select count(1) CANTIDAD from WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
+	$query_exist = "select count(1) CANTIDAD FROM OASIS4.WEBSERV_REPORTES_JSON where SERV_ID=" . $servicio_id . " and TIRE_ID=" . $tipo_id . " and PERIODO='" . $periodo_conteo_oracle . "'";
 	//echo "<br> query_exist: ".$query_exist."<br>";
 	$st_exist = oci_parse($conn_oracle, $query_exist);
 	$periodo_existe = oci_execute($st_exist, OCI_DEFAULT);
@@ -191,7 +191,7 @@ function validar_que_el_periodo_exista($conn_oracle, $periodo_conteo, $servicio_
 
 function insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo)
 {
-	$sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+	$sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
 	VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al consumir el WebService','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
 	echo $sql_log_err;
 	$st_log_err = oci_parse($conn_oracle, $sql_log_err);
@@ -204,7 +204,7 @@ function insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 
 function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $json, $serv_nombre, $tipo_get, $periodo_conteo)
 {
-	$sql_exc = "INSERT INTO webserv_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "','$json')"; //no se inserta el json porque provoca error al insertar el registro
+	$sql_exc = "INSERT INTO OASIS4.WEBSERV_reportes_json ( serv_id, tire_id,periodo, json) VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "','$json')"; //no se inserta el json porque provoca error al insertar el registro
 	echo "<br>$sql_exc";
 	$st = oci_parse($conn_oracle, $sql_exc);
 	$result = oci_execute($st);
@@ -212,7 +212,7 @@ function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 
 	/////Eliminar el el registro de la tabla del log de errores en caso de que exista
 	if ($result) {
-		$sql_log_err = "delete from webserv_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
+		$sql_log_err = "delete FROM OASIS4.WEBSERV_log_errores where serv_id=" . $servicio_id . " and tire_id=" . $tipo_id . " and  periodo = '" . $fecha_oracle . "'";
 		$st_log_err = oci_parse($conn_oracle, $sql_log_err);
 		$result_log = oci_execute($st_log_err);
 		oci_free_statement($st_log_err);
@@ -222,7 +222,7 @@ function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 			return "Error al borrar el log";
 		}
 	} else {
-		$sql_log_err = "INSERT INTO webserv_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
+		$sql_log_err = "INSERT INTO OASIS4.WEBSERV_log_errores (serv_id, tire_id,periodo, nombre, descripcion) 
 		 VALUES (" . $servicio_id . "," . $tipo_id . ",'" . $fecha_oracle . "', 'WSPRESCRIPCION: Error al insertar el registro','No se cargó " . $serv_nombre . " " . $tipo_get . " 20" . $periodo_conteo . "')";
 		echo "<br>$sql_log_err";
 		$st_log_err = oci_parse($conn_oracle, $sql_log_err);
@@ -230,7 +230,7 @@ function insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_orac
 		oci_free_statement($st_log_err);
 		if ($result) {
 		}
-		return "Error al insertar el json en la tabla webserv_reportes_json";
+		return "Error al insertar el json en la tabla OASIS4.WEBSERV_reportes_json";
 	}
 }
 

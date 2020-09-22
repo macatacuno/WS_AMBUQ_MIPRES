@@ -1,6 +1,6 @@
 <?php
 
-$conn_oracle = oci_connect('oasis4', 'sybase11', '10.244.9.229:1521/ambuqQA');
+$conn_oracle = oci_connect('RPARRA', 'Rparra2019', '10.244.19.75:1521/ambuqPRD');
 set_time_limit(9999999);
 ini_set('memory_limit', '-1');
 
@@ -83,7 +83,7 @@ DECODE(to_char(FECDIRECCIONAMIENTO,'DD/MM/YYYY HH24:MI:SS'), NULL,'NO EXISTE',to
 DECODE(ESTDIRECCIONAMIENTO, NULL,'NO EXISTE',ESTDIRECCIONAMIENTO) ESTDIRECCIONAMIENTO,
 DECODE(to_char(FECANULACION,'DD/MM/YYYY HH24:MI:SS'), NULL,'NO EXISTE',to_char(FECANULACION,'DD/MM/YYYY HH24:MI:SS')) FECANULACION,
 to_char(REPO_PERIODO,'DD/MM/YYYY') REPO_PERIODO
-FROM WEBSERV_DIRECCIONAMIENTOS 
+FROM OASIS4.WEBSERV_DIRECCIONAMIENTOS 
 where  REPO_SERV_ID=" . $servicio_id . " and REPO_TIRE_ID=" . $tipo_id . " and REPO_PERIODO BETWEEN '" . $periodo_inicial_oracle . "' AND '" . $periodo_final_oracle . "'";
   $st_tire = oci_parse($conn_oracle, $query);
   oci_execute($st_tire, OCI_DEFAULT);
@@ -178,7 +178,7 @@ where  REPO_SERV_ID=" . $servicio_id . " and REPO_TIRE_ID=" . $tipo_id . " and R
   /***************************************************************************************/
 }
 
-// echo "<br>query: $query<br>";
+//echo "<br>query: $query<br>";
 // Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
 $objXLS->setActiveSheetIndex(0);
 // Se modifican los encabezados del HTTP para indicar que se envia un archivo de Excel.

@@ -80,7 +80,7 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                 $CodSerTecAEntregar = str_replace(" ", "", $clave["CodSerTecAEntregar"]);
                 $CantTotAEntregar = str_replace("'", "", $clave["CantTotAEntregar"]);
                 /////Insertar prescripcion (Inicio)
-                $sql_exc = "INSERT INTO WEBSERV_DIRECCIONAMIENTOS (
+                $sql_exc = "INSERT INTO OASIS4.WEBSERV_DIRECCIONAMIENTOS (
                     REPO_SERV_ID,
                     REPO_PERIODO,
                     REPO_TIRE_ID,
