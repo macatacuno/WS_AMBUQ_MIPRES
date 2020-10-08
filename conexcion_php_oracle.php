@@ -28,7 +28,7 @@
 
 
   ////Consultar Tabla (Inicio)
-  $query = "SELECT ID_PRES,NOPRESCRIPCION,FPRESCRIPCION FROM oasis4.WEBSERV_PRES_PRES order by id_pres";
+  $query = "SELECT ID_PRES,NOPRESCRIPCION,FPRESCRIPCION FROM OASIS4.WEBSERV_PRES_PRES order by id_pres";
   $stid = oci_parse($conn_oracle, $query);
   oci_execute($stid, OCI_DEFAULT);
 
