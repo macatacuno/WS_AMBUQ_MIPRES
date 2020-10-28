@@ -58,7 +58,6 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
         //echo "<br>--------Direccionamiento: $json ";
         if ($json == "" || (strlen($json) >= 3 && strlen($json) <= 100)) {
             insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);
-            
         } else if ($json == "[]") {
             insertar_periodo_json($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, 'NO', $serv_nombre, $tipo_get, $periodo_conteo);
         } else {
@@ -142,6 +141,9 @@ for ($i_Principal = 0; $i_Principal <= $cant_dias - 1; $i_Principal++) {
                     // echo  "<br>Insercion Correcta ";
                 } else {
                     echo  "<br>Insercion Incorrecta en el direccionamiento #" . $clave["IDDireccionamiento"];
+                    //delete from WEBSERV_DIRECCIONAMIENTOS where REPO_PERIODO=$fecha_oracle
+                    //insertar_log_de_error($conn_oracle, $servicio_id, $tipo_id, $fecha_oracle, $serv_nombre, $tipo_get, $periodo_conteo);   
+                break;
                 }
             }
             echo "<br>--------Cantidad de direccionamientos insertados: $cont_dir ";
